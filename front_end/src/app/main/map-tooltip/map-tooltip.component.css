@@ -1,0 +1,17 @@
+app-map-tooltip {
+  position: absolute;
+}
+
+.map-tooltip {
+  position: absolute;
+  z-index: 450;
+  background-color: white;
+  opacity: .8;
+  padding: 5px;
+  width: 200px;
+  margin-top: -50px;
+  margin-left: 20px;
+  border-radius: 5px;
+  border: 1px solid black;
+  color: black;
+}

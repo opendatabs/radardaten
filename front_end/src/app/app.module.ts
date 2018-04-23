@@ -9,6 +9,8 @@ import { NavbarComponent } from './navbar/navbar.component';
 import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 import { MapComponent } from './main/map/map.component';
 import { MapViewComponent } from './main/map-view/map-view.component';
+import {LeafletModule} from "@asymmetrik/ngx-leaflet";
+import { MapTooltipComponent } from './main/map-tooltip/map-tooltip.component';
 
 
 @NgModule({
@@ -17,12 +19,14 @@ import { MapViewComponent } from './main/map-view/map-view.component';
     MainComponent,
     NavbarComponent,
     MapComponent,
-    MapViewComponent
+    MapViewComponent,
+    MapTooltipComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
-    NgbModule.forRoot()
+    NgbModule.forRoot(),
+    LeafletModule.forRoot()
   ],
   providers: [],
   bootstrap: [AppComponent]
