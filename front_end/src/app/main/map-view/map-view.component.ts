@@ -1,4 +1,6 @@
 import {Component, OnInit, ViewChild} from '@angular/core';
+import {DataService} from "../../shared/data-service.service";
+import {Radar} from "../../shared/radar";
 
 @Component({
   selector: 'app-map-view',
@@ -7,9 +9,19 @@ import {Component, OnInit, ViewChild} from '@angular/core';
 })
 export class MapViewComponent implements OnInit {
 
-  constructor() { }
+  data: Radar[];
+
+  constructor(
+    private dataService: DataService
+  ) { }
 
   ngOnInit() {
+    this.dataService.getMapData().subscribe((data:Radar[]) => {
+      this.data = data;
+    }, err => {
+      console.log(err);
+      alert('an error occured');
+    })
   }
 
 }

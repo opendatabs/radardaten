@@ -1,3 +1,21 @@
-<div class="map-tooltip" [style.left]="pxLeft + 'px'" [style.top]="pxTop + 'px'" [style.display]="display" [style.transform]="transform">
-  <p>Should work now {{pxLeft}}</p>
+<div  *ngIf="content" class="map-tooltip" [style.left]="pxLeft + 'px'" [style.top]="pxTop + 'px'" [style.display]="display"
+     [style.transform]="transform">
+  <table>
+    <tr>
+      <td>Strassenname:</td>
+      <td>{{content.street_name}}</td>
+    </tr>
+    <tr>
+      <td>Datum:</td>
+      <td>{{content.date}}</td>
+    </tr>
+    <tr>
+      <td>Durchschnittsgeschwindigkeit:</td>
+      <td>{{content.avg_speed}}</td>
+    </tr>
+    <tr>
+      <td>Übertretungsquote:</td>
+      <td>{{content.speeding_quote}}</td>
+    </tr>
+  </table>
 </div>
