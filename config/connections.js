@@ -19,7 +19,7 @@
  * http://sailsjs.org/#!/documentation/reference/sails.config/sails.config.connections.html
  */
 
-let local;
+let local = {};
  if (process.env.NODE_ENV === 'development') { // TODO problem?
   local = require('./local.js');
  }
