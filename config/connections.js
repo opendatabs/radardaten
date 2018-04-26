@@ -51,6 +51,14 @@ module.exports.connections = {
       database: local.localDb
   },
 
+  devDb: {
+    adapter: 'sails-mysql',
+    host: 'fdn-dev.iwi.unibe.ch',
+    user: process.env.USER,
+    password: process.env.PASSWORD,
+    database: 'radardaten'
+  },
+
   /***************************************************************************
   *                                                                          *
   * MongoDB is the leading NoSQL database.                                   *
