@@ -1,10 +1,11 @@
 <div class="row">
   <div class="col-12">
-    <app-map [data]="data" *ngIf="data"></app-map>
+    <app-map [data]="data" (bubbleClickEvent)="openDetails($event)" *ngIf="data"></app-map>
   </div>
 </div>
 <div class="row">
   <div class="col-12">
-    <app-map-detail></app-map-detail>
+    <!--do not use ngif because that would remove html and we cannot use viewChild method-->
+    <app-map-detail [hidden]="hideDetail"></app-map-detail>
   </div>
 </div>

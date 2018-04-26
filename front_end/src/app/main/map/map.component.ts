@@ -1,4 +1,4 @@
-import {ChangeDetectorRef, Component, Input, OnInit, ViewChild} from '@angular/core';
+import {ChangeDetectorRef, Component, EventEmitter, Input, OnInit, Output, ViewChild} from '@angular/core';
 import {divIcon, latLng, Layer, marker, tileLayer, Map, tooltip} from "leaflet";
 import {MapTooltipComponent} from "../map-tooltip/map-tooltip.component";
 import {Radar} from "../../shared/radar";
@@ -13,10 +13,10 @@ export class MapComponent implements OnInit {
   @ViewChild(MapTooltipComponent) tooltip: MapTooltipComponent;
 
   @Input() data: Radar[];
+  @Output() bubbleClickEvent: EventEmitter<any> = new EventEmitter();
 
   markers: Layer[] = [];
   map = null;
-  left1: number;
 
   options = {
     layers: [
@@ -47,6 +47,8 @@ export class MapComponent implements OnInit {
         self.showPopup(this, self, d)
       }).on('mouseout', function () {
           self.hidePopup()
+        }).on('click', function () {
+          self.openDetails(d);
         });
       this.markers.push(mark);
     })
@@ -54,6 +56,8 @@ export class MapComponent implements OnInit {
 
   onMapReady(map: Map) {
     this.map = map;
+    this.map.setMaxBounds(this.map.getBounds());
+    this.map.setMinZoom(13);
   }
 
   showPopup(lefletElement: any, self: MapComponent, radar: Radar): void {
@@ -69,6 +73,10 @@ export class MapComponent implements OnInit {
   hidePopup() {
     this.tooltip.hideTooltip();
     this.cd.detectChanges();
+  }
+
+  openDetails(radar: Radar) {
+    this.bubbleClickEvent.emit(radar);
   }
 
 }

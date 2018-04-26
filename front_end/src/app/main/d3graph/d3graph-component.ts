@@ -1,4 +1,4 @@
-import { Component, ElementRef, NgZone, OnDestroy, OnInit } from '@angular/core';
+import {Component, ElementRef, Input, NgZone, OnChanges, OnDestroy, OnInit} from '@angular/core';
 
 import {
   D3Service,
@@ -14,13 +14,20 @@ import {
 } from 'd3-ng2-service';
 import {DataService} from "../../shared/data-service.service";
 import {Radar} from "../../shared/radar";
+import * as moment from 'moment';
+import {ColorService} from "../../shared/color.service";
+
+declare var $:any;
 
 @Component({
   selector: 'app-d3graph',
   templateUrl: './d3graph-component.html',
   styleUrls: ['./d3graph-component.css']
 })
-export class D3graphComponent implements OnInit {
+export class D3graphComponent implements OnInit, OnChanges {
+
+  @Input() data: any[];
+
   private d3: D3;
   private parentNativeElement: any;
   private d3Svg: Selection<SVGSVGElement, any, null, undefined>;
@@ -30,10 +37,9 @@ export class D3graphComponent implements OnInit {
   private name: string;
   private yVal: number;
   private colors: any = [];
-  private data: {name: string, yVal: number}[] = [];
   private padding: number = 25;
-  private width: number = 500;
-  private height: number = 150;
+  private width: number;
+  private height: number = 300;
   private xScale: any;
   private yScale: any;
   private xColor: any;
@@ -45,36 +51,30 @@ export class D3graphComponent implements OnInit {
     element: ElementRef,
     private ngZone: NgZone,
     d3Service: D3Service,
-    private dataService: DataService
+    private dataService: DataService,
+    private colorService: ColorService
   ){
     this.d3 = d3Service.getD3();
     this.parentNativeElement = element.nativeElement;
+    moment.locale('de-ch');
   }
 
   ngOnInit() {
-    this.dataService.getDetailData().subscribe((data:any[]) => {
-      this.data = data;
-      this.initChart();
-      this.updateChart();
-    }, err => {
-      console.log(err);
-      alert('an error occured');
-    })
   }
 
-  update() {
-    this.dataService.getDetailData2().subscribe((data:any[]) => {
-      this.data = data;
+  ngOnChanges(changes: any) {
+    if (changes.data && changes.data.currentValue && !changes.data.previousValue) {
+      this.initChart();
       this.updateChart();
-    }, err => {
-      console.log(err);
-      alert('an error occured');
-    })
+    } else if (changes.data && changes.data.currentValue) {
+      this.updateChart();
+    }
   }
 
   initChart() {
     let self = this;
     let d3 = this.d3;
+    this.width = $("#map").width();
 
     if (this.parentNativeElement !== null) {
       self.svg = d3.select(this.parentNativeElement)
@@ -87,16 +87,18 @@ export class D3graphComponent implements OnInit {
       self.data = this.data;
 
       self.xScale = d3.scaleBand()
-        .domain(self.data.map(function(d){ return d.name; }))
-        .range([0, 200]);
+        .domain(self.data.map(function(d) { return d.timestamp; }))
+        .range([0, (self.width - (2*self.padding))])
+        .padding(.1);
 
       self.yScale = d3.scaleLinear()
-        .domain([0,d3.max(self.data, function(d) {return d.yVal})])
-        .range([100, 0]);
+        .domain([0, 1])
+        .range([0, (self.height- (2*self.padding))]);
 
       self.xAxis = d3.axisBottom(self.xScale) // d3.js v.4
-        .ticks(5)
-        .scale(self.xScale);
+        .scale(self.xScale)
+        .ticks(24)
+        .tickFormat(d => moment(d).format("LT"));
 
       self.yAxis = d3.axisLeft(self.xScale) // d3.js v.4
         .scale(self.yScale)
@@ -123,33 +125,33 @@ export class D3graphComponent implements OnInit {
       .enter()
       .append('rect')
       .attr('x', function(d,i) {
-        return self.xScale(d.name );
+        return self.xScale(d.timestamp) + self.padding;
       })
       .attr('y', function(d) {
-        return self.yScale(d.yVal);
+        return self.yScale(d.speeding_quote) + self.padding;
       })
-      .attr("transform","translate(" + (self.padding -5  + 25) + "," + (self.padding - 5) + ")")
+      // .attr("transform","translate(" + (self.padding -5  + 25) + "," + (self.padding - 5) + ")")
       .attr('height', function(d) {
-        return self.height - self.yScale(d.yVal) - (2*self.padding) + 5})
-      .attr('width', 10)
+        return self.height - self.yScale(d.speeding_quote) - (2*self.padding)})
+      .attr('width', self.xScale.bandwidth())
       .attr('fill', function(d, i) {
-        return self.colors[i];
+        return self.colorService.perc2color(d.speeding_quote * 100);
       });
 
     self.rects
       .transition()
       .attr('x', function(d,i) {
-        return self.xScale(d.name );
+        return self.xScale(d.timestamp) + self.padding;
       })
       .attr('y', function(d) {
-        return self.yScale(d.yVal);
+        return self.yScale(d.speeding_quote) + self.padding;
       })
-      .attr("transform","translate(" + (self.padding -5  + 25) + "," + (self.padding - 5) + ")")
+      // .attr("transform","translate(" + (self.padding -5  + 25) + "," + (self.padding - 5) + ")")
       .attr('height', function(d) {
-        return self.height - self.yScale(d.yVal) - (2*self.padding) + 5})
-      .attr('width', 10)
+        return self.height - self.yScale(d.speeding_quote) - (2*self.padding)})
+      .attr('width', self.xScale.bandwidth())
       .attr('fill', function(d, i) {
-        return self.colors[i];
+        return self.colorService.perc2color(d.speeding_quote * 100);
       });
   }
 }
