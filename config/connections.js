@@ -19,9 +19,10 @@
  * http://sailsjs.org/#!/documentation/reference/sails.config/sails.config.connections.html
  */
 
-// if (process.env.NODE_ENV === 'development') { // TODO problem?
-  const local = require('./local.js');
-// }
+let local;
+ if (process.env.NODE_ENV === 'development') { // TODO problem?
+  local = require('./local.js');
+ }
 module.exports.connections = {
 
   /***************************************************************************
