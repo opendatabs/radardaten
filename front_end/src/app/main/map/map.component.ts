@@ -3,6 +3,7 @@ import {divIcon, latLng, Layer, marker, tileLayer, Map, tooltip} from "leaflet";
 import {MapTooltipComponent} from "../map-tooltip/map-tooltip.component";
 import {Radar} from "../../shared/radar";
 import {ColorService} from "../../shared/color.service";
+declare var $:any;
 
 @Component({
   selector: 'app-map',
@@ -35,10 +36,10 @@ export class MapComponent implements OnInit {
     let mark;
     let self = this;
 
-    this.data.forEach((d: Radar) => {
-      let color = this.colorService.perc2color(d.speeding_quote*100);
+    this.data.forEach((d: Radar, index: number) => {
+      let color = this.colorService.perc2color2(d.speeding_quote*100);
       let i = divIcon({html: "<svg width='15' height='15' class='svg-marker'>" +
-        "<circle fill='"+color+"' class='circle'></circle>" +
+        "<circle fill='"+color+"' class='circle' id='circle"+index+"'></circle>" +
         "</svg>"});
 
       mark = marker([ d.lat, d.long ], {
@@ -48,6 +49,8 @@ export class MapComponent implements OnInit {
       }).on('mouseout', function () {
           self.hidePopup()
         }).on('click', function () {
+          $('#map').find('.active').removeClass('active');
+          $("#circle"+index).addClass('active');
           self.openDetails(d);
         });
       this.markers.push(mark);

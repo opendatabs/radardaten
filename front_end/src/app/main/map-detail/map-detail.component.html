@@ -1,1 +1,44 @@
-<app-d3graph [data]="data"></app-d3graph>
+<div class="card mt-2" id="map-detail">
+  <div class="card-body">
+    <div class="row">
+      <div class="col-12">
+        <div ngbDropdown class="d-inline-block">
+          <button class="btn btn-outline-primary" id="dropdownBasic1" ngbDropdownToggle>{{selectedMeasurement}}</button>
+          <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
+            <button class="dropdown-item" *ngFor="let measurement of measurements" (click)="selectMesaurement(measurement)">
+              {{measurement}}
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <app-d3graph [data]="data"></app-d3graph>
+    </div>
+    <div class="row mt-5" *ngIf="radar">
+      <div class="col-12">
+        <h3>Details:</h3>
+        <div class="pt-2">
+        <table class="table table-striped">
+          <tr>
+            <td>Strassenname:</td>
+            <td>{{radar.street_name}}</td>
+          </tr>
+          <tr>
+            <td>Datum:</td>
+            <td>{{radar.date}}</td>
+          </tr>
+          <tr>
+            <td>Durchschnittsgeschwindigkeit:</td>
+            <td>{{radar.avg_speed}}</td>
+          </tr>
+          <tr>
+            <td>Übertretungsquote:</td>
+            <td>{{radar.speeding_quote}}</td>
+          </tr>
+        </table>
+      </div>
+      </div>
+    </div>
+  </div>
+</div>

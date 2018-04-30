@@ -18,3 +18,9 @@
   background: none;
   border: none;
 }
+
+#map circle.active {
+  opacity: 1;
+  stroke: black;
+  stroke-width: 2;
+}

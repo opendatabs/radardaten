@@ -20,8 +20,8 @@
  */
 
 let local = {};
- if (process.env.NODE_ENV === 'development') { // TODO problem?
-  local = require('./local.js');
+ if (!process.env.NODE_ENV || process.env.NODE_ENV === 'development') { // TODO problem?
+  local = require('../local.js');
  }
 module.exports.connections = {
 

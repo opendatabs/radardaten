@@ -92,7 +92,7 @@ export class D3graphComponent implements OnInit, OnChanges {
         .padding(.1);
 
       self.yScale = d3.scaleLinear()
-        .domain([0, 1])
+        .domain([1, 0])
         .range([0, (self.height- (2*self.padding))]);
 
       self.xAxis = d3.axisBottom(self.xScale) // d3.js v.4
@@ -135,7 +135,7 @@ export class D3graphComponent implements OnInit, OnChanges {
         return self.height - self.yScale(d.speeding_quote) - (2*self.padding)})
       .attr('width', self.xScale.bandwidth())
       .attr('fill', function(d, i) {
-        return self.colorService.perc2color(d.speeding_quote * 100);
+        return self.colorService.perc2color2((1-d.speeding_quote) * 100);
       });
 
     self.rects
@@ -151,7 +151,7 @@ export class D3graphComponent implements OnInit, OnChanges {
         return self.height - self.yScale(d.speeding_quote) - (2*self.padding)})
       .attr('width', self.xScale.bandwidth())
       .attr('fill', function(d, i) {
-        return self.colorService.perc2color(d.speeding_quote * 100);
+        return self.colorService.perc2color2((1-d.speeding_quote) * 100);
       });
   }
 }
