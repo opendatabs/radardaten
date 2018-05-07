@@ -1,6 +1,7 @@
-import {ChangeDetectorRef, Component, OnInit, TemplateRef} from '@angular/core';
+import {ApplicationRef, Component, OnInit} from '@angular/core';
 import {ModalDismissReasons, NgbModal} from "@ng-bootstrap/ng-bootstrap";
-import {LatLng, latLng, Map, tileLayer} from "leaflet";
+import {control, divIcon, LatLng, latLng, Layer, Map, marker, Marker, tileLayer} from "leaflet";
+import layers = control.layers;
 
 enum Status {
   initial = 1,
@@ -26,13 +27,15 @@ export class SelectCoordinatesComponent implements OnInit {
     center: latLng(47.55814, 7.58769)
   };
   map: Map;
-  coordinates: LatLng;
+  coordinates: LatLng = new LatLng(0,0);
   direction1: LatLng;
   direction2: LatLng;
   status: Status;
+  markers: Layer[] = [];
+  Status = Status; // copy class to local reference
 
   constructor(private modalService: NgbModal,
-              private cd:ChangeDetectorRef,
+              private ref: ApplicationRef,
   ) {
   }
 
@@ -58,20 +61,51 @@ export class SelectCoordinatesComponent implements OnInit {
   }
 
   addCoordinates(latLng: LatLng) {
-    debugger;
+    if (this.status === Status.finished)
+      return null;
+
+    let color: string;
     switch (this.status) {
       case Status.initial:
+        color = "red";
         this.coordinates = latLng;
         break;
       case Status.direction1:
+        color = "blue";
         this.direction1 = latLng;
         break;
       case Status.direction2:
+        color = "green";
         this.direction2 = latLng;
         break;
     }
+    let i = divIcon({html: "<svg width='15' height='15' class='svg-marker'>" +
+      "<circle cx='5' cy='5' fill='"+color+"' class='circle'></circle>" +
+      "</svg>"});
+    let mark: Marker = marker(latLng, {
+      icon: i
+    });
+    this.markers.push(mark);
+
     this.status++;
-    this.cd.detectChanges();
+    // manually trigger angular changeDetection, because action is called from leaflet
+    this.ref.tick();
+  }
+
+  deleteEntries() {
+    this.coordinates = null;
+    this.direction1 = null;
+    this.direction2 = null;
+    this.status = 1;
+    this.markers = [];
+  }
+
+  submit() {
+    // implement submit function here
+    let str = this.coordinates.toString() + "\n" +
+      this.direction1.toString() + "\n" +
+      this.direction2.toString();
+    alert(str);
   }
 
   private getDismissReason(reason: any): string {

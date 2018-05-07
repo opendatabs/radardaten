@@ -1,4 +1,7 @@
-import {ChangeDetectorRef, Component, EventEmitter, Input, OnInit, Output, ViewChild} from '@angular/core';
+import {
+  ApplicationRef, ChangeDetectorRef, Component, EventEmitter, Input, OnInit, Output,
+  ViewChild
+} from '@angular/core';
 import {divIcon, latLng, Layer, marker, tileLayer, Map, tooltip} from "leaflet";
 import {MapTooltipComponent} from "../map-tooltip/map-tooltip.component";
 import {Radar} from "../../shared/radar";
@@ -28,7 +31,7 @@ export class MapComponent implements OnInit {
   };
 
   constructor(
-    private cd:ChangeDetectorRef,
+    private ref:ApplicationRef,
     private colorService: ColorService
   ) {}
 
@@ -70,12 +73,12 @@ export class MapComponent implements OnInit {
       this.map.latLngToLayerPoint(lefletElement._latlng).y,
       radar
     );
-    self.cd.detectChanges();
+    self.ref.tick();
   }
 
   hidePopup() {
     this.tooltip.hideTooltip();
-    this.cd.detectChanges();
+    this.ref.tick();
   }
 
   openDetails(radar: Radar) {

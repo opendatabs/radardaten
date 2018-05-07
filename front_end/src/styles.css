@@ -1,20 +1,20 @@
 /*Styles for leaflet map*/
-#map .svg-marker {
+#map .svg-marker, #select-coordinates-map .svg-marker {
   overflow: visible;
 }
 
-#map .circle {
+#map .circle, #select-coordinates-map .circle {
   r: 10;
   stroke: black;
   opacity: .7;
 }
 
-#map .circle:hover {
+#map .circle:hover, #select-coordinates-map .circle:hover {
   opacity: 1;
   cursor: pointer;
 }
 
-#map .leaflet-div-icon {
+#map .leaflet-div-icon, #select-coordinates-map .leaflet-div-icon {
   background: none;
   border: none;
 }
@@ -23,6 +23,10 @@
   opacity: 1;
   stroke: black;
   stroke-width: 2;
+}
+
+#select-coordinates-map {
+  cursor: pointer;
 }
 
 .big-modal .modal-dialog {

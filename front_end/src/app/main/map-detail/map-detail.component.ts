@@ -20,7 +20,6 @@ export class MapDetailComponent implements OnInit {
 
   constructor(
     private dataService: DataService,
-    private cd:ChangeDetectorRef
   ) { }
 
   ngOnInit() {
@@ -32,7 +31,6 @@ export class MapDetailComponent implements OnInit {
       this.data = data;
       this.radar = radar;
       // we need this because the action is called from leaflet. and leaflet has a bug that it'doesn't trigger update circle after changes
-      this.cd.detectChanges();
       document.getElementById('map-detail').scrollIntoView();
     });
   }

@@ -1,0 +1,20 @@
+.colorDiv {
+  height: 15px;
+  width: 15px;
+  float: left;
+  margin-right: 10px;
+  margin-top: 5px;
+}
+
+.colorDiv.red {
+  background-color: red;
+}
+
+.colorDiv.blue {
+  background-color: blue;
+}
+
+.colorDiv.green {
+  background-color: green;
+}
+
