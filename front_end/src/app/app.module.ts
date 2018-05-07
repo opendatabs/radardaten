@@ -17,6 +17,8 @@ import {ColorService} from "./shared/color.service";
 import {MapDetailComponent} from './main/map-detail/map-detail.component';
 import {D3graphComponent} from './main/d3graph/d3graph-component';
 import {D3Service} from 'd3-ng2-service';
+import { SelectCoordinatesComponent } from './main/select-coordinates/select-coordinates.component';
+import {FormsModule} from "@angular/forms";
 
 
 @NgModule({
@@ -28,14 +30,16 @@ import {D3Service} from 'd3-ng2-service';
     MapViewComponent,
     MapTooltipComponent,
     MapDetailComponent,
-    D3graphComponent
+    D3graphComponent,
+    SelectCoordinatesComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     NgbModule.forRoot(),
     LeafletModule.forRoot(),
-    HttpClientModule
+    HttpClientModule,
+    FormsModule
   ],
   providers: [DataService, HttpClientModule, ColorService, D3Service],
   bootstrap: [AppComponent]

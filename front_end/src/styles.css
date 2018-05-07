@@ -24,3 +24,8 @@
   stroke: black;
   stroke-width: 2;
 }
+
+.big-modal .modal-dialog {
+  max-width: 80%;
+}
+
