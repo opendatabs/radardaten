@@ -98,7 +98,7 @@ export class D3graphComponent implements OnInit, OnChanges {
       self.xAxis = d3.axisBottom(self.xScale) // d3.js v.4
         .scale(self.xScale)
         .ticks(24)
-        .tickFormat(d => moment(d).format("LT"));
+        .tickFormat((d: string) => moment(d).format("LT"));
 
       self.yAxis = d3.axisLeft(self.xScale) // d3.js v.4
         .scale(self.yScale)

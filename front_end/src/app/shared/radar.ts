@@ -6,4 +6,5 @@ export interface Radar {
   date: string,
   avg_speed: number,
   speeding_quote: number
+  speed_limit: number
 }

@@ -28,5 +28,4 @@ export class DataService {
   getDetailData2(): Observable<any[]> {
     return this.http.get<any[]>('assets/_mockData/detailData2.json');
   }
-
 }

@@ -9,6 +9,25 @@ module.exports = {
 
   attributes: {
 
+    email: {
+      type: 'email',
+      unique: true,
+    },
+    password: {
+      type: 'String',
+      required: true
+    },
+    admin: {
+      type: 'boolean'
+    },
+    toJSON: function () {
+      let obj = this.toObject();
+      delete obj.password;
+      return obj;
+    },
+    isPasswordValid: function(password, cb) {
+      bcrypt.compare(password, this.password, cb)
+    }
   }
 };
 

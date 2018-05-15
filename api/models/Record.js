@@ -9,6 +9,21 @@ module.exports = {
 
   attributes: {
 
+    date: {
+      type: 'String'
+    },
+    kmh: {
+      type: 'number'
+    },
+    length: {
+      type: 'number'
+    },
+    weekday: {
+      type: 'String'
+    },
+    radar: {
+      model: 'radar'
+    }
   }
 };
 

@@ -20,8 +20,8 @@
  */
 
 let local = {};
- if (!process.env.NODE_ENV || process.env.NODE_ENV === 'development') { // TODO problem?
-  local = require('../local.js');
+ if (!process.env.NODE_ENV || process.env.NODE_ENV === 'development') {
+  local = require('./local.js');
  }
 module.exports.connections = {
 
@@ -44,12 +44,12 @@ module.exports.connections = {
   * Run: npm install sails-mysql@for-sails-0.12 --save                       *
   *                                                                          *
   ***************************************************************************/
-    localhostDb: {
-      adapter: 'sails-mysql',
-      host: 'localhost',
-      user: local.localDbUser,
-      password: local.localDbPassword,
-      database: local.localDb
+  localhostDb: {
+    adapter: 'sails-mysql',
+    host: 'localhost',
+    user: local.localDbUser,
+    password: local.localDbPassword,
+    database: local.localDb
   },
 
   devDb: {
