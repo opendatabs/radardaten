@@ -8,7 +8,7 @@ import { Record } from './record';
 @Injectable()
 export class RecordService {
 
-  api = environment.api;
+  api = environment.api + 'record/';
 
   constructor(
     private http: HttpClient
@@ -18,19 +18,19 @@ export class RecordService {
     return this.http.get<Record[]>(this.api);
   }
 
-  getIndicator(id: number): Observable<Record> {
+  getRecord(id: number): Observable<Record> {
     return this.http.get<Record>(this.api + id);
   }
 
-  addIndicator(record: Record): Observable<Record> {
+  addRecord(record: Record): Observable<Record> {
     return this.http.post<Record>(this.api, record);
   }
 
-  updateIndicator(record: Record): Observable<Record> {
+  updateRecord(record: Record): Observable<Record> {
     return this.http.patch<Record>(this.api + record.id, record);
   }
 
-  deleteIndicator(record: Record): Observable<Record> {
+  deleteRecord(record: Record): Observable<Record> {
     return this.http.delete<Record>(this.api + record.id);
   }
 

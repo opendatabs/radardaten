@@ -12,25 +12,25 @@ module.exports = {
       type: 'string'
     },
     long: {
-      type: 'number'
+      type: 'float'
     },
     lat: {
-      type: 'number'
+      type: 'float'
     },
     directionLong: {
-      type: 'number'
+      type: 'float'
     },
     directionLat: {
-      type: 'number'
+      type: 'float'
     },
     speedingQuote: {
-      type: 'number'
+      type: 'integer'
     },
     speedLimit: {
-      type: 'number'
+      type: 'integer'
     },
     avgSpeed: {
-      type: 'number'
+      type: 'float'
     },
     records: {
       collection: 'record',

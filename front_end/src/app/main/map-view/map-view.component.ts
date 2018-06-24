@@ -16,7 +16,6 @@ export class MapViewComponent implements OnInit {
 
   constructor(
     private dataService: DataService,
-    private cd:ChangeDetectorRef
 ) { }
 
   ngOnInit() {
@@ -31,7 +30,5 @@ export class MapViewComponent implements OnInit {
   openDetails(radar: Radar) {
     this.hideDetail = false;
     this.mapDetailComponent.open(radar);
-    // we need this because the action is called from leaflet. and leaflet has a bug that it'doesn't trigger update circle after changes
-    this.cd.detectChanges();
   }
 }

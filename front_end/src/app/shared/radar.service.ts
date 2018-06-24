@@ -8,7 +8,7 @@ import { Radar } from './radar';
 @Injectable()
 export class RadarService {
 
-  api = environment.api;
+  api = environment.api + 'radar/';
 
   constructor(
     private http: HttpClient
@@ -18,19 +18,19 @@ export class RadarService {
     return this.http.get<Radar[]>(this.api);
   }
 
-  getIndicator(id: number): Observable<Radar> {
+  getRadar(id: number): Observable<Radar> {
     return this.http.get<Radar>(this.api + id);
   }
 
-  addIndicator(radar: Radar): Observable<Radar> {
-    return this.http.post<Radar>(this.api, radar);
+  addRadar(radar: object): Observable<object> { //TODO how pass <Radar> insted of <object>? ID created in backend
+    return this.http.post<object>(this.api + 'addRadar', radar);
   }
 
-  updateIndicator(radar: Radar): Observable<Radar> {
-    return this.http.patch<Radar>(this.api + radar.id, radar);
+  updateRadar(radar: Radar): Observable<Radar> {
+    return this.http.put<Radar>(this.api + 'updateRadar', radar);
   }
 
-  deleteIndicator(radar: Radar): Observable<Radar> {
+  deleteRadar(radar: Radar): Observable<Radar> {
     return this.http.delete<Radar>(this.api + radar.id);
   }
 

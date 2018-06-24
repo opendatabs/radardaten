@@ -21,6 +21,9 @@ import { AdminComponent } from './admin/admin.component';
 import { RadarService } from './shared/radar.service';
 import { RecordService } from './shared/record.service';
 import { Ng2SmartTableModule } from "ng2-smart-table";
+import { SelectCoordinatesComponent } from './main/select-coordinates/select-coordinates.component';
+import {FormsModule} from "@angular/forms";
+import { AddRecordsBtnComponent } from './admin/utility/add-records-btn.component';
 
 
 @NgModule({
@@ -33,7 +36,9 @@ import { Ng2SmartTableModule } from "ng2-smart-table";
     MapTooltipComponent,
     MapDetailComponent,
     D3graphComponent,
-    AdminComponent
+    AdminComponent,
+    SelectCoordinatesComponent,
+    AddRecordsBtnComponent,
   ],
   imports: [
     BrowserModule,
@@ -49,7 +54,8 @@ import { Ng2SmartTableModule } from "ng2-smart-table";
     ColorService,
     D3Service,
     RadarService,
-    RecordService
+    RecordService,
+    FormsModule
   ],
   bootstrap: [AppComponent]
 })

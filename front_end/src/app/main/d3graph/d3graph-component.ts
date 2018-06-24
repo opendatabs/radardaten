@@ -26,6 +26,29 @@ declare var $:any;
 })
 export class D3graphComponent implements OnInit, OnChanges {
 
+  //NEW
+  json: any;
+  dataa = `007	13:40:12	20.02.15	1	3.5
+006	13:40:13	20.02.15	1	3.6
+008	13:40:14	20.02.15	1	3.6
+013	13:40:43	20.02.15	1	4.5
+009	13:41:02	20.02.15	1	2.8
+016	13:43:15	20.02.15	1	3.7
+014	13:43:19	20.02.15	1	4.6
+016	13:44:03	20.02.15	1	3.7
+018	13:45:48	20.02.15	1	3.8
+016	13:46:44	20.02.15	1	4.8
+012	13:47:30	20.02.15	1	4.2
+005	13:48:16	20.02.15	1	3.8
+007	13:48:18	20.02.15	1	3.9
+014	13:49:10	20.02.15	1	3.9
+010	13:49:28	20.02.15	1	4.1
+017	13:49:31	20.02.15	1	4.5
+017	13:49:49	20.02.15	1	5.2
+009	13:50:14	20.02.15	1	3.8
+016	13:50:36	20.02.15	1	2.2`;
+
+
   @Input() data: any[];
 
   private d3: D3;
@@ -75,6 +98,9 @@ export class D3graphComponent implements OnInit, OnChanges {
     let self = this;
     let d3 = this.d3;
     this.width = $("#map").width();
+    this.json = d3.tsvParseRows(this.dataa);
+    console.log('hihi')
+    console.log(this.json);
 
     if (this.parentNativeElement !== null) {
       self.svg = d3.select(this.parentNativeElement)

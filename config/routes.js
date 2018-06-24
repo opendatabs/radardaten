@@ -34,7 +34,7 @@ module.exports.routes = {
 
   '/': {
     view: 'homepage'
-  }
+  },
 
   /***************************************************************************
   *                                                                          *
@@ -45,5 +45,7 @@ module.exports.routes = {
   * for configuration options and examples.                                  *
   *                                                                          *
   ***************************************************************************/
+  'post /Radar/addRadar' : 'RadarController.addRadar',
+  'post /Radar/updateRadar' : 'RadarController.updateRadar',
 
 };
