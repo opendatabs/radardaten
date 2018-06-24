@@ -33,8 +33,8 @@ export class MapDetailComponent implements OnInit {
     // this.dataService.getDetailData().subscribe((data:any[]) => {
     this.recordService.getRecords()
       .subscribe(
-        (res:any[]) => {
-          this.data = res;
+        (data:any[]) => {
+          this.data = data;
           this.radar = radar;
           /*
           we need this because the action is called from leaflet.
@@ -53,8 +53,8 @@ export class MapDetailComponent implements OnInit {
     // })
     this.recordService.getRecords()
       .subscribe(
-        (res:any[]) => {
-          this.data = res;
+        (data:any[]) => {
+          this.data = data;
         },
         err => console.log(err) // TODO decide on concise error handling
       );

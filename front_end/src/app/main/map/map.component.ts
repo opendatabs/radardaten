@@ -40,7 +40,7 @@ export class MapComponent implements OnInit {
     let self = this;
 
     this.data.forEach((d: Radar, index: number) => {
-      let color = this.colorService.perc2color2(d.speeding_quote*100);
+      let color = this.colorService.perc2color2(d.speedingQuote*100);
       let i = divIcon({html: "<svg width='15' height='15' class='svg-marker'>" +
         "<circle fill='"+color+"' class='circle' id='circle"+index+"'></circle>" +
         "</svg>"});

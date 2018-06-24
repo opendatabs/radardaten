@@ -13,13 +13,16 @@ module.exports = {
       type: 'String'
     },
     kmh: {
-      type: 'number'
+      type: 'float'
     },
     length: {
-      type: 'number'
+      type: 'float'
     },
     weekday: {
       type: 'String'
+    },
+    speedingQuote: { // TODO get from radar
+      type: 'float'
     },
     radar: {
       model: 'radar'

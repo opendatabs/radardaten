@@ -1,10 +1,10 @@
 export interface Radar {
   id: number,
-  street_name: string,
+  streetName: string,
   long: number,
   lat: number,
   date: string,
-  avg_speed: number,
-  speeding_quote: number
+  avgSpeed: number,
+  speedingQuote: number
   speed_limit: number
 }

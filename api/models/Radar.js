@@ -11,6 +11,9 @@ module.exports = {
     streetName: {
       type: 'string'
     },
+    date: {
+      type: 'string'
+    },
     long: {
       type: 'float'
     },

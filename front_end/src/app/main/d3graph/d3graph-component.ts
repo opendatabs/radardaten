@@ -154,14 +154,15 @@ export class D3graphComponent implements OnInit, OnChanges {
         return self.xScale(d.timestamp) + self.padding;
       })
       .attr('y', function(d) {
-        return self.yScale(d.speeding_quote) + self.padding;
+        debugger;
+        return self.yScale(d.speedingQuote) + self.padding;
       })
       // .attr("transform","translate(" + (self.padding -5  + 25) + "," + (self.padding - 5) + ")")
       .attr('height', function(d) {
-        return self.height - self.yScale(d.speeding_quote) - (2*self.padding)})
+        return self.height - self.yScale(d.speedingQuote) - (2*self.padding)})
       .attr('width', self.xScale.bandwidth())
       .attr('fill', function(d, i) {
-        return self.colorService.perc2color2((1-d.speeding_quote) * 100);
+        return self.colorService.perc2color2((1-d.speedingQuote) * 100);
       });
 
     self.rects
@@ -170,14 +171,14 @@ export class D3graphComponent implements OnInit, OnChanges {
         return self.xScale(d.timestamp) + self.padding;
       })
       .attr('y', function(d) {
-        return self.yScale(d.speeding_quote) + self.padding;
+        return self.yScale(d.speedingQuote) + self.padding;
       })
       // .attr("transform","translate(" + (self.padding -5  + 25) + "," + (self.padding - 5) + ")")
       .attr('height', function(d) {
-        return self.height - self.yScale(d.speeding_quote) - (2*self.padding)})
+        return self.height - self.yScale(d.speedingQuote) - (2*self.padding)})
       .attr('width', self.xScale.bandwidth())
       .attr('fill', function(d, i) {
-        return self.colorService.perc2color2((1-d.speeding_quote) * 100);
+        return self.colorService.perc2color2((1-d.speedingQuote) * 100);
       });
   }
 }
