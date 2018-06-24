@@ -33,7 +33,11 @@ module.exports = {
     Radar.update(
       { id: req.body.id }, {
         streetName: req.body.streetName,
-        speedLimit: parseInt(req.body.speedLimit)
+        speedLimit: parseInt(req.body.speedLimit),
+        lat: req.body.lat,
+        long: req.body.long,
+        directionLat: req.body.directionLat,
+        directionLong: req.body.directionLong,
       })
       .exec( (err, updated) => {
 

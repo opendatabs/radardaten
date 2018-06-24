@@ -4,6 +4,7 @@ import {control, divIcon, LatLng, latLng, Layer, Map, marker, Marker, tileLayer}
 import layers = control.layers;
 import { ViewCell} from 'ng2-smart-table';
 import { RadarService } from '../../shared/radar.service';
+import { HttpErrorResponse } from '@angular/common/http';
 
 enum Status {
   initial = 1,
@@ -39,14 +40,17 @@ export class SelectCoordinatesComponent implements OnInit, ViewCell {
   markers: Layer[] = [];
   Status = Status; // copy class to local reference
 
-  constructor(private modalService: NgbModal,
-              private ref: ApplicationRef,
-              private radarService: RadarService
-  ) {
-  }
+  constructor(
+    private modalService: NgbModal,
+    private ref: ApplicationRef,
+    private radarService: RadarService
+  ) { }
 
   ngOnInit(): void {
     this.status = Status.initial;
+    this.coordinates = new LatLng(this.rowData.lat, this.rowData.long);
+    this.direction1 = new LatLng(this.rowData.directionLat, this.rowData.directionLong);
+    //TODO add another direction?
   }
 
   onOpen(content) {
@@ -113,12 +117,15 @@ export class SelectCoordinatesComponent implements OnInit, ViewCell {
       this.direction1.toString() + "\n" +
       this.direction2.toString();
     console.log(str);
-    this.rowData.lat = 0;
-    this.rowData.long = 0;
-    this.rowData.directionLat = 0;
-    this.rowData.directionLong = 0;
-    this.radarService.updateRadar(this.rowData);
-    this.open.emit(this.rowData); // <-- TODO needed to update component data? Evt. remove
+    // TODO Are there actually two directions per measurement?
+    this.rowData.lat = this.coordinates.lat;
+    this.rowData.long = this.coordinates.lng;
+    this.rowData.directionLat = this.direction1.lat;
+    this.rowData.directionLong = this.direction1.lng;
+    debugger;
+    this.radarService.updateRadar(this.rowData).subscribe();
+    // this.open.emit(this.rowData); // <-- TODO needed to update component data? Evt. remove
+    // TODO Give the user a feedback
   }
 
   private getDismissReason(reason: any): string {

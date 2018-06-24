@@ -51,7 +51,7 @@ export class AdminComponent implements OnInit {
         onComponentInitFunction(instance) {
           instance.open.subscribe(row => {
             // probably no action needed
-            // console.log(row)
+            console.log(row)
 
           });
         }
