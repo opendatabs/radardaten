@@ -9,7 +9,7 @@ module.exports = {
 
   attributes: {
 
-    date: {
+    timestamp: {
       type: 'String'
     },
     kmh: {

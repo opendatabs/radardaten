@@ -39,7 +39,7 @@ export class AddRecordsBtnComponent implements OnInit, ViewCell {
   closeResult: string;
 
   // private d3: D3;
-  json: any;
+  json: any; //TODO extract weekday
   data= `
 km/h  date  time  direction m
 007 13:40:12  20.02.15  1 3.5

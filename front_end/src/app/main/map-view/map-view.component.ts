@@ -2,6 +2,7 @@ import {ChangeDetectorRef, Component, OnInit, ViewChild} from '@angular/core';
 import {DataService} from "../../shared/data-service.service";
 import {Radar} from "../../shared/radar";
 import {MapDetailComponent} from "../map-detail/map-detail.component";
+import { RadarService } from '../../shared/radar.service';
 
 @Component({
   selector: 'app-map-view',
@@ -16,15 +17,16 @@ export class MapViewComponent implements OnInit {
 
   constructor(
     private dataService: DataService,
+    private radarService: RadarService,
 ) { }
 
   ngOnInit() {
-    this.dataService.getMapData().subscribe((data:Radar[]) => {
-      this.data = data;
-    }, err => {
-      console.log(err);
-      alert('an error occured');
-    })
+    // this.dataService.getMapData().subscribe((data:Radar[]) => {
+    this.radarService.getRadars()
+      .subscribe(
+        res => this.data = res,
+        err => console.log(err)
+      );
   }
 
   openDetails(radar: Radar) {

@@ -27,7 +27,7 @@ export class AdminComponent implements OnInit {
   @Output() selectClick: EventEmitter<any> = new EventEmitter();
 
   settings = {
-    columns: {
+    columns: { //TODO add Start date of measurement
       streetName: {
         title: 'Strasse & Nr.',
       },

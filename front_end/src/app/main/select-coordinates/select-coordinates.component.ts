@@ -48,13 +48,12 @@ export class SelectCoordinatesComponent implements OnInit, ViewCell {
 
   ngOnInit(): void {
     this.status = Status.initial;
-    this.coordinates = new LatLng(this.rowData.lat, this.rowData.long);
-    this.direction1 = new LatLng(this.rowData.directionLat, this.rowData.directionLong);
-    //TODO add another direction?
   }
 
   onOpen(content) {
-    console.log(this.rowData); //TODO remove
+    this.coordinates = new LatLng(this.rowData.lat, this.rowData.long);
+    this.direction1 = new LatLng(this.rowData.directionLat, this.rowData.directionLong);
+    //TODO add another direction?
     this.modalService.open(content, { windowClass: 'big-modal' }).result.then((result) => {
       this.closeResult = `Closed with: ${result}`;
     }, (reason) => {
@@ -122,9 +121,8 @@ export class SelectCoordinatesComponent implements OnInit, ViewCell {
     this.rowData.long = this.coordinates.lng;
     this.rowData.directionLat = this.direction1.lat;
     this.rowData.directionLong = this.direction1.lng;
-    debugger;
     this.radarService.updateRadar(this.rowData).subscribe();
-    // this.open.emit(this.rowData); // <-- TODO needed to update component data? Evt. remove
+    this.open.emit(this.rowData); // <-- TODO needed to update component data? Evt. remove
     // TODO Give the user a feedback
   }
 
