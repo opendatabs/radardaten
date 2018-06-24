@@ -115,7 +115,7 @@ export class SelectCoordinatesComponent implements OnInit, ViewCell {
     console.log(str);
     this.rowData.lat = 0;
     this.rowData.long = 0;
-    this.rowData.directionLat= 0;
+    this.rowData.directionLat = 0;
     this.rowData.directionLong = 0;
     this.radarService.updateRadar(this.rowData);
     this.open.emit(this.rowData); // <-- TODO needed to update component data? Evt. remove

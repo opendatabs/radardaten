@@ -92,50 +92,45 @@ export class AdminComponent implements OnInit {
     },
   };
 
-
-    constructor(
+  constructor(
     private radarService: RadarService,
     private recordService: RecordService
   ) { }
 
   ngOnInit() {
     if (!this.data) {
-      this.radarService.getRadars()
-        .subscribe(
-          event => {
-            this.data = event;
-            this.source = new LocalDataSource(this.data);
-            console.log(this.data);
-          },
-          err => {
-            this.error = err;
-            console.log(err);
-          })
+      this.getData();
     }
   }
 
 
   onClickDelete(event){
-      //TODO Alert to confirm delte
-    const radar: Radar = event.data;
-    this.radarService.deleteRadar(radar)
-      .subscribe(
-        res => {
-          event.confirm.resolve(event.source.data);
-        },
-        (err: HttpErrorResponse) => {
-          if (err.error instanceof Error) {
-            console.log("Client-side error occured.");
-          } else {
-            console.log("Server-side error occured.");
-            console.log(err)
-          }
-        });
+    if (confirm(`
+    Wollen Sie den Eintrag und alle damit verbundenen 
+    Messungen und Koordinaten wirklich löschen?`)) {
+      if (event.data.hasOwnProperty('id')) {
+        const radar: Radar = event.data;
+        this.radarService.deleteRadar(radar)
+          .subscribe(
+            res => {
+              event.confirm.resolve(event.source.data);
+              //TODO delete associated records
+            },
+            (err: HttpErrorResponse) => {
+              if (err.error instanceof Error) {
+                console.log("Client-side error occured.");
+              } else {
+                console.log("Server-side error occured.");
+                console.log(err)
+              }
+            }
+          );
+      }
+    }
   }
 
   onClickEdit(event) {
-    // cast string to number; NaN if cast is flawed
-    event.newData.speedLimit = Number(event.newData.speedLimit);
+    event.newData.speedLimit = this.validateSpeed(event.newData.speedLimit);
     const radar: Radar = event.newData;
     this.radarService.updateRadar(radar)
       .subscribe(
@@ -149,18 +144,21 @@ export class AdminComponent implements OnInit {
             console.log("Server-side error occured.");
             console.log(err);
           }
-        });
+        }
+      );
   }
 
-  onClickCreate(event){
-      console.log(event)
-    event.newData.speedLimit = Number(event.newData.speedLimit);
+  onClickCreate(event) {
+    event.newData.speedLimit = this.validateSpeed(event.newData.speedLimit);
     event.newData.avgSpeed = Number(event.newData.avgSpeed);
     event.newData.speedingQuote = Number(event.newData.speedingQuote);
+    console.log(this.data);
     this.radarService.addRadar(event.newData)
       .subscribe(
         res => {
           event.confirm.resolve(event.newData);
+          // Necessary in case the radar gets deleted right after creation. No ID otherwise.
+          this.getData();
         },
         (err: HttpErrorResponse) => {
           if (err.error instanceof Error) {
@@ -169,7 +167,30 @@ export class AdminComponent implements OnInit {
             console.log("Server-side error occured.");
             console.log(err)
           }
-        });
+        }
+      );
+  }
+
+  private getData(): void {
+    this.radarService.getRadars()
+      .subscribe(
+        res => {
+          this.data = res;
+          this.source = new LocalDataSource(this.data);
+          console.log(this.data);
+        },
+        err => {
+          this.error = err;
+          console.log(err);
+        }
+      );
+  }
+
+  private validateSpeed(speed: number): number {
+      // cast string to number; NaN if cast is flawed
+      if (!isNaN(Number(speed)) && speed > 0 && speed < 120)
+        return Number(speed);
+      return 1;
   }
 
 }

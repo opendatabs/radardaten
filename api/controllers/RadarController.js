@@ -7,10 +7,10 @@
 
 module.exports = {
   addRadar: (req, res) => {
-   const radar = {
+    const radar = {
       streetName: req.body.streetName,
-      speedingQuote: parseInt(req.body.speedingQuote), //TODO calculate from Record
       speedLimit: parseInt(req.body.speedLimit),
+      speedingQuote: parseInt(req.body.speedingQuote), //TODO calculate from Record
       avgSpeed: parseInt(req.body.avgSpeed), //TODO calculate from Record
       long: 0,
       lat: 0,
