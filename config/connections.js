@@ -60,6 +60,14 @@ module.exports.connections = {
     database: process.env.DATABASE
   },
 
+  devDbLocal: {
+    adapter: 'sails-mysql',
+    host: local.localHOST,
+    user: local.localUSER,
+    password: local.localPASSWORD,
+    database: local.localDATABASE
+  }
+
   /***************************************************************************
   *                                                                          *
   * MongoDB is the leading NoSQL database.                                   *
