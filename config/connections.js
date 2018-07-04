@@ -54,10 +54,10 @@ module.exports.connections = {
 
   devDb: {
     adapter: 'sails-mysql',
-    host: 'fdn-dev.iwi.unibe.ch',
+    host: process.env.HOST,
     user: process.env.USER,
     password: process.env.PASSWORD,
-    database: 'radardaten'
+    database: process.env.DATABASE
   },
 
   /***************************************************************************

@@ -10,19 +10,19 @@ module.exports = {
   attributes: {
 
     timestamp: {
-      type: 'String'
+      type: 'dateTime'
     },
     kmh: {
-      type: 'float'
+      type: 'float',
+      defaultsTo: 0
     },
     length: {
-      type: 'float'
+      type: 'float',
+      defaultsTo: 0
     },
     weekday: {
-      type: 'String'
-    },
-    speedingQuote: { // TODO get from radar
-      type: 'float'
+      type: 'String',
+      defaultsTo: null
     },
     radar: {
       model: 'radar'

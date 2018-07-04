@@ -5,6 +5,8 @@
  * @docs        :: http://sailsjs.org/documentation/concepts/models-and-orm/models
  */
 
+require('moment');
+
 module.exports = {
 
   attributes: {
@@ -12,28 +14,46 @@ module.exports = {
       type: 'string'
     },
     date: {
-      type: 'string'
+      type: 'dateTime',
+      defaultsTo: () => {
+        moment().format("YYYY-MM-DD HH:mm:ss");
+      }
     },
     long: {
-      type: 'float'
+      type: 'float',
+      defaultsTo: 0
     },
     lat: {
-      type: 'float'
+      type: 'float',
+      defaultsTo: 0
     },
-    directionLong: {
-      type: 'float'
+    directionOneLong: {
+      type: 'float',
+      defaultsTo: 0
     },
-    directionLat: {
-      type: 'float'
+    directionOneLat: {
+      type: 'float',
+      defaultsTo: 0
+    },
+    directionTwoLong: {
+      type: 'float',
+      defaultsTo: 0
+    },
+    directionTwoLat: {
+      type: 'float',
+      defaultsTo: 0
     },
     speedingQuote: {
-      type: 'integer'
+      type: 'integer',
+      defaultsTo: 0
     },
     speedLimit: {
-      type: 'integer'
+      type: 'integer',
+      defaultsTo: 0
     },
     avgSpeed: {
-      type: 'float'
+      type: 'float',
+      defaultsTo: 0
     },
     records: {
       collection: 'record',
