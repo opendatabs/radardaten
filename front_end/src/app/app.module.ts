@@ -47,7 +47,8 @@ import {CalculatorService} from "./shared/calculator.service";
     NgbModule.forRoot(),
     LeafletModule.forRoot(),
     HttpClientModule,
-    Ng2SmartTableModule
+    Ng2SmartTableModule,
+    FormsModule
   ],
   providers: [
     DataService,
@@ -56,7 +57,6 @@ import {CalculatorService} from "./shared/calculator.service";
     D3Service,
     RadarService,
     RecordService,
-    FormsModule,
     CalculatorService
   ],
   bootstrap: [AppComponent]

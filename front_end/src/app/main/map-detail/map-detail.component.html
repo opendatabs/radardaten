@@ -10,10 +10,18 @@
             </button>
           </div>
         </div>
+        <div class="btn-group btn-group-toggle" ngbRadioGroup name="radioBasic" [(ngModel)]="groupBy">
+          <label ngbButtonLabel class="btn-primary">
+            <input ngbButton type="radio" [value]="'days'"> Tage
+          </label>
+          <label ngbButtonLabel class="btn-primary">
+            <input ngbButton type="radio" [value]="'hours'"> Stunden
+          </label>
+        </div>
       </div>
     </div>
     <div class="row">
-      <app-d3graph [records]="graphDataDir1" [speedLimit]="radar?.speedLimit"></app-d3graph>
+      <app-d3graph [records]="graphDataDir1" [speedLimit]="radar?.speedLimit" [groupBy]="groupBy"></app-d3graph>
     </div>
     <div class="row mt-5" *ngIf="radar">
       <div class="col-12">

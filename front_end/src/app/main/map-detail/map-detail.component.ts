@@ -18,6 +18,7 @@ export class MapDetailComponent implements OnInit {
   measurements: string[];
   selectedMeasurement: string;
   radar: Radar;
+  groupBy: string = 'days';
 
   constructor(
     private dataService: DataService,

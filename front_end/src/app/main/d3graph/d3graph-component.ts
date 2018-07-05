@@ -26,31 +26,10 @@ declare var $:any;
 })
 export class D3graphComponent implements OnInit, OnChanges {
 
-  //NEW
-  json: any;
-  dataa = `007	13:40:12	20.02.15	1	3.5
-006	13:40:13	20.02.15	1	3.6
-008	13:40:14	20.02.15	1	3.6
-013	13:40:43	20.02.15	1	4.5
-009	13:41:02	20.02.15	1	2.8
-016	13:43:15	20.02.15	1	3.7
-014	13:43:19	20.02.15	1	4.6
-016	13:44:03	20.02.15	1	3.7
-018	13:45:48	20.02.15	1	3.8
-016	13:46:44	20.02.15	1	4.8
-012	13:47:30	20.02.15	1	4.2
-005	13:48:16	20.02.15	1	3.8
-007	13:48:18	20.02.15	1	3.9
-014	13:49:10	20.02.15	1	3.9
-010	13:49:28	20.02.15	1	4.1
-017	13:49:31	20.02.15	1	4.5
-017	13:49:49	20.02.15	1	5.2
-009	13:50:14	20.02.15	1	3.8
-016	13:50:36	20.02.15	1	2.2`;
-
-
   @Input() records: Record[];
   @Input() speedLimit: number;
+  @Input() groupBy: string;
+
   stackedData: any[];
 
   private d3: D3;
@@ -90,6 +69,10 @@ export class D3graphComponent implements OnInit, OnChanges {
     } else if (changes.records && changes.records.currentValue) {
       this.stackedData = this.stackData(changes.records.currentValue);
       this.updateChart();
+    } else if ( changes.groupBy && changes.groupBy.currentValue) {
+      this.stackedData = this.stackData(this.records);
+      this.initChart();
+      this.updateChart();
     }
   }
 
@@ -97,7 +80,11 @@ export class D3graphComponent implements OnInit, OnChanges {
     const self = this;
     let nested = this.d3.nest<Record, {count:number, avgSpeed:number}>()
       .key(function(d: Record) {
-        return moment(d.timestamp).format('YYYY-MM-DD');
+        if (self.groupBy === 'days') {
+          return moment(d.timestamp).format('YYYY-MM-DD');
+        } else {
+          return moment(d.timestamp).format('HH')
+        }
       })
       .rollup(function(v:any) {
         return {
@@ -114,22 +101,23 @@ export class D3graphComponent implements OnInit, OnChanges {
     let self = this;
     let d3 = this.d3;
     this.width = $("#map").width();
-    // this.json = d3.tsvParseRows(this.dataa);
-    // console.log('hihi')
-    // console.log(this.json);
 
+    $(this.parentNativeElement).find('svg').remove();
     if (this.parentNativeElement !== null) {
       self.svg = d3.select(this.parentNativeElement)
         .append('svg')        // create an <svg> element
         .attr('width', self.width) // set its dimensions
         .attr('height', self.height);
 
-      self.colors = ['red', 'yellow', 'green', 'blue'];
-
       self.stackedData = this.stackedData;
 
+      const weekDomain = ['Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag', 'Samstag', 'Sonntag'];
+      const hoursDomain = ['00', '01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12', '13', '14', '15',
+        '16', '17', '18', '19', '20', '21', '22', '23'];
+      let domain;
+      (self.groupBy === 'days') ? domain = weekDomain : domain = hoursDomain;
       self.xScale = d3.scaleBand()
-        .domain(['Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag', 'Samstag', 'Sonntag'])
+        .domain(domain)
         .range([0, (self.width - (2*self.padding))])
         .padding(.1);
 
@@ -166,7 +154,11 @@ export class D3graphComponent implements OnInit, OnChanges {
       .enter()
       .append('rect')
       .attr('x', function(d,i) {
-        return self.xScale(moment(d.key).format('dddd')) + self.padding;
+        if (self.groupBy === 'days') {
+          return self.xScale(moment(d.key).format('dddd')) + self.padding;
+        } else {
+          return self.xScale(d.key) + self.padding;
+        }
       })
       .attr('y', function(d) {
         return self.yScale(d.value.avgSpeed) + self.padding;
@@ -182,7 +174,11 @@ export class D3graphComponent implements OnInit, OnChanges {
     self.rects
       .transition()
       .attr('x', function(d,i) {
-        return self.xScale(moment(d.key).format('dddd')) + self.padding;
+        if (self.groupBy === 'days') {
+          return self.xScale(moment(d.key).format('dddd')) + self.padding;
+        } else {
+          return self.xScale(d.key) + self.padding;
+        }
       })
       .attr('y', function(d) {
         return self.yScale(d.value.avgSpeed) + self.padding;
