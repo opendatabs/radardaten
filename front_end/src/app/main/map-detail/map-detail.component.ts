@@ -1,8 +1,10 @@
 import {ChangeDetectorRef, Component, OnInit} from '@angular/core';
 import {Radar} from "../../shared/radar";
+import { Record } from "../../shared/record";
 import {DataService} from "../../shared/data-service.service";
-import { RadarService } from '../../shared/radar.service';
 import { RecordService } from '../../shared/record.service';
+declare const $: any;
+import * as moment from 'moment';
 
 @Component({
   selector: 'app-map-detail',
@@ -11,12 +13,9 @@ import { RecordService } from '../../shared/record.service';
 })
 export class MapDetailComponent implements OnInit {
 
-  data: any[];
-  measurements: string[] = [
-    "2018-04-30",
-    "2018-05-01",
-    "2018-05-02",
-  ];
+  graphDataDir1: Record[];
+  graphDataDir2: Record[];
+  measurements: string[];
   selectedMeasurement: string;
   radar: Radar;
 
@@ -26,37 +25,30 @@ export class MapDetailComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.selectedMeasurement = this.measurements[0];
   }
 
   open(radar: Radar) {
-    // this.dataService.getDetailData().subscribe((data:any[]) => {
-    this.recordService.getRecords()
-      .subscribe(
-        (data:any[]) => {
-          this.data = data;
-          this.radar = radar;
-          /*
-          we need this because the action is called from leaflet.
-          and leaflet has a bug that it'doesn't trigger update circle after changes
-           */
-          document.getElementById('map-detail').scrollIntoView();
-        },
-          err => console.log(err) // TODO decide on concise error handling
-      );
+    this.radar = radar;
+    this.measurements = $.unique(radar.records.map(d => {
+      return this.formatTimestampWeek(d.timestamp);
+    }));
+    this.selectMesaurement(this.measurements[0]);
+    /*
+    we need this because the action is called from leaflet.
+    and leaflet has a bug that it'doesn't trigger update circle after changes
+     */
+    document.getElementById('map-detail').scrollIntoView();
   }
 
   selectMesaurement(measurement: string) {
     this.selectedMeasurement = measurement;
-    // this.dataService.getDetailData().subscribe((data: any[]) => {
-    //   this.data = data;
-    // })
-    this.recordService.getRecords()
-      .subscribe(
-        (data:any[]) => {
-          this.data = data;
-        },
-        err => console.log(err) // TODO decide on concise error handling
-      );
+    this.graphDataDir1 = this.radar.records.filter(d => {
+      return this.formatTimestampWeek(d.timestamp) === measurement;
+    });
+    console.log(this.graphDataDir1);
+  }
+
+  private formatTimestampWeek(timestamp: string) {
+    return moment(timestamp).format("YYYY-MM") + " Woche " + moment(timestamp).format('ww')
   }
 }

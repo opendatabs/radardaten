@@ -24,6 +24,7 @@ import { Ng2SmartTableModule } from "ng2-smart-table";
 import { SelectCoordinatesComponent } from './main/select-coordinates/select-coordinates.component';
 import {FormsModule} from "@angular/forms";
 import { AddRecordsBtnComponent } from './admin/utility/add-records-btn.component';
+import {CalculatorService} from "./shared/calculator.service";
 
 
 @NgModule({
@@ -55,7 +56,8 @@ import { AddRecordsBtnComponent } from './admin/utility/add-records-btn.componen
     D3Service,
     RadarService,
     RecordService,
-    FormsModule
+    FormsModule,
+    CalculatorService
   ],
   bootstrap: [AppComponent]
 })

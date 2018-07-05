@@ -6,6 +6,7 @@ import { Radar } from '../shared/radar';
 import { AddRecordsBtnComponent } from './utility/add-records-btn.component';
 import { SelectCoordinatesComponent } from '../main/select-coordinates/select-coordinates.component';
 import { HttpErrorResponse } from '@angular/common/http';
+import {CalculatorService} from "../shared/calculator.service";
 
 @Component({
   selector: 'app-admin',
@@ -54,7 +55,6 @@ export class AdminComponent implements OnInit {
           instance.open.subscribe(row => {
             // probably no action needed
             console.log(row)
-
           });
         }
       },
@@ -96,7 +96,8 @@ export class AdminComponent implements OnInit {
 
   constructor(
     private radarService: RadarService,
-    private recordService: RecordService
+    private recordService: RecordService,
+    private calculatorService: CalculatorService
   ) { }
 
   ngOnInit() {
@@ -178,6 +179,9 @@ export class AdminComponent implements OnInit {
       .subscribe(
         res => {
           this.data = res;
+          this.data.forEach(d => {
+            d.avgSpeed = this.calculatorService.calculateAvgSpeed(d.records);
+          });
           this.source = new LocalDataSource(this.data);
           console.log(this.data);
         },

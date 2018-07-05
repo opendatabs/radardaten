@@ -39,7 +39,7 @@ module.exports = {
         directionOneLat: req.body.directionOneLat,
         directionOneLong: req.body.directionOneLong,
         directionTwoLat: req.body.directionTwoLat,
-        directionTwoLong: req.body.directionTwoeLong,
+        directionTwoLong: req.body.directionTwoLong,
       })
       .exec( (err, updated) => {
 

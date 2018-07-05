@@ -13,9 +13,9 @@ import {
   Transition
 } from 'd3-ng2-service';
 import {DataService} from "../../shared/data-service.service";
-import {Radar} from "../../shared/radar";
 import * as moment from 'moment';
 import {ColorService} from "../../shared/color.service";
+import {Record} from "../../shared/record";
 
 declare var $:any;
 
@@ -49,23 +49,20 @@ export class D3graphComponent implements OnInit, OnChanges {
 016	13:50:36	20.02.15	1	2.2`;
 
 
-  @Input() data: any[];
+  @Input() records: Record[];
+  @Input() speedLimit: number;
+  stackedData: any[];
 
   private d3: D3;
   private parentNativeElement: any;
-  private d3Svg: Selection<SVGSVGElement, any, null, undefined>;
 
-  private d3ParentElement: any;
   private svg: any;
-  private name: string;
-  private yVal: number;
   private colors: any = [];
   private padding: number = 25;
   private width: number;
   private height: number = 300;
   private xScale: any;
   private yScale: any;
-  private xColor: any;
   private xAxis: any;
   private yAxis: any;
   private rects: any;
@@ -86,21 +83,40 @@ export class D3graphComponent implements OnInit, OnChanges {
   }
 
   ngOnChanges(changes: any) {
-    if (changes.data && changes.data.currentValue && !changes.data.previousValue) {
+    if (changes.records && changes.records.currentValue && !changes.records.previousValue) {
+      this.stackedData = this.stackData(changes.records.currentValue);
       this.initChart();
       this.updateChart();
-    } else if (changes.data && changes.data.currentValue) {
+    } else if (changes.records && changes.records.currentValue) {
+      this.stackedData = this.stackData(changes.records.currentValue);
       this.updateChart();
     }
+  }
+
+  stackData(records: Record[]) {
+    const self = this;
+    let nested = this.d3.nest<Record, {count:number, avgSpeed:number}>()
+      .key(function(d: Record) {
+        return moment(d.timestamp).format('YYYY-MM-DD');
+      })
+      .rollup(function(v:any) {
+        return {
+          count: v.length,
+          avgSpeed: self.d3.mean(v, function (d:any) {return d.kmh})
+        };
+      })
+      .entries(records);
+    console.log(nested);
+    return nested;
   }
 
   initChart() {
     let self = this;
     let d3 = this.d3;
     this.width = $("#map").width();
-    this.json = d3.tsvParseRows(this.dataa);
-    console.log('hihi')
-    console.log(this.json);
+    // this.json = d3.tsvParseRows(this.dataa);
+    // console.log('hihi')
+    // console.log(this.json);
 
     if (this.parentNativeElement !== null) {
       self.svg = d3.select(this.parentNativeElement)
@@ -110,21 +126,20 @@ export class D3graphComponent implements OnInit, OnChanges {
 
       self.colors = ['red', 'yellow', 'green', 'blue'];
 
-      self.data = this.data;
+      self.stackedData = this.stackedData;
 
       self.xScale = d3.scaleBand()
-        .domain(self.data.map(function(d) { return d.timestamp; }))
+        .domain(['Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag', 'Samstag', 'Sonntag'])
         .range([0, (self.width - (2*self.padding))])
         .padding(.1);
 
       self.yScale = d3.scaleLinear()
-        .domain([1, 0])
+        .domain([self.speedLimit, 0])
         .range([0, (self.height- (2*self.padding))]);
 
       self.xAxis = d3.axisBottom(self.xScale) // d3.js v.4
         .scale(self.xScale)
-        .ticks(24)
-        .tickFormat((d: string) => moment(d).format("LT"));
+        .ticks(7);
 
       self.yAxis = d3.axisLeft(self.xScale) // d3.js v.4
         .scale(self.yScale)
@@ -145,40 +160,39 @@ export class D3graphComponent implements OnInit, OnChanges {
   updateChart() {
     let self = this;
     self.rects = self.svg.selectAll('rect')
-      .data(self.data);
+      .data(self.stackedData);
 
     self.rects
       .enter()
       .append('rect')
       .attr('x', function(d,i) {
-        return self.xScale(d.timestamp) + self.padding;
+        return self.xScale(moment(d.key).format('dddd')) + self.padding;
       })
       .attr('y', function(d) {
-        debugger;
-        return self.yScale(d.speedingQuote) + self.padding;
+        return self.yScale(d.value.avgSpeed) + self.padding;
       })
       // .attr("transform","translate(" + (self.padding -5  + 25) + "," + (self.padding - 5) + ")")
       .attr('height', function(d) {
-        return self.height - self.yScale(d.speedingQuote) - (2*self.padding)})
+        return self.height - self.yScale(d.value.avgSpeed) - (2*self.padding)})
       .attr('width', self.xScale.bandwidth())
       .attr('fill', function(d, i) {
-        return self.colorService.perc2color2((1-d.speedingQuote) * 100);
+        return self.colorService.perc2color2(d.value.avgSpeed, self.speedLimit);
       });
 
     self.rects
       .transition()
       .attr('x', function(d,i) {
-        return self.xScale(d.timestamp) + self.padding;
+        return self.xScale(moment(d.key).format('dddd')) + self.padding;
       })
       .attr('y', function(d) {
-        return self.yScale(d.speedingQuote) + self.padding;
+        return self.yScale(d.value.avgSpeed) + self.padding;
       })
       // .attr("transform","translate(" + (self.padding -5  + 25) + "," + (self.padding - 5) + ")")
       .attr('height', function(d) {
-        return self.height - self.yScale(d.speedingQuote) - (2*self.padding)})
+        return self.height - self.yScale(d.value.avgSpeed) - (2*self.padding)})
       .attr('width', self.xScale.bandwidth())
       .attr('fill', function(d, i) {
-        return self.colorService.perc2color2((1-d.speedingQuote) * 100);
+        return self.colorService.perc2color2(d.value.avgSpeed, self.speedLimit);
       });
   }
 }

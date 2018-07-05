@@ -13,7 +13,7 @@
       </div>
     </div>
     <div class="row">
-      <app-d3graph [data]="data"></app-d3graph>
+      <app-d3graph [records]="graphDataDir1" [speedLimit]="radar?.speedLimit"></app-d3graph>
     </div>
     <div class="row mt-5" *ngIf="radar">
       <div class="col-12">
@@ -29,12 +29,12 @@
             <td>{{radar.date}}</td>
           </tr>
           <tr>
-            <td>Durchschnittsgeschwindigkeit:</td>
-            <td>{{radar.avgSpeed}}</td>
+            <td>Ø (km/h) Richtung 1:</td>
+            <td>{{radar.directionOneMeanKmh}}</td>
           </tr>
           <tr>
-            <td>Übertretungsquote:</td>
-            <td>{{radar.speedingQuote}}</td>
+            <td>Ø (km/h) Richtung 2:</td>
+            <td>{{radar.directionTwoMeanKmh}}</td>
           </tr>
         </table>
       </div>
