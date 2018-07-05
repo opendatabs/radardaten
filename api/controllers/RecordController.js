@@ -6,6 +6,25 @@
  */
 
 module.exports = {
+  addRecord: (req, res) => {
+    const record = {
+      timestamp: req.body.timestamp,
+      kmh: req.body.kmh,
+      length: req.body.length,
+      weekday: req.body.weekday,
+      direction: req.body.direction,
+      radar: req.body.radar,
+    };
+    Record.create(record)
+      .exec( err => {
+
+        if (err) {
+          res.serverError(err);
+          return;
+        }
+        return res.json(record);
+      })
+  },
 
 };
 

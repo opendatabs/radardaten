@@ -10,12 +10,12 @@ module.exports = {
     const radar = {
       streetName: req.body.streetName,
       speedLimit: parseInt(req.body.speedLimit),
-      speedingQuote: parseInt(req.body.speedingQuote), //TODO calculate from Record
-      avgSpeed: parseInt(req.body.avgSpeed), //TODO calculate from Record
       long: 0,
       lat: 0,
-      directionLong: 0,
-      directionLat: 0,
+      directionOneLong: 0,
+      directionOneLat: 0,
+      directionTwoLong: 0,
+      directionTwoLat: 0,
     };
     Radar.create(radar)
       .exec( err => {
@@ -36,8 +36,10 @@ module.exports = {
         speedLimit: parseInt(req.body.speedLimit),
         lat: req.body.lat,
         long: req.body.long,
-        directionLat: req.body.directionLat,
-        directionLong: req.body.directionLong,
+        directionOneLat: req.body.directionOneLat,
+        directionOneLong: req.body.directionOneLong,
+        directionTwoLat: req.body.directionTwoLat,
+        directionTwoLong: req.body.directionTwoeLong,
       })
       .exec( (err, updated) => {
 

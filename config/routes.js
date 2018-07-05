@@ -47,5 +47,6 @@ module.exports.routes = {
   ***************************************************************************/
   'post /Radar/addRadar' : 'RadarController.addRadar',
   'post /Radar/updateRadar' : 'RadarController.updateRadar',
+  'post /Record/addRecord' : 'RecordController.addRecord',
 
 };

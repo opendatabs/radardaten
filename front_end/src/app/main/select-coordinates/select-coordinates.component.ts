@@ -52,8 +52,8 @@ export class SelectCoordinatesComponent implements OnInit, ViewCell {
 
   onOpen(content) {
     this.coordinates = new LatLng(this.rowData.lat, this.rowData.long);
-    this.direction1 = new LatLng(this.rowData.directionLat, this.rowData.directionLong);
-    //TODO add another direction?
+    this.direction1 = new LatLng(this.rowData.directionOneLat, this.rowData.directionOneLong);
+    this.direction2 = new LatLng(this.rowData.directionTwoLat, this.rowData.directionTwoLong);
     this.modalService.open(content, { windowClass: 'big-modal' }).result.then((result) => {
       this.closeResult = `Closed with: ${result}`;
     }, (reason) => {
@@ -119,8 +119,10 @@ export class SelectCoordinatesComponent implements OnInit, ViewCell {
     // TODO Are there actually two directions per measurement?
     this.rowData.lat = this.coordinates.lat;
     this.rowData.long = this.coordinates.lng;
-    this.rowData.directionLat = this.direction1.lat;
-    this.rowData.directionLong = this.direction1.lng;
+    this.rowData.directionOneLat = this.direction1.lat;
+    this.rowData.directionOneLong = this.direction1.lng;
+    this.rowData.directionTwoLat = this.direction2.lat;
+    this.rowData.directionTwoLong = this.direction2.lng;
     this.radarService.updateRadar(this.rowData).subscribe();
     this.open.emit(this.rowData); // <-- TODO needed to update component data? Evt. remove
     // TODO Give the user a feedback

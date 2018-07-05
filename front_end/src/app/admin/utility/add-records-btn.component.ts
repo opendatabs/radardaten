@@ -1,6 +1,8 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { ViewCell} from 'ng2-smart-table';
 import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { RecordService } from '../../shared/record.service';
+import { HttpErrorResponse } from '@angular/common/http';
 // import { D3Service, D3 } from 'd3-ng2-service';
 
 @Component({
@@ -16,9 +18,11 @@ import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
       <div class="modal-body">
         <div class="row">
           <div class="col-8">
-            <label id="lbl">File </label>
-            <input #fileInput type='file'/>
+              <label id="lbl">Messungen auswählen </label>
+              <input type='file' (change)="fileChanged($event)">
           </div>
+          <button type="button" class="btn btn-primary"
+                  (click)="uploadDocument()">Hochladen</button>
         </div>
       </div>
       <div class="modal-footer">
@@ -36,30 +40,20 @@ export class AddRecordsBtnComponent implements OnInit, ViewCell {
 
   @Output() open: EventEmitter<any> = new EventEmitter();
 
+  file:any;
+  fileChanged(e) {
+    this.file = e.target.files[0];
+  }
+
   closeResult: string;
 
   // private d3: D3;
-  json: any; //TODO extract weekday
-  data= `
-km/h  date  time  direction m
-007 13:40:12  20.02.15  1 3.5
-006	13:40:13	20.02.15	1	3.6
-008	13:40:14	20.02.15	1	3.6
-013	13:40:43	20.02.15	1	4.5
-009	13:41:02	20.02.15	1	2.8
-016	13:43:15	20.02.15	1	3.7
-014	13:43:19	20.02.15	1	4.6
-016	13:44:03	20.02.15	1	3.7
-018	13:45:48	20.02.15	1	3.8
-016	13:46:44	20.02.15	1	4.8
-012	13:47:30	20.02.15	1	4.2
-005	13:48:16	20.02.15	1	3.8
-007	13:48:18	20.02.15	1	3.9
-014	13:49:10	20.02.15	1	3.9
-  `;
+  txt: any; //TODO extract weekday
+  lines: Array<string> = [];
 
   constructor(
     private modalService: NgbModal,
+    private recordService: RecordService
     // d3Service: D3Service
   ) {
     // this.d3 = d3Service.getD3();
@@ -87,6 +81,42 @@ km/h  date  time  direction m
     } else {
       return  `with: ${reason}`;
     }
+  }
+  uploadDocument(file) {
+    let fileReader = new FileReader();
+    fileReader.onload = e => {
+      this.txt = fileReader.result.toString();
+      this.parseText(this.txt);
+      this.lines.forEach(e => {
+        this.recordService.addRecord(this.recordService.parseRecord(e, 1))
+          .subscribe(
+            res => {
+              console.log('congratulations');
+            },
+            (err: HttpErrorResponse) => {
+              if (err.error instanceof Error) {
+                console.log("Client-side error occured.");
+              } else {
+                console.log("Server-side error occured.");
+                console.log(err)
+              }
+            }
+          );
+      })
+    };
+    fileReader.readAsText(this.file);
+  }
+  private parseText(input :string): void {
+    const regex = /[0-2]\d\d\s[0-2]\d:[0-6]\d:[0-6]\d\s\d\d\.[01]\d\.[0-3]\d\s[01]\s[\d*]\.\d$/gm;
+    let match;
+    do {
+      match = regex.exec(input);
+      if (match) {
+        if (match.length) {
+          this.lines.push(match[0])
+        }
+      }
+    } while (match);
   }
 
 

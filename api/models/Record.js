@@ -24,6 +24,9 @@ module.exports = {
       type: 'String',
       defaultsTo: null
     },
+    direction: {
+      type: 'float'
+    },
     radar: {
       model: 'radar'
     }

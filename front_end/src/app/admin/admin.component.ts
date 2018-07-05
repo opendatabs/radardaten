@@ -32,15 +32,17 @@ export class AdminComponent implements OnInit {
         title: 'Strasse & Nr.',
       },
       speedLimit: {
-        title: 'Höchstgeschw.',
+        title: 'Limite (km/h)',
       },
       avgSpeed: {
-        title: 'Durchschn.geschw.',
+        title: 'Ø (km/h)',
         editable: false,
+        addable: false,
       },
       speedingQuote: {
-        title: 'Übertretungsquote',
+        title: 'Übertr.quote',
         editable: false,
+        addable: false,
       },
       locationButton: {
         title: 'Koordinaten',
