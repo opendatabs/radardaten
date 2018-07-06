@@ -26,5 +26,17 @@ module.exports = {
       })
   },
 
+  getRecordsOfRadar: (req, res) => {
+    Record.find({
+      radar: req.query.radarId
+    }).exec( (err, data) => {
+      if (err) {
+        res.serverError(err);
+        return;
+      }
+      return res.json(data);
+    })
+  }
+
 };
 

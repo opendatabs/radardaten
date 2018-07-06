@@ -23,6 +23,10 @@ export class RecordService {
     return this.http.get<Record>(this.api + id);
   }
 
+  getRecordOfRadar(radarId: number): Observable<Record[]> {
+    return this.http.get<Record[]>(this.api + `recordsOfRadar?radarId=${radarId}`);
+  }
+
   addRecord(record: Record): Observable<Record> {
     return this.http.post<Record>(this.api + 'addRecord', record);
   }

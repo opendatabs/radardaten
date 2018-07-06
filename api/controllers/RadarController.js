@@ -51,5 +51,26 @@ module.exports = {
       })
   },
 
+  getRadarWithAvgSpeed(req, res) {
+    const sql = `SELECT
+  radar.*,
+  (
+    SELECT avg(kmh)
+    FROM record
+    WHERE direction = 1
+          AND record.radar = radar.id
+  ) AS avgDir1,
+  (
+    SELECT avg(kmh)
+    FROM record
+    WHERE direction = 2
+          AND record.radar = radar.id
+  ) AS avgDir2
+FROM radar`;
+    Radar.query(sql, [], function (error, data) {
+      res.json(data);
+    })
+  }
+
 };
 

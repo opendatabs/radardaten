@@ -8,12 +8,12 @@ export interface Radar {
   directionOneLong: number;
   directionTwoLat: number;
   directionTwoLong: number;
-  directionOneMeanKmh?: number;
-  directionTwoMeanKmh?: number;
+  avgDir1?: number;
+  avgDir2?: number;
   id: number;
   lat: number;
   long: number;
-  records: Record[];
+  records?: Record[];
   speedLimit: number;
   speedingQuote: number;
   streetName: string;

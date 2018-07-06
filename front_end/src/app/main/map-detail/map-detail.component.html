@@ -21,7 +21,7 @@
       </div>
     </div>
     <div class="row">
-      <app-d3graph [records]="graphDataDir1" [speedLimit]="radar?.speedLimit" [groupBy]="groupBy"></app-d3graph>
+      <app-d3graph *ngIf="radar" [records]="graphDataDir1" [speedLimit]="radar?.speedLimit" [groupBy]="groupBy"></app-d3graph>
     </div>
     <div class="row mt-5" *ngIf="radar">
       <div class="col-12">
@@ -38,11 +38,11 @@
           </tr>
           <tr>
             <td>Ø (km/h) Richtung 1:</td>
-            <td>{{radar.directionOneMeanKmh}}</td>
+            <td>{{radar.avgDir1}}</td>
           </tr>
           <tr>
             <td>Ø (km/h) Richtung 2:</td>
-            <td>{{radar.directionTwoMeanKmh}}</td>
+            <td>{{radar.avgDir2}}</td>
           </tr>
         </table>
       </div>
@@ -50,3 +50,4 @@
     </div>
   </div>
 </div>
+<button type="button" class="btn" (click)="tick()">refresh</button>

@@ -90,7 +90,7 @@ export class SelectCoordinatesComponent implements OnInit, ViewCell {
         break;
     }
     let i = divIcon({html: "<svg width='15' height='15' class='svg-marker'>" +
-      "<circle cx='5' cy='5' fill='"+color+"' class='circle'></circle>" +
+      "<circle cx='5' cy='5' r='10' fill='"+color+"' class='circle'></circle>" +
       "</svg>"});
     let mark: Marker = marker(latLng, {
       icon: i

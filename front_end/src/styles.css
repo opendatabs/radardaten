@@ -4,7 +4,6 @@
 }
 
 #map .circle, #select-coordinates-map .circle {
-  r: 10;
   stroke: black;
   opacity: .7;
 }

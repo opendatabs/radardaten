@@ -1,4 +1,4 @@
-import {ChangeDetectorRef, Component, OnInit} from '@angular/core';
+import {ApplicationRef, ChangeDetectorRef, Component, OnInit} from '@angular/core';
 import {Radar} from "../../shared/radar";
 import { Record } from "../../shared/record";
 import {DataService} from "../../shared/data-service.service";
@@ -23,22 +23,28 @@ export class MapDetailComponent implements OnInit {
   constructor(
     private dataService: DataService,
     private recordService: RecordService,
+    private ref: ApplicationRef,
   ) { }
 
   ngOnInit() {
   }
 
   open(radar: Radar) {
-    this.radar = radar;
-    this.measurements = $.unique(radar.records.map(d => {
-      return this.formatTimestampWeek(d.timestamp);
-    }));
-    this.selectMesaurement(this.measurements[0]);
-    /*
-    we need this because the action is called from leaflet.
-    and leaflet has a bug that it'doesn't trigger update circle after changes
-     */
-    document.getElementById('map-detail').scrollIntoView();
+    this.recordService.getRecordOfRadar(radar.id).subscribe(data => {
+      this.radar = radar;
+      this.radar.records = data;
+      debugger;
+      this.measurements = $.unique(radar.records.map(d => {
+        return this.formatTimestampWeek(d.timestamp);
+      }));
+      this.selectMesaurement(this.measurements[0]);
+      /*
+      we need this because the action is called from leaflet.
+      and leaflet has a bug that it'doesn't trigger update circle after changes
+       */
+      this.ref.tick();
+      document.getElementById('map-detail').scrollIntoView();
+    })
   }
 
   selectMesaurement(measurement: string) {
@@ -46,10 +52,14 @@ export class MapDetailComponent implements OnInit {
     this.graphDataDir1 = this.radar.records.filter(d => {
       return this.formatTimestampWeek(d.timestamp) === measurement;
     });
-    console.log(this.graphDataDir1);
+    console.log(this);
   }
 
   private formatTimestampWeek(timestamp: string) {
     return moment(timestamp).format("YYYY-MM") + " Woche " + moment(timestamp).format('ww')
+  }
+
+  tick() {
+    this.ref.tick();
   }
 }

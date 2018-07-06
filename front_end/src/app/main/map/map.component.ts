@@ -64,11 +64,11 @@ export class MapComponent implements OnInit {
     let mark;
     let self = this;
     this.data.forEach((d: Radar, index: number) => {
-      let maxSpeed = Math.max(d.directionOneMeanKmh, d.directionTwoMeanKmh);
+      let maxSpeed = Math.max(d.avgDir1, d.avgDir2);
       let color = this.colorService.perc2color2(maxSpeed, d.speedLimit);
       let i = divIcon({
         html: "<svg width='15' height='15' class='svg-marker'>" +
-        "<circle fill='" + color + "' class='circle' id='circle" + index + "'></circle>" +
+        "<circle fill='" + color + "' class='circle' r='10' id='circle" + index + "'></circle>" +
         "</svg>"
       });
 
@@ -93,8 +93,8 @@ export class MapComponent implements OnInit {
     this.data.forEach((d: Radar, index: number) => {
       let directionDegrees = this.calculateDirectionDegrees(d);
       // todo: replace by speeding quote and for two directions
-      let color1 = this.colorService.perc2color2(d.directionOneMeanKmh, d.speedLimit);
-      let color2 = this.colorService.perc2color2(d.directionTwoMeanKmh, d.speedLimit);
+      let color1 = this.colorService.perc2color2(d.avgDir1, d.speedLimit);
+      let color2 = this.colorService.perc2color2(d.avgDir2, d.speedLimit);
       // create a random ID for marker to ensure unique ids.
       let randomId = Math.floor(Math.random() * Math.floor(100000));
       let i = divIcon({

@@ -20,19 +20,14 @@ export class MapViewComponent implements OnInit {
   constructor(
     private dataService: DataService,
     private radarService: RadarService,
-    private calculatorService: CalculatorService
 ) { }
 
   ngOnInit() {
     // this.dataService.getMapData().subscribe((data:Radar[]) => {
-    this.radarService.getRadars()
+    this.radarService.getRadarWithAvgSpeed()
       .subscribe(
         res => {
           this.data = res;
-          this.data.forEach(d => {
-            d.directionOneMeanKmh = this.calculatorService.calculateAvgSpeed(d.records, 1);
-            d.directionTwoMeanKmh = this.calculatorService.calculateAvgSpeed(d.records, 2);
-          });
           console.log(this.data)
         },
         err => console.log(err)
