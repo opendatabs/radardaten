@@ -115,8 +115,6 @@ export class SelectCoordinatesComponent implements OnInit, ViewCell {
     let str = this.coordinates.toString() + "\n" +
       this.direction1.toString() + "\n" +
       this.direction2.toString();
-    console.log(str);
-    // TODO Are there actually two directions per measurement?
     this.rowData.lat = this.coordinates.lat;
     this.rowData.long = this.coordinates.lng;
     this.rowData.directionOneLat = this.direction1.lat;

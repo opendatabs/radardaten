@@ -27,6 +27,10 @@ export class RecordService {
     return this.http.post<Record>(this.api + 'addRecord', record);
   }
 
+  addRecords(record: Record): Observable<Record[]> {
+    return this.http.post<Record[]>(this.api + 'addRecords', record);
+  }
+
   updateRecord(record: any): Observable<Record> {
     return this.http.patch<Record>(this.api + record.id, record); //TODO add input "record" But what about non existing ID?!?!
   }
@@ -57,7 +61,7 @@ export class RecordService {
   private extractWeekday(timeStamp: any): string {
     const day = moment(timeStamp).isoWeekday();
     const weekdays = ['montag', 'dienstag', 'mittwoch', 'donnerstag', 'freitag', 'samstag', 'sonntag'];
-    return weekdays[day];
+    return weekdays[day-1];
   }
 
 }

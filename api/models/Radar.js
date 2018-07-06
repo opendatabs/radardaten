@@ -59,6 +59,10 @@ module.exports = {
       collection: 'record',
       via: 'radar'
     }
+  },
+  // if deleted, delete all associated records
+  afterDestroy: function(destroyedRecords, cb) {
+    Record.destroy({radar: _.pluck(destroyedRecords, 'id')}).exec(cb);
   }
 };
 

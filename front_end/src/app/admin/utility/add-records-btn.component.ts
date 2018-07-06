@@ -3,7 +3,6 @@ import { ViewCell} from 'ng2-smart-table';
 import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { RecordService } from '../../shared/record.service';
 import { HttpErrorResponse } from '@angular/common/http';
-// import { D3Service, D3 } from 'd3-ng2-service';
 
 @Component({
   selector: 'app-add-records-btn',
@@ -22,7 +21,9 @@ import { HttpErrorResponse } from '@angular/common/http';
               <input type='file' (change)="fileChanged($event)">
           </div>
           <button type="button" class="btn btn-primary"
-                  (click)="uploadDocument()">Hochladen</button>
+                  [class.disabled]="isClicked"
+                  (click)="uploadDocument();isClicked=true">
+            Hochladen</button>
         </div>
       </div>
       <div class="modal-footer">
@@ -47,24 +48,20 @@ export class AddRecordsBtnComponent implements OnInit, ViewCell {
 
   closeResult: string;
 
-  // private d3: D3;
-  txt: any; //TODO extract weekday
+  txt: any;
   lines: Array<string> = [];
+  isClicked: boolean = false;
 
   constructor(
     private modalService: NgbModal,
     private recordService: RecordService
-    // d3Service: D3Service
   ) {
-    // this.d3 = d3Service.getD3();
   }
 
-  ngOnInit() {
-    // this.json = d3.tsvParse(this.data);
-  }
+  ngOnInit() { }
+
   onClick() {
-    this.open.emit(this.rowData); // Necessary?
-    //TODO add upload / parse. Take Radar from rowData
+    this.open.emit(this.rowData);
   }
   onOpen(content) {
     this.modalService.open(content, { windowClass: 'big-modal' }).result.then((result) => {
@@ -88,7 +85,7 @@ export class AddRecordsBtnComponent implements OnInit, ViewCell {
       this.txt = fileReader.result.toString();
       this.parseText(this.txt);
       this.lines.forEach(e => {
-        this.recordService.addRecord(this.recordService.parseRecord(e, 1))
+        this.recordService.addRecord(this.recordService.parseRecord(e, this.rowData.id))
           .subscribe(
             res => {
               console.log('congratulations');
