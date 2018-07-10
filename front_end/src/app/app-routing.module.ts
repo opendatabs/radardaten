@@ -5,9 +5,9 @@ import { MapViewComponent } from "./main/map-view/map-view.component";
 import { AdminComponent } from "./admin/admin.component";
 
 const routes: Routes = [
-  { path: '', redirectTo: 'kartenansicht', pathMatch: 'full' },
+  { path: '', redirectTo: 'karte', pathMatch: 'full' },
   { path: 'home', component: MainComponent },
-  { path: 'kartenansicht', component: MapViewComponent },
+  { path: 'karte', component: MapViewComponent },
   { path: 'admin', component: AdminComponent },
 ];
 

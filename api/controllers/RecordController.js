@@ -6,8 +6,10 @@
  */
 
 module.exports = {
-  addRecord: (req, res) => {
-    const record = {
+
+  addRecord(req, res) {
+
+    let record = {
       timestamp: req.body.timestamp,
       kmh: req.body.kmh,
       length: req.body.length,
@@ -26,7 +28,7 @@ module.exports = {
       })
   },
 
-  getRecordsOfRadar: (req, res) => {
+  getRecordsOfRadar(req, res) {
     Record.find({
       radar: req.query.radarId
     }).exec( (err, data) => {

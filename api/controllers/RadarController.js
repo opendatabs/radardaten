@@ -6,7 +6,7 @@
  */
 
 module.exports = {
-  addRadar: (req, res) => {
+  addRadar(req, res) {
     const radar = {
       streetName: req.body.streetName,
       speedLimit: parseInt(req.body.speedLimit),
@@ -29,7 +29,7 @@ module.exports = {
   },
 
 
-  updateRadar: (req, res) => {
+  updateRadar(req, res) {
     Radar.update(
       { id: req.body.id }, {
         streetName: req.body.streetName,

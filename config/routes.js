@@ -22,6 +22,11 @@
 
 module.exports.routes = {
 
+  'r|^\/?(home|karte|admin)$|': {
+    skipAssets: true,
+    view: 'pages/homepage'
+  },
+
   /***************************************************************************
   *                                                                          *
   * Make the view located at `views/homepage.ejs` (or `views/homepage.jade`, *
@@ -49,6 +54,7 @@ module.exports.routes = {
   'post /Radar/updateRadar' : 'RadarController.updateRadar',
   'get  /Radar/radarWithAvgSpeed' : 'RadarController.getRadarWithAvgSpeed',
   'post /Record/addRecord' : 'RecordController.addRecord',
+  'post /Record/addRecords' : 'RecordController.addRecords',
   'get /Record/recordsOfRadar' : 'RecordController.getRecordsOfRadar',
 
 };
