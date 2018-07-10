@@ -18,9 +18,10 @@ import { HttpErrorResponse } from '@angular/common/http';
         <div class="row">
           <div class="col-8">
               <label id="lbl">Messungen auswählen </label>
+            <!--TODO Check filetype-->
               <input type='file' (change)="fileChanged($event)">
           </div>
-          <button type="button" class="btn btn-primary"
+          <button type="button" class="btn btn-outline-primary"
                   [class.disabled]="isClicked"
                   (click)="uploadDocument();isClicked=true">
             Hochladen</button>
@@ -30,7 +31,7 @@ import { HttpErrorResponse } from '@angular/common/http';
         <button type="button" class="btn btn-outline-dark" (click)="c('Close click')">Close</button>
       </div>
     </ng-template>
-    <button (click)="onOpen(content)" class="btn btn-primary">Hochladen</button>
+    <button (click)="onOpen(content)" class="btn btn-outline-primary">Hochladen</button>
   `,
   styles: []
 })

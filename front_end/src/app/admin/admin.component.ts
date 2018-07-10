@@ -1,12 +1,12 @@
 import { Component, Input, Output, OnInit, EventEmitter } from '@angular/core';
 import { RadarService } from '../shared/radar.service';
 import { RecordService } from '../shared/record.service';
-import { LocalDataSource } from 'ng2-smart-table';
+import { Ng2SmartTableModule, LocalDataSource } from 'ng2-smart-table';
 import { Radar } from '../shared/radar';
 import { AddRecordsBtnComponent } from './utility/add-records-btn.component';
 import { SelectCoordinatesComponent } from '../main/select-coordinates/select-coordinates.component';
 import { HttpErrorResponse } from '@angular/common/http';
-import {CalculatorService} from "../shared/calculator.service";
+import { CalculatorService } from '../shared/calculator.service';
 
 @Component({
   selector: 'app-admin',
@@ -18,35 +18,40 @@ import {CalculatorService} from "../shared/calculator.service";
 })
 export class AdminComponent implements OnInit {
 
-  data: any[];
-
-
-
-  source: LocalDataSource;
-  error: any;
-
   @Output() selectClick: EventEmitter<any> = new EventEmitter();
 
+  data: any[];
+  source: LocalDataSource;
+
+  filterActive: boolean = false;
+  error: any;
+
+
   settings = {
-    columns: { //TODO add Start date of measurement
+    columns: { //TODO add Start date of measurement, add records-count
       streetName: {
         title: 'Strasse & Nr.',
+        filter: false,
       },
       speedLimit: {
         title: 'Limite (km/h)',
+        filter: false,
       },
       avgSpeed: {
         title: 'Ø (km/h)',
+        filter: false,
         editable: false,
         addable: false,
       },
       speedingQuote: {
         title: 'Übertr.quote',
+        filter: false,
         editable: false,
         addable: false,
       },
       locationButton: {
         title: 'Koordinaten',
+        filter: false,
         type: 'custom',
         addable: false,
         editable: false,
@@ -60,6 +65,7 @@ export class AdminComponent implements OnInit {
       },
       recordsButton: {
         title: 'Messungen',
+        filter: false,
         type: 'custom',
         editable: false,
         addable: false,
@@ -76,13 +82,24 @@ export class AdminComponent implements OnInit {
     },
     delete: {
       confirmDelete: true,
+      deleteButtonContent: 'Löschen',
       // deleteButtonContent: '<div class="waves-effect waves-light btn red">Delete</div>'
     },
     edit: {
       confirmSave: true,
+      editButtonContent: 'Anpassen'
     },
     add: {
       confirmCreate: true,
+      addButtonContent: 'Erstellen',
+      createButtonContent: 'Erstellen',
+      cancelButtonContent: 'Abbrechen',
+    },
+    cancel: {
+      cancelButtonContent: 'Abbrechen',
+    },
+    create: {
+      createButtonContent: 'Erstellen',
     },
     attr: {
       class: 'table'
@@ -90,7 +107,8 @@ export class AdminComponent implements OnInit {
     actions: {
       add: true,
       edit: true,
-      delete: true
+      delete: true,
+      columnTitle: 'Aktionen',
     },
   };
 
@@ -197,6 +215,39 @@ export class AdminComponent implements OnInit {
       if (!isNaN(Number(speed)) && speed > 0 && speed < 120)
         return Number(speed);
       return 1;
+  }
+
+  onSearch(query: string = '') {
+    this.source.setFilter([
+      // fields we want to include in the search
+      {
+        field: 'streetName',
+        search: query
+      },
+      // {
+      //   field: 'speedLimit',
+      //   filter: query
+      // },
+      // {
+      //   field: 'avgSpeed',
+      //   filter: query
+      // },
+      // {
+      //   field: 'speedingQuote',
+      //   filter: query
+      // }
+    ], false);
+    // second parameter specifying whether to perform 'AND' or 'OR' search
+    // (meaning all columns should contain search query or at least one)
+    // 'AND' by default, so changing to 'OR' by setting false here
+
+    query.length ? this.filterActive = true : this.onClearFilter();
+  }
+
+  onClearFilter(): void {
+    this.source.reset();
+    this.filterActive = false;
+    //TODO reset searchtext
   }
 
 }

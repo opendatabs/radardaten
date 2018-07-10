@@ -40,6 +40,8 @@ export class SelectCoordinatesComponent implements OnInit, ViewCell {
   markers: Layer[] = [];
   Status = Status; // copy class to local reference
 
+  coordinatesBtnLabel: String = 'Ändern';
+
   constructor(
     private modalService: NgbModal,
     private ref: ApplicationRef,
@@ -48,6 +50,9 @@ export class SelectCoordinatesComponent implements OnInit, ViewCell {
 
   ngOnInit(): void {
     this.status = Status.initial;
+    if (this.rowData.lat === 0 && this.rowData.long === 0) {
+      this.coordinatesBtnLabel = 'Hinzufügen';
+    }
   }
 
   onOpen(content) {
@@ -122,6 +127,7 @@ export class SelectCoordinatesComponent implements OnInit, ViewCell {
     this.rowData.directionTwoLat = this.direction2.lat;
     this.rowData.directionTwoLong = this.direction2.lng;
     this.radarService.updateRadar(this.rowData).subscribe();
+    this.coordinatesBtnLabel = 'Ändern';
     this.open.emit(this.rowData); // <-- TODO needed to update component data? Evt. remove
     // TODO Give the user a feedback
   }
