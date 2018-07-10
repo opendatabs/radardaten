@@ -53,7 +53,6 @@ module.exports.routes = {
   'post /Radar/addRadar' : 'RadarController.addRadar',
   'post /Radar/updateRadar' : 'RadarController.updateRadar',
   'get  /Radar/radarWithAvgSpeed' : 'RadarController.getRadarWithAvgSpeed',
-  'post /Record/addRecord' : 'RecordController.addRecord',
   'post /Record/addRecords' : 'RecordController.addRecords',
   'get /Record/recordsOfRadar' : 'RecordController.getRecordsOfRadar',
 

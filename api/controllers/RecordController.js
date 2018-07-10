@@ -8,24 +8,19 @@
 module.exports = {
 
   addRecord(req, res) {
+   return 'somthing'
+  },
 
-    let record = {
-      timestamp: req.body.timestamp,
-      kmh: req.body.kmh,
-      length: req.body.length,
-      weekday: req.body.weekday,
-      direction: req.body.direction,
-      radar: req.body.radar,
-    };
-    Record.create(record)
-      .exec( err => {
-
-        if (err) {
-          res.serverError(err);
-          return;
-        }
-        return res.json(record);
+  addRecords(req, res) {
+    if (req.body.length) {
+      Record.create(req.body)
+        .exec( (err, created) => {
+          if (err) {
+            res.serverError(err);
+          }
+        return res.json(created);
       })
+    }
   },
 
   getRecordsOfRadar(req, res) {

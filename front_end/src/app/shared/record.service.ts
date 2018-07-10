@@ -27,13 +27,9 @@ export class RecordService {
     return this.http.get<Record[]>(this.api + `recordsOfRadar?radarId=${radarId}`);
   }
 
-  addRecord(record: Record): Observable<Record> {
-    return this.http.post<Record>(this.api + 'addRecord', record);
-  }
-
-  addRecords(record: Record): Observable<Record[]> {
-    return this.http.post<Record[]>(this.api + 'addRecords', record);
-  }
+  // addRecords(records: Record[]): Observable<Record[]> { //TODO why not possible to choose returntype Record[]?!
+  //   return this.http.post<Record[]>(this.api + 'addRecords', records);
+  // }
 
   updateRecord(record: any): Observable<Record> {
     return this.http.patch<Record>(this.api + record.id, record); //TODO add input "record" But what about non existing ID?!?!

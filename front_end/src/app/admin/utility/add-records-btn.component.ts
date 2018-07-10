@@ -49,7 +49,8 @@ export class AddRecordsBtnComponent implements OnInit, ViewCell {
   closeResult: string;
 
   txt: any;
-  lines: Array<string> = [];
+  // lines: Array<Record> = []; //TODO: Generic type 'Record' requires 2 type argument(s)??
+  lines: Array<any> = [];
   isClicked: boolean = false;
 
   constructor(
@@ -83,9 +84,10 @@ export class AddRecordsBtnComponent implements OnInit, ViewCell {
     let fileReader = new FileReader();
     fileReader.onload = e => {
       this.txt = fileReader.result.toString();
+      debugger;
       this.parseText(this.txt);
-      this.lines.forEach(e => {
-        this.recordService.addRecord(this.recordService.parseRecord(e, this.rowData.id))
+      debugger;
+      this.recordService.addRecords(this.lines)
           .subscribe(
             res => {
               console.log('congratulations');
@@ -99,7 +101,6 @@ export class AddRecordsBtnComponent implements OnInit, ViewCell {
               }
             }
           );
-      })
     };
     fileReader.readAsText(this.file);
   }
@@ -110,7 +111,7 @@ export class AddRecordsBtnComponent implements OnInit, ViewCell {
       match = regex.exec(input);
       if (match) {
         if (match.length) {
-          this.lines.push(match[0])
+          this.lines.push(this.recordService.parseRecord(match[0], this.rowData.id));
         }
       }
     } while (match);
