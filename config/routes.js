@@ -55,5 +55,6 @@ module.exports.routes = {
   'get  /Radar/radarWithAvgSpeed' : 'RadarController.getRadarWithAvgSpeed',
   'post /Record/addRecords' : 'RecordController.addRecords',
   'get /Record/recordsOfRadar' : 'RecordController.getRecordsOfRadar',
+  // 'get /Radar/getRecordCount/:id' : 'RadarController.getRecordCount',
 
 };

@@ -3,6 +3,7 @@ import { ViewCell} from 'ng2-smart-table';
 import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { RecordService } from '../../shared/record.service';
 import { HttpErrorResponse } from '@angular/common/http';
+import { RadarService } from '../../shared/radar.service';
 
 @Component({
   selector: 'app-add-records-btn',
@@ -17,14 +18,24 @@ import { HttpErrorResponse } from '@angular/common/http';
       <div class="modal-body">
         <div class="row">
           <div class="col-8">
-              <label id="lbl">Messungen auswählen </label>
-            <!--TODO Check filetype-->
-              <input type='file' (change)="fileChanged($event)">
+          <div class="custom-file">
+            <input type="file" class="custom-file-input" id="customFile" (change)="fileChanged($event)">
+            <label class="custom-file-label" for="customFile">.txt-Datei wählen</label>
           </div>
-          <button type="button" class="btn btn-outline-primary"
+          </div>
+          <button type="button"
+                  *ngIf="file && validFiletype"
+                  class="btn btn-outline-primary"
                   [class.disabled]="isClicked"
                   (click)="uploadDocument();isClicked=true">
-            Hochladen</button>
+            Hochladen
+          </button>
+        </div>
+        <div *ngIf="file && !validFiletype" class="alert alert-danger mt-2" role="alert">
+          Kein zulässiger Dateitype ausgewählt. Bitte laden Sie eine .txt Datei hoch.
+        </div>
+        <div *ngIf="success" class="alert alert-success mt-2" role="alert">
+          Messungen erfolgreich hochgeladen.
         </div>
       </div>
       <div class="modal-footer">
@@ -43,8 +54,13 @@ export class AddRecordsBtnComponent implements OnInit, ViewCell {
   @Output() open: EventEmitter<any> = new EventEmitter();
 
   file:any;
+  validFiletype: boolean = false;
+  success: boolean = false;
   fileChanged(e) {
     this.file = e.target.files[0];
+    if (this.file.type === 'text/plain') {
+      this.validFiletype = true;
+    }
   }
 
   closeResult: string;
@@ -56,11 +72,14 @@ export class AddRecordsBtnComponent implements OnInit, ViewCell {
 
   constructor(
     private modalService: NgbModal,
-    private recordService: RecordService
+    private recordService: RecordService,
+    private radarService: RadarService,
   ) {
   }
 
-  ngOnInit() { }
+  ngOnInit() {
+    this.radarService.updateRadar(this.rowData).subscribe();
+  }
 
   onClick() {
     this.open.emit(this.rowData);
@@ -85,13 +104,12 @@ export class AddRecordsBtnComponent implements OnInit, ViewCell {
     let fileReader = new FileReader();
     fileReader.onload = e => {
       this.txt = fileReader.result.toString();
-      debugger;
       this.parseText(this.txt);
-      debugger;
       this.recordService.addRecords(this.lines)
           .subscribe(
             res => {
-              console.log('congratulations');
+              this.success = true;
+              // console.log('congratulations');
             },
             (err: HttpErrorResponse) => {
               if (err.error instanceof Error) {
@@ -105,6 +123,7 @@ export class AddRecordsBtnComponent implements OnInit, ViewCell {
     };
     fileReader.readAsText(this.file);
   }
+
   private parseText(input :string): void {
     const regex = /[0-2]\d\d\s[0-2]\d:[0-6]\d:[0-6]\d\s\d\d\.[01]\d\.[0-3]\d\s[01]\s[\d*]\.\d$/gm;
     let match;

@@ -36,6 +36,8 @@ module.exports = {
         speedLimit: parseInt(req.body.speedLimit),
         lat: req.body.lat,
         long: req.body.long,
+        date: req.body.date,
+        recordCount: count,
         directionOneLat: req.body.directionOneLat,
         directionOneLong: req.body.directionOneLong,
         directionTwoLat: req.body.directionTwoLat,
@@ -50,6 +52,13 @@ module.exports = {
         return res.json(updated);
       })
   },
+
+  // getRecordCount(id) {
+  //   Record.count({radar: id})
+  //     .exec(function (err, result) {
+  //       return result;
+  //     })
+  // },
 
   getRadarWithAvgSpeed(req, res) {
     const sql = `SELECT

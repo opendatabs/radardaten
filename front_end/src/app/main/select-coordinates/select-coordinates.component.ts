@@ -129,7 +129,6 @@ export class SelectCoordinatesComponent implements OnInit, ViewCell {
     this.radarService.updateRadar(this.rowData).subscribe();
     this.coordinatesBtnLabel = 'Ändern';
     this.open.emit(this.rowData); // <-- TODO needed to update component data? Evt. remove
-    // TODO Give the user a feedback
   }
 
   private getDismissReason(reason: any): string {
@@ -141,5 +140,6 @@ export class SelectCoordinatesComponent implements OnInit, ViewCell {
       return  `with: ${reason}`;
     }
   }
+
 
 }
