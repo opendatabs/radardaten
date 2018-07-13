@@ -37,7 +37,7 @@ module.exports = {
         lat: req.body.lat,
         long: req.body.long,
         date: req.body.date,
-        recordCount: count,
+        recordCount: req.body.recordCount,
         directionOneLat: req.body.directionOneLat,
         directionOneLong: req.body.directionOneLong,
         directionTwoLat: req.body.directionTwoLat,

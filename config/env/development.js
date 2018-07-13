@@ -21,6 +21,7 @@ module.exports = {
   models: {
     connection: 'localhostDb'
     // connection: 'devDbLocal'
+    // connection: 'devDbLocal'
   },
   cors:{
     allRoutes: true,
