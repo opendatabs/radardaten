@@ -9,6 +9,7 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { CalculatorService } from '../shared/calculator.service';
 import { DatepickerComponent } from './utility/datepicker.component';
 import * as moment from 'moment';
+import * as $ from 'jquery';
 
 @Component({
   selector: 'app-admin',
@@ -88,8 +89,6 @@ export class AdminComponent implements OnInit {
         renderComponent: AddRecordsBtnComponent,
         onComponentInitFunction(instance) {
           instance.open.subscribe(row => {
-            //
-            alert('File upload')
             //TODO overwrite old entries in case of duplicates
           });
         }
@@ -99,13 +98,11 @@ export class AdminComponent implements OnInit {
       //   filter: false,
       //   editable: false,
       //   addable: false,
-      // }
-
+      // },
     },
     delete: {
       confirmDelete: true,
       deleteButtonContent: 'Löschen',
-      // deleteButtonContent: '<div class="waves-effect waves-light btn red">Delete</div>'
     },
     edit: {
       confirmSave: true,
@@ -147,7 +144,6 @@ export class AdminComponent implements OnInit {
       this.getData();
     }
   }
-
 
   onClickDelete(event){
     if (confirm(`
@@ -247,18 +243,6 @@ export class AdminComponent implements OnInit {
         field: 'streetName',
         search: query
       },
-      // {
-      //   field: 'speedLimit',
-      //   filter: query
-      // },
-      // {
-      //   field: 'avgSpeed',
-      //   filter: query
-      // },
-      // {
-      //   field: 'speedingQuote',
-      //   filter: query
-      // }
     ], false);
     // second parameter specifying whether to perform 'AND' or 'OR' search
     // (meaning all columns should contain search query or at least one)
@@ -270,7 +254,7 @@ export class AdminComponent implements OnInit {
   onClearFilter(): void {
     this.source.reset();
     this.filterActive = false;
-    //TODO reset searchtext
+    $('#search').val('');
   }
 
   // private updateRecordCount(id: number) {

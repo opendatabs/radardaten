@@ -14,7 +14,7 @@ module.exports = {
           if (err) {
             res.serverError(err);
           }
-        return res.json(created);
+        return res.json(created.length);
       })
     }
   },

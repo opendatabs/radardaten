@@ -26,6 +26,7 @@ import {FormsModule} from "@angular/forms";
 import { AddRecordsBtnComponent } from './admin/utility/add-records-btn.component';
 import {CalculatorService} from "./shared/calculator.service";
 import { DatepickerComponent } from './admin/utility/datepicker.component';
+import { AngularFontAwesomeModule } from 'angular-font-awesome';
 
 
 @NgModule({
@@ -51,6 +52,7 @@ import { DatepickerComponent } from './admin/utility/datepicker.component';
     HttpClientModule,
     Ng2SmartTableModule,
     FormsModule,
+    AngularFontAwesomeModule,
   ],
   providers: [
     DataService,

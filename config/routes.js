@@ -24,7 +24,7 @@ module.exports.routes = {
 
   'r|^\/?(home|karte|admin)$|': {
     skipAssets: true,
-    view: 'pages/homepage'
+    view: 'homepage'
   },
 
   /***************************************************************************

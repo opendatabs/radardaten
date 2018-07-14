@@ -3,11 +3,17 @@
        (keydown.enter)="onSearch(search.value)"> <!--TODO input action on keystroke-->
 <button class="btn btn-outline-primary py-2 px-3 m-2"
         *ngIf="filterActive" (click)="onClearFilter()">
-  Filter X
+  <fa name="filter" size="lg"></fa>&nbsp;X
 </button>
+
 <ng2-smart-table [settings]="settings"
                  [source]="source"
                  (editConfirm)="onClickEdit($event)"
                  (createConfirm)="onClickCreate($event)"
                  (deleteConfirm)="onClickDelete($event)">
 </ng2-smart-table>
+<div class="container h-100" *ngIf="!data">
+  <div class="row h-100 justify-content-center align-items-center">
+    <fa class="alingn"  name="ellipsis-h" size="4x" animation="spin"></fa>
+  </div>
+</div>
