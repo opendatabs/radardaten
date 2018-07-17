@@ -134,7 +134,7 @@ export class AddRecordsBtnComponent implements OnInit, ViewCell {
 
   private parseText(input :string): void {
     const regex = /[0-2]\d\d\s[0-2]\d:[0-6]\d:[0-6]\d\s\d\d\.[01]\d\.[0-3]\d\s[012]\s\d*\.\d$/gm;
-    let bundle = new Array(500);
+    let bundle = [];
     let match;
     do {
       match = regex.exec(input);
