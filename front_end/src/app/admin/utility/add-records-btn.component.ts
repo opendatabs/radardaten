@@ -95,7 +95,7 @@ export class AddRecordsBtnComponent implements OnInit, ViewCell {
   }
 
   ngOnInit() {
-    this.radarService.updateRadar(this.rowData).subscribe();
+    // this.radarService.updateRadar(this.rowData).subscribe();
   }
 
   onClick() {
