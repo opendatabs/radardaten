@@ -25,6 +25,8 @@ import { SelectCoordinatesComponent } from './main/select-coordinates/select-coo
 import {FormsModule} from "@angular/forms";
 import { AddRecordsBtnComponent } from './admin/utility/add-records-btn.component';
 import {CalculatorService} from "./shared/calculator.service";
+import { DatepickerComponent } from './admin/utility/datepicker.component';
+import { AngularFontAwesomeModule } from 'angular-font-awesome';
 
 
 @NgModule({
@@ -40,6 +42,7 @@ import {CalculatorService} from "./shared/calculator.service";
     AdminComponent,
     SelectCoordinatesComponent,
     AddRecordsBtnComponent,
+    DatepickerComponent,
   ],
   imports: [
     BrowserModule,
@@ -48,7 +51,8 @@ import {CalculatorService} from "./shared/calculator.service";
     LeafletModule.forRoot(),
     HttpClientModule,
     Ng2SmartTableModule,
-    FormsModule
+    FormsModule,
+    AngularFontAwesomeModule,
   ],
   providers: [
     DataService,

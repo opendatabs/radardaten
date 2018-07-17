@@ -30,6 +30,7 @@ module.exports = {
     radar: {
       model: 'radar'
     }
-  }
+  },
+
 };
 

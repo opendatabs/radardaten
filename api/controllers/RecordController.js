@@ -7,10 +7,6 @@
 
 module.exports = {
 
-  addRecord(req, res) {
-   return 'somthing'
-  },
-
   addRecords(req, res) {
     if (req.body.length) {
       Record.create(req.body)
@@ -18,7 +14,7 @@ module.exports = {
           if (err) {
             res.serverError(err);
           }
-        return res.json(created);
+        return res.json(created.length);
       })
     }
   },
@@ -33,7 +29,7 @@ module.exports = {
       }
       return res.json(data);
     })
-  }
+  },
 
 };
 

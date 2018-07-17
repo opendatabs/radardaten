@@ -33,7 +33,6 @@ export class MapDetailComponent implements OnInit {
     this.recordService.getRecordOfRadar(radar.id).subscribe(data => {
       this.radar = radar;
       this.radar.records = data;
-      debugger;
       this.measurements = $.unique(radar.records.map(d => {
         return this.formatTimestampWeek(d.timestamp);
       }));

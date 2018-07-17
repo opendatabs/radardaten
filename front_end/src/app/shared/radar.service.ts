@@ -37,4 +37,8 @@ export class RadarService {
   getRadarWithAvgSpeed(): Observable<Radar[]> {
     return this.http.get<Radar[]>(this.api + 'radarWithAvgSpeed')
   }
+
+  getRecordCount(id: number): Observable<any> {
+    return this.http.get<Radar>(this.api + 'getRecordCount/' + id)
+  }
 }

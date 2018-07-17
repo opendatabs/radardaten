@@ -3,7 +3,7 @@ import {Record} from "./record";
 export interface Radar {
   avgSpeed: number;
   createdAt: string;
-  date: string;
+  date: any;
   directionOneLat: number;
   directionOneLong: number;
   directionTwoLat: number;

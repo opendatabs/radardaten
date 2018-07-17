@@ -58,6 +58,10 @@ module.exports = {
     records: {
       collection: 'record',
       via: 'radar'
+    },
+    recordCount: {
+      type: 'float',
+      defaultsTo: 0
     }
   },
   // if deleted, delete all associated records

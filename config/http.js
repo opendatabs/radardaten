@@ -75,6 +75,14 @@ module.exports.http = {
 
 
     // bodyParser: require('skipper')({strict: true})
+    bodyParser: (function () {
+      var opts = {limit:10000000, parameterLimit:10000};
+      var fn;
+
+      // Default to built-in bodyParser:
+      fn = require('skipper');
+      return fn(opts);
+    })()
 
   },
 

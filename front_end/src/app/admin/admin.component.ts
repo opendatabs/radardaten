@@ -7,6 +7,9 @@ import { AddRecordsBtnComponent } from './utility/add-records-btn.component';
 import { SelectCoordinatesComponent } from '../main/select-coordinates/select-coordinates.component';
 import { HttpErrorResponse } from '@angular/common/http';
 import { CalculatorService } from '../shared/calculator.service';
+import { DatepickerComponent } from './utility/datepicker.component';
+import * as moment from 'moment';
+import * as $ from 'jquery';
 
 @Component({
   selector: 'app-admin',
@@ -14,7 +17,9 @@ import { CalculatorService } from '../shared/calculator.service';
   styleUrls: ['./admin.component.css'],
   entryComponents: [
     AddRecordsBtnComponent,
-    SelectCoordinatesComponent ]
+    SelectCoordinatesComponent,
+    DatepickerComponent
+  ]
 })
 export class AdminComponent implements OnInit {
 
@@ -28,10 +33,22 @@ export class AdminComponent implements OnInit {
 
 
   settings = {
-    columns: { //TODO add Start date of measurement, add records-count
+    columns: {
       streetName: {
         title: 'Strasse & Nr.',
         filter: false,
+      },
+      date: {
+        title: 'Messbeginn',
+        filter: false,
+        type: 'html',
+        valuePrepareFunction: (value) => {
+          return moment(value).format('LL');
+        },
+        editor: {
+          type: 'custom',
+          component: DatepickerComponent,
+        },
       },
       speedLimit: {
         title: 'Limite (km/h)',
@@ -72,18 +89,20 @@ export class AdminComponent implements OnInit {
         renderComponent: AddRecordsBtnComponent,
         onComponentInitFunction(instance) {
           instance.open.subscribe(row => {
-            //
-            alert('File upload')
             //TODO overwrite old entries in case of duplicates
           });
         }
       },
-
+      // recordCount: {
+      //   title: '# Messungen',
+      //   filter: false,
+      //   editable: false,
+      //   addable: false,
+      // },
     },
     delete: {
       confirmDelete: true,
       deleteButtonContent: 'Löschen',
-      // deleteButtonContent: '<div class="waves-effect waves-light btn red">Delete</div>'
     },
     edit: {
       confirmSave: true,
@@ -116,14 +135,15 @@ export class AdminComponent implements OnInit {
     private radarService: RadarService,
     private recordService: RecordService,
     private calculatorService: CalculatorService
-  ) { }
+  ) {
+    moment.locale('de-ch');
+  }
 
   ngOnInit() {
     if (!this.data) {
       this.getData();
     }
   }
-
 
   onClickDelete(event){
     if (confirm(`
@@ -135,7 +155,6 @@ export class AdminComponent implements OnInit {
           .subscribe(
             res => {
               event.confirm.resolve(event.source.data);
-              //TODO delete associated records
             },
             (err: HttpErrorResponse) => {
               if (err.error instanceof Error) {
@@ -201,7 +220,7 @@ export class AdminComponent implements OnInit {
             d.avgSpeed = this.calculatorService.calculateAvgSpeed(d.records);
           });
           this.source = new LocalDataSource(this.data);
-          console.log(this.data);
+          // console.log(this.data);
         },
         err => {
           this.error = err;
@@ -224,18 +243,6 @@ export class AdminComponent implements OnInit {
         field: 'streetName',
         search: query
       },
-      // {
-      //   field: 'speedLimit',
-      //   filter: query
-      // },
-      // {
-      //   field: 'avgSpeed',
-      //   filter: query
-      // },
-      // {
-      //   field: 'speedingQuote',
-      //   filter: query
-      // }
     ], false);
     // second parameter specifying whether to perform 'AND' or 'OR' search
     // (meaning all columns should contain search query or at least one)
@@ -247,7 +254,19 @@ export class AdminComponent implements OnInit {
   onClearFilter(): void {
     this.source.reset();
     this.filterActive = false;
-    //TODO reset searchtext
+    $('#search').val('');
   }
+
+  // private updateRecordCount(id: number) {
+  //   this.radarService.getRecordCount(id).subscribe(
+  //     event => {
+  //       e.recordCount = event;
+  //       console.log(event);
+  //     },
+  //     err => {
+  //       console.log(err)
+  //     }
+  //   )
+  // }
 
 }
