@@ -67,8 +67,8 @@ export class MapComponent implements OnInit {
       let maxSpeed = Math.max(d.avgDir1, d.avgDir2);
       let color = this.colorService.perc2color2(maxSpeed, d.speedLimit);
       let i = divIcon({
-        html: "<svg width='15' height='15' class='svg-marker'>" +
-        "<circle fill='" + color + "' class='circle' r='10' id='circle" + index + "'></circle>" +
+        html: "<svg width='12' height='12' class='svg-marker'>" +
+        "<circle cx='7' cy='7' fill='" + color + "' class='circle' r='7' id='circle" + index + "'></circle>" +
         "</svg>"
       });
 
@@ -157,15 +157,16 @@ export class MapComponent implements OnInit {
   }
 
   angleFromCoordinate(lat1:number, lng1:number, lat2:number, lng2:number) {
+    debugger;
     let dLon = (lng2 - lng1);
     let y = Math.sin(dLon) * Math.cos(lat2);
     let x = Math.cos(lat1) * Math.sin(lat2) - Math.sin(lat1) * Math.cos(lat2) * Math.cos(dLon);
     let rad = Math.atan2(y, x);
     let brng = rad * 180 / Math.PI;
-    return 360 - ((brng + 360) % 360);
+    return 360 - ((brng + 360) % 360) + 90;
 }
 
   private calculateDirectionDegrees(d: Radar) {
-    return this.angleFromCoordinate(d.directionOneLat, d.directionTwoLat, d.directionOneLong, d.directionTwoLong)
+    return this.angleFromCoordinate(d.directionOneLat, d.directionOneLong, d.directionTwoLat, d.directionTwoLong)
   }
 }

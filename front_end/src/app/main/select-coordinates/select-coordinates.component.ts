@@ -39,6 +39,7 @@ export class SelectCoordinatesComponent implements OnInit, ViewCell {
   status: Status;
   markers: Layer[] = [];
   Status = Status; // copy class to local reference
+  adapted: boolean = false;
 
   coordinatesBtnLabel: String = 'Ändern';
 
@@ -64,6 +65,7 @@ export class SelectCoordinatesComponent implements OnInit, ViewCell {
     }, (reason) => {
       this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
     });
+    this.adapted = false;
   }
 
   onMapReady(map: Map) {
@@ -95,7 +97,7 @@ export class SelectCoordinatesComponent implements OnInit, ViewCell {
         break;
     }
     let i = divIcon({html: "<svg width='15' height='15' class='svg-marker'>" +
-      "<circle cx='5' cy='5' r='10' fill='"+color+"' class='circle'></circle>" +
+      "<circle cx='7' cy='7' r='7' fill='"+color+"' class='circle'></circle>" +
       "</svg>"});
     let mark: Marker = marker(latLng, {
       icon: i
@@ -129,6 +131,7 @@ export class SelectCoordinatesComponent implements OnInit, ViewCell {
     this.radarService.updateRadar(this.rowData).subscribe();
     this.coordinatesBtnLabel = 'Ändern';
     this.open.emit(this.rowData); // <-- TODO needed to update component data? Evt. remove
+    this.adapted = true;
   }
 
   private getDismissReason(reason: any): string {
