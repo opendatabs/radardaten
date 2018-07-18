@@ -43,11 +43,12 @@ import * as $ from 'jquery';
         </div>
         <div class="container h-100 my-2" *ngIf="!success && loading">
           <div class="row h-100 justify-content-center align-items-center">
-            <fa class="alingn"  name="ellipsis-h" size="4x" animation="spin"></fa>
+            <fa class="alingn"  name="refresh" size="4x" animation="spin"></fa>
           </div>
         </div>
         <div *ngIf="success" class="alert alert-success mt-2" role="alert">
-          Messungen erfolgreich hochgeladen.
+          <b>{{ recordsCreated }}</b> Messungen erfolgreich hochgeladen <br> <br>
+          Insgesamt enthält {{rowData.streetName}} jetzt {{ recordTotal }} Messungen.
         </div>
       </div>
       <div class="modal-footer">
@@ -69,7 +70,8 @@ export class AddRecordsBtnComponent implements OnInit, ViewCell {
   validFiletype: boolean = false;
   loading: boolean = false;
   success: boolean = false;
-  recordSum: number = 0;
+  recordTotal: number = 0;
+  recordsCreated: number = 0;
   error: any;
   closeResult: string;
   txt: any;
@@ -102,6 +104,9 @@ export class AddRecordsBtnComponent implements OnInit, ViewCell {
     this.open.emit(this.rowData);
   }
   onOpen(content) {
+    this.success = false;
+    this.loading = false;
+    this.error = null;
     this.modalService.open(content, { windowClass: 'big-modal' }).result.then((result) => {
       this.closeResult = `Closed with: ${result}`;
     }, (reason) => {
@@ -134,17 +139,17 @@ export class AddRecordsBtnComponent implements OnInit, ViewCell {
 
   private parseText(input :string): void {
     const regex = /[0-2]\d\d\s[0-2]\d:[0-6]\d:[0-6]\d\s\d\d\.[01]\d\.[0-3]\d\s[012]\s\d*\.\d$/gm;
-    let bundle = [];
-    let match;
+    let bundle: object[] = [];
+    let match: string[];
     do {
       match = regex.exec(input);
       if (match) {
         if (match.length) {
           bundle.push(this.recordService.parseRecord(match[0], this.rowData.id));
-          if (bundle.length >= 500) {
-            this.saveBundle(bundle);
-            bundle.length = 0;
-          }
+          // if (bundle.length >= 500) {
+          //   this.saveBundle(bundle);
+          //   bundle.length = 0;
+          // }
         }
       }
     } while (match);
@@ -153,15 +158,17 @@ export class AddRecordsBtnComponent implements OnInit, ViewCell {
 
   private saveBundle(records: any): void {
     if (records.length) {
+      console.log('Bytelenght: ' + this.byteCount(records));
       this.recordService.addRecords(records)
         .subscribe(
           res => {
             this.loading = false;
             this.success = true;
-            console.log('congratulations'); // TODO add progress bar
-            console.log(res);
+            this.recordsCreated = res.recordsCreated;
+            this.recordTotal = res.recordTotal;
           },
           (err: HttpErrorResponse) => {
+            debugger;
             if (err.error instanceof Error) {
               console.log("Client-side error occured.");
               this.error = err.message;
@@ -177,6 +184,10 @@ export class AddRecordsBtnComponent implements OnInit, ViewCell {
     } else {
       this.error = 'Messungsformat nicht akzeptiert'
     }
+  }
+
+  private byteCount(s) {
+    return encodeURI(JSON.stringify(s)).split(/%..|./).length - 1;
   }
 
 
