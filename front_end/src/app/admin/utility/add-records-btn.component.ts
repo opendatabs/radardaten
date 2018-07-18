@@ -144,10 +144,10 @@ export class AddRecordsBtnComponent implements OnInit, ViewCell {
       if (match) {
         if (match.length) {
           bundle.push(this.recordService.parseRecord(match[0], this.rowData.id));
-          // if (bundle.length >= 500) {
-          //   this.saveBundle(bundle);
-          //   bundle.length = 0;
-          // }
+          if (bundle.length >= 500) {
+            this.saveBundle(bundle);
+            bundle.length = 0;
+          }
         }
       }
     } while (match);
@@ -164,6 +164,7 @@ export class AddRecordsBtnComponent implements OnInit, ViewCell {
             this.success = true;
             this.recordsCreated = res;
             this.updateRecordCount();
+            console.log('Added new records: ' +res )
           },
           (err: HttpErrorResponse) => {
             debugger;

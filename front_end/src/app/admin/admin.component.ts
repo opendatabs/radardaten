@@ -220,7 +220,6 @@ export class AdminComponent implements OnInit {
             d.avgSpeed = this.calculatorService.calculateAvgSpeed(d.records);
           });
           this.source = new LocalDataSource(this.data);
-          // console.log(this.data);
         },
         err => {
           this.error = err;
@@ -256,17 +255,5 @@ export class AdminComponent implements OnInit {
     this.filterActive = false;
     $('#search').val('');
   }
-
-  // private updateRecordCount(id: number) {
-  //   this.radarService.getRecordCount(id).subscribe(
-  //     event => {
-  //       e.recordCount = event;
-  //       console.log(event);
-  //     },
-  //     err => {
-  //       console.log(err)
-  //     }
-  //   )
-  // }
 
 }
