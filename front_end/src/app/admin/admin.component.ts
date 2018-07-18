@@ -93,12 +93,12 @@ export class AdminComponent implements OnInit {
           });
         }
       },
-      // recordCount: {
-      //   title: '# Messungen',
-      //   filter: false,
-      //   editable: false,
-      //   addable: false,
-      // },
+      recordCount: {
+        title: '# Messungen',
+        filter: false,
+        editable: false,
+        addable: false,
+      },
     },
     delete: {
       confirmDelete: true,
