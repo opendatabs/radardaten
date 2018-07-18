@@ -163,7 +163,6 @@ export class AddRecordsBtnComponent implements OnInit, ViewCell {
             this.loading = false;
             this.success = true;
             this.recordsCreated = res;
-            this.updateRecordCount();
             console.log('Added new records: ' +res )
           },
           (err: HttpErrorResponse) => {
