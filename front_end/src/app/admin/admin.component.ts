@@ -42,7 +42,7 @@ export class AdminComponent implements OnInit {
         title: 'Messbeginn',
         filter: false,
         type: 'html',
-        valuePrepareFunction: (value) => {
+        valuePrepareFunction: value => {
           return moment(value).format('LL');
         },
         editor: {
