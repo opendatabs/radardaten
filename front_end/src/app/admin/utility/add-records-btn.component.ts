@@ -47,15 +47,14 @@ import * as $ from 'jquery';
           </div>
         </div>
         <div *ngIf="success" class="alert alert-success mt-2" role="alert">
-          <b>{{ recordsCreated }}</b> Messungen erfolgreich hochgeladen <br> <br>
-          Insgesamt enthält {{rowData.streetName}} jetzt {{ recordTotal }} Messungen.
+          <b>{{ recordsCreated }}</b> Messungen erfolgreich hochgeladen
         </div>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-outline-dark" (click)="c('Close click')">Close</button>
       </div>
     </ng-template>
-    <button (click)="onOpen(content)" class="btn btn-outline-primary">Hochladen</button>
+    <button (click)="onOpen(content)" class="btn btn-outline-primary py-0">Hochladen</button>
   `,
   styles: []
 })
@@ -70,7 +69,6 @@ export class AddRecordsBtnComponent implements OnInit, ViewCell {
   validFiletype: boolean = false;
   loading: boolean = false;
   success: boolean = false;
-  recordTotal: number = 0;
   recordsCreated: number = 0;
   error: any;
   closeResult: string;
@@ -146,10 +144,10 @@ export class AddRecordsBtnComponent implements OnInit, ViewCell {
       if (match) {
         if (match.length) {
           bundle.push(this.recordService.parseRecord(match[0], this.rowData.id));
-          // if (bundle.length >= 500) {
-          //   this.saveBundle(bundle);
-          //   bundle.length = 0;
-          // }
+          if (bundle.length >= 500) {
+            this.saveBundle(bundle);
+            bundle.length = 0;
+          }
         }
       }
     } while (match);
@@ -164,8 +162,8 @@ export class AddRecordsBtnComponent implements OnInit, ViewCell {
           res => {
             this.loading = false;
             this.success = true;
-            this.recordsCreated = res.recordsCreated;
-            this.recordTotal = res.recordTotal;
+            this.recordsCreated = res;
+            console.log('Added new records: ' +res )
           },
           (err: HttpErrorResponse) => {
             debugger;
@@ -186,7 +184,14 @@ export class AddRecordsBtnComponent implements OnInit, ViewCell {
     }
   }
 
-  private byteCount(s) {
+  updateRecordCount(): void {
+    this.radarService.updateRecordCount(this.rowData).subscribe(
+      res => console.log(res),
+      err => console.log(err)
+    );
+  }
+
+  private byteCount(s): number {
     return encodeURI(JSON.stringify(s)).split(/%..|./).length - 1;
   }
 

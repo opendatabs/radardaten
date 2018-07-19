@@ -53,12 +53,23 @@ module.exports = {
       })
   },
 
-  // getRecordCount(id) {
-  //   Record.count({radar: id})
-  //     .exec(function (err, result) {
-  //       return result;
-  //     })
-  // },
+  updateRecordCount(req, res){
+    Record.find({ radar: req.body.id })
+    .exec( (err, recordTotal) => {
+      if (err) {
+        return res.json(500, { error: 'Validierungsfehler: Keine assozierte Messungen' })
+      }
+      const total = recordTotal.length;
+      Radar.update({ id: req.body.id }, { recordCount: total })
+        .exec( (err, updated) => {
+          if (err) {
+            return res.json(500, { error: 'Validierungsfehler: Messstation konnte nicht aktualisiert werden' })
+          }
+          return res.json(updated);
+        });
+    });
+  },
+
 
   getRadarWithAvgSpeed(req, res) {
     const sql = `SELECT

@@ -9,7 +9,6 @@ module.exports = {
 
   addRecords(req, res) {
     if (req.body.length) {
-      const radarId = req.body[0].radar;
       Record.create(req.body)
         .exec( (err, created) => {
           if (err) {
@@ -19,22 +18,7 @@ module.exports = {
               return res.serverError(err);
             }
           }
-          Record.find({ radar: radarId })
-            .exec( (err, recordTotal) => {
-              if (err) {
-                res.json(500, { error: 'Validierungsfehler' })
-              }
-              Radar.update({ id: radarId }, { recordCount: recordTotal.length })
-                .exec( (updated, err) => {
-                  if (err) {
-                    return res.json(500, { error: 'Validierungsfehler' })
-                  }
-                  return res.json({
-                    recordTotal: recordTotal.length,
-                    recordsCreated: created.length
-                  });
-              });
-          });
+          return res.json(created.length);
       });
     } else {
       return res.json(500, { error: 'Upload enthält keine Daten' })
@@ -51,7 +35,7 @@ module.exports = {
       }
       return res.json(data);
     })
-  },
+  }
 
 };
 
