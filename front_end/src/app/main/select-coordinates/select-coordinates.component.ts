@@ -25,13 +25,7 @@ export class SelectCoordinatesComponent implements OnInit, ViewCell {
   @Output() open: EventEmitter<any> = new EventEmitter();
 
   closeResult: string;
-  options = {
-    layers: [
-      tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 18, attribution: '...' }),
-    ],
-    zoom: 13,
-    center: latLng(47.55814, 7.58769)
-  };
+  options = {};
   map: Map;
   coordinates: LatLng = new LatLng(0,0);
   direction1: LatLng;
@@ -56,10 +50,33 @@ export class SelectCoordinatesComponent implements OnInit, ViewCell {
     }
   }
 
+  // every time we open the map, we have to recreate the options. Otherwise the tiles of leaflet map aren't initialized correctly (blank map)
+  setOptions() {
+    this.options = {
+      layers: [
+        tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 18, attribution: '...' }),
+      ],
+      zoom: 13,
+      center: latLng(47.55814, 7.58769)
+    };
+  }
+
+  // open modal and add points to map if coordinates exist
   onOpen(content) {
+    this.setOptions();
+    this.status = Status.initial;
     this.coordinates = new LatLng(this.rowData.lat, this.rowData.long);
+    this.addCoordinates(this.coordinates);
+    this.status = Status.direction1;
     this.direction1 = new LatLng(this.rowData.directionOneLat, this.rowData.directionOneLong);
+    this.addCoordinates(this.direction1);
+    this.status = Status.direction2;
     this.direction2 = new LatLng(this.rowData.directionTwoLat, this.rowData.directionTwoLong);
+    this.addCoordinates(this.direction2);
+
+    //set status again to initial after drawing coordinates
+    this.status = Status.initial;
+
     this.modalService.open(content, { windowClass: 'big-modal' }).result.then((result) => {
       this.closeResult = `Closed with: ${result}`;
     }, (reason) => {
@@ -69,6 +86,9 @@ export class SelectCoordinatesComponent implements OnInit, ViewCell {
   }
 
   onMapReady(map: Map) {
+    setTimeout(() => {
+      map.invalidateSize();
+    }, 0);
     this.map = map;
     this.map.setMaxBounds(this.map.getBounds());
     this.map.setMinZoom(13);
@@ -78,7 +98,7 @@ export class SelectCoordinatesComponent implements OnInit, ViewCell {
   }
 
   addCoordinates(latLng: LatLng) {
-    if (this.status === Status.finished)
+    if (this.status === Status.finished || !latLng)
       return null;
 
     let color: string;
