@@ -7,6 +7,7 @@ import * as moment from 'moment'
 import {Radar} from "./radar";
 import {WeeklyRecord} from "./weekly-record";
 import {MeasurementWeek} from "./measurement-week";
+import {DailyRecord} from "./daily-record";
 
 
 @Injectable()
@@ -40,6 +41,11 @@ export class RecordService {
 
   getRecordsForDetailView(radarId: number, direction: number, startDay: string, endDay: string): Observable<WeeklyRecord[]> {
     return this.http.get<WeeklyRecord[]>(this.api + `getRecordForDetailView?radarId=${radarId}&direction=${direction}
+    &startDay=${startDay}&endDay=${endDay}`);
+  }
+
+  getRecordsForDailyView(radarId: number, direction: number, startDay: string, endDay: string): Observable<DailyRecord[]> {
+    return this.http.get<DailyRecord[]>(this.api + `getRecordForDailyView?radarId=${radarId}&direction=${direction}
     &startDay=${startDay}&endDay=${endDay}`);
   }
   updateRecord(record: any): Observable<Record> {

@@ -5,10 +5,10 @@ import {DataService} from "../../shared/data-service.service";
 import { RecordService } from '../../shared/record.service';
 declare const $: any;
 import * as moment from 'moment';
-import {LoadingModalComponent} from "../../shared/loading-modal/loading-modal.component";
 import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
 import {WeeklyRecord} from "../../shared/weekly-record";
 import {MeasurementWeek} from "../../shared/measurement-week";
+import {DailyRecord} from "../../shared/daily-record";
 
 @Component({
   selector: 'app-map-detail',
@@ -16,8 +16,6 @@ import {MeasurementWeek} from "../../shared/measurement-week";
   styleUrls: ['./map-detail.component.css']
 })
 export class MapDetailComponent implements OnInit {
-
-  @ViewChild(LoadingModalComponent) loadingModalComponent: LoadingModalComponent;
 
   graphData: WeeklyRecord[];
   measurements: MeasurementWeek[];
@@ -29,7 +27,8 @@ export class MapDetailComponent implements OnInit {
   currentWeek: WeeklyRecord[];
   directionOne: boolean = true;
   measure: string = 'speedingQuote';
-  currentDay: any;
+  currentDay: DailyRecord[];
+  dailyHeader: string;
 
   constructor(
     private dataService: DataService,
@@ -62,11 +61,13 @@ export class MapDetailComponent implements OnInit {
   }
 
   selectMesaurement(measurement: MeasurementWeek) {
+    this.currentDay = null;
     this.selectedMeasurement = measurement;
     this.getMeasurementsForWeek();
   }
 
   changeDirection() {
+    this.currentDay = null;
     this.getMeasurementsForWeek()
   }
 
@@ -77,10 +78,26 @@ export class MapDetailComponent implements OnInit {
       this.radar.id,
       direction,
       moment(this.selectedMeasurement.startDay).format('YYYY-MM-DD'),
-      moment(this.selectedMeasurement.startDay).add('day', 7).format('YYYY-MM-DD')
+      moment(this.selectedMeasurement.startDay).add(7, 'day').format('YYYY-MM-DD')
     ).subscribe(data => {
       this.currentWeek = data;
       this.ref.tick();
     });
+  }
+
+  openDailyView(weeklyRecord: WeeklyRecord) {
+    this.dailyHeader = weeklyRecord.weekday.charAt(0).toUpperCase() + weeklyRecord.weekday.slice(1);
+    this.dailyHeader += " ("+moment(weeklyRecord.timestamp).format('DD.MM.YYYY') +")";
+    let direction;
+    (this.directionOne) ? direction = 1 : direction = 2;
+    this.recordService.getRecordsForDailyView(
+      this.radar.id,
+      direction,
+      moment(weeklyRecord.timestamp).format('YYYY-MM-DD'),
+      moment(weeklyRecord.timestamp).add(1, 'day' ).format('YYYY-MM-DD')
+    ).subscribe((data: DailyRecord[]) => {
+      console.log(data);
+      this.currentDay = data;
+    })
   }
 }

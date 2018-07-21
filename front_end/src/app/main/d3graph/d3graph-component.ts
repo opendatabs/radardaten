@@ -1,4 +1,4 @@
-import {Component, ElementRef, Input, NgZone, OnChanges, OnDestroy, OnInit} from '@angular/core';
+import {Component, ElementRef, EventEmitter, Input, NgZone, OnChanges, OnDestroy, OnInit, Output} from '@angular/core';
 
 import {
   D3Service,
@@ -15,7 +15,6 @@ import {
 import {DataService} from "../../shared/data-service.service";
 import * as moment from 'moment';
 import {ColorService} from "../../shared/color.service";
-import {Record} from "../../shared/record";
 import {WeeklyRecord} from "../../shared/weekly-record";
 import {Radar} from "../../shared/radar";
 
@@ -34,6 +33,8 @@ export class D3graphComponent implements OnInit, OnChanges {
   @Input() groupBy: string;
   @Input() clickable: boolean;
   @Input() measure: string;
+
+  @Output() clickEvent: EventEmitter<WeeklyRecord> = new EventEmitter<WeeklyRecord>();
 
   private d3: D3;
   private parentNativeElement: any;
@@ -65,8 +66,11 @@ export class D3graphComponent implements OnInit, OnChanges {
   }
 
   ngOnChanges(changes: any) {
+    debugger;
     if (changes.data && changes.data.currentValue && !changes.data.previousValue) {
       this.initChart();
+      this.updateChart();
+    } else if (changes.data && changes.data.currentValue) {
       this.updateChart();
     } else if (this.data && changes.measure && changes.measure.currentValue) {
       this.initChart();
@@ -146,7 +150,7 @@ export class D3graphComponent implements OnInit, OnChanges {
         if (self.groupBy === 'days') {
           return self.xScale(moment(d.timestamp).format('dddd')) + self.padding;
         } else {
-          return self.xScale(d.timestamp) + self.padding;
+          return self.xScale(("0" + d.hour).slice(-2)) + self.padding;
         }
       })
       .attr('y', function(d) {
@@ -177,18 +181,23 @@ export class D3graphComponent implements OnInit, OnChanges {
         div.transition()
           .duration(200)
           .style("opacity", .9);
-        div.html(`Anzahl Fahrzeuge: ${d.count}<br/>Ø (km/h): ${d.avgSpeed}<br/>Übertretungsquote: ${d.speedingQuote}`)
-          .style("left", (self.d3.event.pageX) + "px")
+        div.html(`Anzahl Fahrzeuge: ${d.count}<br/>Ø (km/h): ${d.avgSpeed}<br/>Übertretungsquote: ${Math.round(d.speedingQuote * 100)}%`)
+          .style("left", (self.d3.event.pageX + 20) + "px")
           .style("top", (self.d3.event.pageY - 28) + "px");
       })
       .on('mousemove', function (d) {
-        div.style("left", (self.d3.event.pageX) + "px")
+        div.style("left", (self.d3.event.pageX + 20) + "px")
           .style("top", (self.d3.event.pageY - 28) + "px");
       })
       .on("mouseout", function(d) {
         div.transition()
           .duration(500)
           .style("opacity", 0);
+      })
+      .on('click', function(d) {
+        if (self.clickable) {
+          self.clickEvent.emit(d);
+        }
       });
 
     self.rects
@@ -197,7 +206,7 @@ export class D3graphComponent implements OnInit, OnChanges {
         if (self.groupBy === 'days') {
           return self.xScale(moment(d.timestamp).format('dddd')) + self.padding;
         } else {
-          return self.xScale(d.timestamp) + self.padding;
+          return self.xScale(("0" + d.hour).slice(-2)) + self.padding;
         }
       })
       .attr('y', function(d) {
@@ -223,5 +232,7 @@ export class D3graphComponent implements OnInit, OnChanges {
         return self.colorService.numberToOpacity(d.count, countMax);
       })
       .attr('stroke', 'black');
+
+    self.rects.exit().remove();
   }
 }
