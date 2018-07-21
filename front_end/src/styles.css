@@ -32,9 +32,33 @@
   max-width: 80%;
 }
 
+.line {
+  fill: none;
+  stroke: steelblue;
+  stroke-width: 2px;
+}
+
+div.tooltip {
+  position: absolute;
+/*  width: 180px;
+  height: 80px;*/
+  padding: 10px;
+  background: white;
+  border: 1px solid black;
+  border-radius: 8px;
+  pointer-events: none;
+}
+
 .arrowSvg {
   background-color: #ffffffd4;
   border-radius: 15px;
   margin-left: -15px;
   margin-top: -15px;
 }
+
+rect.clickable:hover {
+  cursor: pointer;
+  stroke: gray;
+  stroke-width: 3px;
+}
+

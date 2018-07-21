@@ -32,6 +32,8 @@ export class D3graphComponent implements OnInit, OnChanges {
   @Input() radar: Radar;
   @Input() speedLimit: number;
   @Input() groupBy: string;
+  @Input() clickable: boolean;
+  @Input() measure: string;
 
   private d3: D3;
   private parentNativeElement: any;
@@ -66,7 +68,8 @@ export class D3graphComponent implements OnInit, OnChanges {
     if (changes.data && changes.data.currentValue && !changes.data.previousValue) {
       this.initChart();
       this.updateChart();
-    } else if (changes.data && changes.data.currentValue) {
+    } else if (this.data && changes.measure && changes.measure.currentValue) {
+      this.initChart();
       this.updateChart();
     }
   }
@@ -95,8 +98,12 @@ export class D3graphComponent implements OnInit, OnChanges {
         .range([0, (self.width - (2*self.padding))])
         .padding(.1);
 
+      const avgDomain = [self.speedLimit, 0];
+      const speedingQuoteDomain = [.7, 0];
+      (self.measure === 'average') ? domain = avgDomain : domain = speedingQuoteDomain;
+
       self.yScale = d3.scaleLinear()
-        .domain([self.speedLimit, 0])
+        .domain(domain)
         .range([0, (self.height- (2*self.padding))]);
 
       self.xAxis = d3.axisBottom(self.xScale) // d3.js v.4
@@ -120,7 +127,15 @@ export class D3graphComponent implements OnInit, OnChanges {
   }
 
   updateChart() {
+
     let self = this;
+
+    let countMax = self.d3.max(self.data.map(d => d.count));
+
+    let div = this.d3.select("body").append("div")
+      .attr("class", "tooltip")
+      .style("opacity", 0);
+
     self.rects = self.svg.selectAll('rect')
       .data(self.data);
 
@@ -135,14 +150,45 @@ export class D3graphComponent implements OnInit, OnChanges {
         }
       })
       .attr('y', function(d) {
-        return self.yScale(d.avgSpeed) + self.padding;
+        if (self.measure === 'average') {
+          return self.yScale(d.avgSpeed) + self.padding;
+        } else {
+          return self.yScale(d.speedingQuote) + self.padding;
+        }
       })
       // .attr("transform","translate(" + (self.padding -5  + 25) + "," + (self.padding - 5) + ")")
       .attr('height', function(d) {
-        return self.height - self.yScale(d.avgSpeed) - (2*self.padding)})
+        if (self.measure === 'average') {
+          return self.height - self.yScale(d.avgSpeed) - (2 * self.padding)
+        } else {
+          return self.height - self.yScale(d.speedingQuote) - (2 * self.padding)
+        }
+      })
       .attr('width', self.xScale.bandwidth())
       .attr('fill', function(d, i) {
-        return self.colorService.perc2color2(d.avgSpeed, self.speedLimit);
+        return self.colorService.numberToColor(d.count, countMax);
+      })
+      .attr('opacity', function(d, i) {
+        return self.colorService.numberToOpacity(d.count, countMax);
+      })
+      .attr('stroke', 'black')
+      .classed('clickable', this.clickable)
+      .on("mouseover", function(d) {
+        div.transition()
+          .duration(200)
+          .style("opacity", .9);
+        div.html(`Anzahl Fahrzeuge: ${d.count}<br/>Ø (km/h): ${d.avgSpeed}<br/>Übertretungsquote: ${d.speedingQuote}`)
+          .style("left", (self.d3.event.pageX) + "px")
+          .style("top", (self.d3.event.pageY - 28) + "px");
+      })
+      .on('mousemove', function (d) {
+        div.style("left", (self.d3.event.pageX) + "px")
+          .style("top", (self.d3.event.pageY - 28) + "px");
+      })
+      .on("mouseout", function(d) {
+        div.transition()
+          .duration(500)
+          .style("opacity", 0);
       });
 
     self.rects
@@ -155,14 +201,27 @@ export class D3graphComponent implements OnInit, OnChanges {
         }
       })
       .attr('y', function(d) {
-        return self.yScale(d.avgSpeed) + self.padding;
+        if (self.measure === 'average') {
+          return self.yScale(d.avgSpeed) + self.padding;
+        } else {
+          return self.yScale(d.speedingQuote) + self.padding;
+        }
       })
       // .attr("transform","translate(" + (self.padding -5  + 25) + "," + (self.padding - 5) + ")")
       .attr('height', function(d) {
-        return self.height - self.yScale(d.avgSpeed) - (2*self.padding)})
+        if (self.measure === 'average') {
+          return self.height - self.yScale(d.avgSpeed) - (2 * self.padding)
+        } else {
+          return self.height - self.yScale(d.speedingQuote) - (2 * self.padding)
+        }
+      })
       .attr('width', self.xScale.bandwidth())
       .attr('fill', function(d, i) {
-        return self.colorService.perc2color2(d.avgSpeed, self.speedLimit);
-      });
+        return self.colorService.numberToColor(d.count, countMax);
+      })
+      .attr('opacity', function(d, i) {
+        return self.colorService.numberToOpacity(d.count, countMax);
+      })
+      .attr('stroke', 'black');
   }
 }

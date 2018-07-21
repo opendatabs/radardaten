@@ -38,17 +38,22 @@ module.exports = {
   },
 
   getRecordForDetailView(req, res) {
+    const radarId = req.query.radarId;
+    const direction = req.query.direction;
+    const startDay = req.query.startDay;
+    const endDay = req.query.endDay;
     const sql = `SELECT ROUND(sum(if(kmh > speedLimit, 1, 0))/count(kmh), 2) as speedingQuote,
   ROUND(avg(kmh),2) as avgSpeed,
   weekday,
-  timestamp
+  timestamp,
+  count(timestamp) as count
     FROM record INNER JOIN radar ON radar.id = record.radar
-    WHERE direction = 1
-    AND record.radar = 44
-    AND record.timestamp > '2015-02-09' AND record.timestamp < '2015-02-16'
+    WHERE direction = ?
+    AND record.radar = ?
+    AND record.timestamp > ? AND record.timestamp < ?
     GROUP BY weekday`;
 
-    Record.query(sql, [], function (error, data) {
+    Record.query(sql, [direction, radarId, startDay, endDay], function (error, data) {
       if (error)
         res.status(500).send(error);
       res.json(data);
@@ -70,7 +75,7 @@ GROUP BY week`;
         res.status(500).send(error);
       res.json(data);
     })
-  }
+  },
 
 };
 

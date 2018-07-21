@@ -23,12 +23,13 @@ export class MapDetailComponent implements OnInit {
   measurements: MeasurementWeek[];
   selectedMeasurement: MeasurementWeek;
   radar: Radar;
-  groupBy: string = 'days';
   visible: boolean = false;
-  loading: boolean = true;
+  loading: boolean = false;
   header: string = "";
   currentWeek: WeeklyRecord[];
   directionOne: boolean = true;
+  measure: string = 'speedingQuote';
+  currentDay: any;
 
   constructor(
     private dataService: DataService,
@@ -61,16 +62,25 @@ export class MapDetailComponent implements OnInit {
   }
 
   selectMesaurement(measurement: MeasurementWeek) {
-    this.loading = true;
     this.selectedMeasurement = measurement;
-    this.recordService.getRecordsForDetailView(this.radar).subscribe(data => {
-      this.currentWeek = data;
-      this.loading = false;
-      this.ref.tick();
-    });
+    this.getMeasurementsForWeek();
   }
 
-  tick() {
-    this.ref.tick();
+  changeDirection() {
+    this.getMeasurementsForWeek()
+  }
+
+  getMeasurementsForWeek() {
+    let direction;
+    (this.directionOne) ? direction = 1 : direction = 2;
+    this.recordService.getRecordsForDetailView(
+      this.radar.id,
+      direction,
+      moment(this.selectedMeasurement.startDay).format('YYYY-MM-DD'),
+      moment(this.selectedMeasurement.startDay).add('day', 7).format('YYYY-MM-DD')
+    ).subscribe(data => {
+      this.currentWeek = data;
+      this.ref.tick();
+    });
   }
 }

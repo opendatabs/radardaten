@@ -1,4 +1,4 @@
-<div class="card mt-2" id="map-detail">
+<div class="card mt-2" id="map-detail" *ngIf="visible">
   <div class="card-body">
     <h2 class="mb-3">{{header}}</h2>
     <div *ngIf="loading">
@@ -19,7 +19,7 @@
               </button>
             </div>
           </div>
-          <div class="btn-group btn-group-toggle" (click)="tick()" ngbRadioGroup name="direction" [(ngModel)]="directionOne">
+          <div class="btn-group btn-group-toggle" (change)="changeDirection()" ngbRadioGroup name="direction" [(ngModel)]="directionOne">
             <label ngbButtonLabel class="btn-primary">
               <input ngbButton type="radio" [value]="true"> Richtung 1
             </label>
@@ -27,20 +27,23 @@
               <input ngbButton type="radio" [value]="false"> Richtung 2
             </label>
           </div>
-          <div class="btn-group btn-group-toggle" ngbRadioGroup name="groupBy" [(ngModel)]="groupBy">
+          <div class="btn-group btn-group-toggle" ngbRadioGroup name="groupBy" [(ngModel)]="measure">
             <label ngbButtonLabel class="btn-primary">
-              <input ngbButton type="radio" [value]="'days'"> Tage
+              <input ngbButton type="radio" [value]="'average'"> Durchschnitt
             </label>
             <label ngbButtonLabel class="btn-primary">
-              <input ngbButton type="radio" [value]="'hours'"> Stunden
+              <input ngbButton type="radio" [value]="'speedingQuote'"> Übertretungsquote
             </label>
           </div>
         </div>
-        <button (click)="groupBy = 'hours'">hours</button> {{groupBy}}
       </div>
       <div class="row">
         <app-d3graph *ngIf="radar" [data]="currentWeek" [radar]="radar" [speedLimit]="radar?.speedLimit"
-                     [groupBy]="groupBy"></app-d3graph>
+                     [groupBy]="'days'" [measure]="measure" [clickable]="true"></app-d3graph>
+      </div>
+      <div class="row">
+        <app-d3graph *ngIf="currentDay" [measure]="measure" [data]="currentDay" [radar]="radar" [speedLimit]="radar?.speedLimit"
+                     [groupBy]="'hours'" [clickable]="false"></app-d3graph>
       </div>
       <div class="row mt-5" *ngIf="radar">
         <div class="col-12">
@@ -90,5 +93,3 @@
     </div>
   </div>
 </div>
-
-<button (click)="tick()">tick</button>

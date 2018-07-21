@@ -29,4 +29,18 @@ export class ColorService {
     return this.colorScale(perc);
   }
 
+  numberToColor(count: number, countMax: number): string {
+    let colorScale = this.d3.scaleLinear<string, number>()
+      .domain([0, countMax])
+      .range(["#fcfcff", "#000000"])
+      .interpolate(this.d3.interpolateHcl);
+    return colorScale(count);
+  }
+
+  numberToOpacity(count: number, countMax: number): number {
+    let colorScale = this.d3.scaleLinear<number, number>()
+      .domain([0, countMax])
+      .range([0, 1]);
+    return colorScale(count);
+  }
 }
