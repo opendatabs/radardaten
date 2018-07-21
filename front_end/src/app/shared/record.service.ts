@@ -4,6 +4,9 @@ import { environment } from '../../environments/environment';
 import { Observable } from 'rxjs/Observable';
 import { Record } from './record';
 import * as moment from 'moment'
+import {Radar} from "./radar";
+import {WeeklyRecord} from "./weekly-record";
+import {MeasurementWeek} from "./measurement-week";
 
 
 @Injectable()
@@ -27,8 +30,16 @@ export class RecordService {
     return this.http.get<Record[]>(this.api + `recordsOfRadar?radarId=${radarId}`);
   }
 
+  getMeasurementWeeks(radarId: number, direction: number): Observable<MeasurementWeek[]> {
+    return this.http.get<MeasurementWeek[]>(this.api + `measurementWeeks?radarId=${radarId}&direction=${direction}`);
+  }
+
   addRecords(records: Record[]): Observable<any> { //TODO why not possible to choose returntype Record[]?!
     return this.http.post<Record[]>(this.api + 'addRecords', records);
+  }
+
+  getRecordsForDetailView(radar: Radar): Observable<WeeklyRecord[]> {
+    return this.http.get<WeeklyRecord[]>(this.api + `getRecordForDetailView?radarId=${radar.id}`);
   }
 
   updateRecord(record: any): Observable<Record> {
@@ -63,5 +74,4 @@ export class RecordService {
     const weekdays = ['montag', 'dienstag', 'mittwoch', 'donnerstag', 'freitag', 'samstag', 'sonntag'];
     return weekdays[day-1];
   }
-
 }

@@ -16,6 +16,8 @@ import {DataService} from "../../shared/data-service.service";
 import * as moment from 'moment';
 import {ColorService} from "../../shared/color.service";
 import {Record} from "../../shared/record";
+import {WeeklyRecord} from "../../shared/weekly-record";
+import {Radar} from "../../shared/radar";
 
 declare var $:any;
 
@@ -26,11 +28,10 @@ declare var $:any;
 })
 export class D3graphComponent implements OnInit, OnChanges {
 
-  @Input() records: Record[];
+  @Input() data: WeeklyRecord[];
+  @Input() radar: Radar;
   @Input() speedLimit: number;
   @Input() groupBy: string;
-
-  stackedData: any[];
 
   private d3: D3;
   private parentNativeElement: any;
@@ -62,39 +63,12 @@ export class D3graphComponent implements OnInit, OnChanges {
   }
 
   ngOnChanges(changes: any) {
-    if (changes.records && changes.records.currentValue && !changes.records.previousValue) {
-      this.stackedData = this.stackData(changes.records.currentValue);
+    if (changes.data && changes.data.currentValue && !changes.data.previousValue) {
       this.initChart();
       this.updateChart();
-    } else if (changes.records && changes.records.currentValue) {
-      this.stackedData = this.stackData(changes.records.currentValue);
-      this.updateChart();
-    } else if ( changes.groupBy && changes.groupBy.currentValue) {
-      this.stackedData = this.stackData(this.records);
-      this.initChart();
+    } else if (changes.data && changes.data.currentValue) {
       this.updateChart();
     }
-  }
-
-  stackData(records: Record[]) {
-    const self = this;
-    let nested = this.d3.nest<Record, {count:number, avgSpeed:number}>()
-      .key(function(d: Record) {
-        if (self.groupBy === 'days') {
-          return moment(d.timestamp).format('YYYY-MM-DD');
-        } else {
-          return moment(d.timestamp).format('HH')
-        }
-      })
-      .rollup(function(v:any) {
-        return {
-          count: v.length,
-          avgSpeed: self.d3.mean(v, function (d:any) {return d.kmh})
-        };
-      })
-      .entries(records);
-    console.log(nested);
-    return nested;
   }
 
   initChart() {
@@ -109,7 +83,7 @@ export class D3graphComponent implements OnInit, OnChanges {
         .attr('width', self.width) // set its dimensions
         .attr('height', self.height);
 
-      self.stackedData = this.stackedData;
+      self.data = this.data;
 
       const weekDomain = ['Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag', 'Samstag', 'Sonntag'];
       const hoursDomain = ['00', '01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12', '13', '14', '15',
@@ -148,47 +122,47 @@ export class D3graphComponent implements OnInit, OnChanges {
   updateChart() {
     let self = this;
     self.rects = self.svg.selectAll('rect')
-      .data(self.stackedData);
+      .data(self.data);
 
     self.rects
       .enter()
       .append('rect')
       .attr('x', function(d,i) {
         if (self.groupBy === 'days') {
-          return self.xScale(moment(d.key).format('dddd')) + self.padding;
+          return self.xScale(moment(d.timestamp).format('dddd')) + self.padding;
         } else {
-          return self.xScale(d.key) + self.padding;
+          return self.xScale(d.timestamp) + self.padding;
         }
       })
       .attr('y', function(d) {
-        return self.yScale(d.value.avgSpeed) + self.padding;
+        return self.yScale(d.avgSpeed) + self.padding;
       })
       // .attr("transform","translate(" + (self.padding -5  + 25) + "," + (self.padding - 5) + ")")
       .attr('height', function(d) {
-        return self.height - self.yScale(d.value.avgSpeed) - (2*self.padding)})
+        return self.height - self.yScale(d.avgSpeed) - (2*self.padding)})
       .attr('width', self.xScale.bandwidth())
       .attr('fill', function(d, i) {
-        return self.colorService.perc2color2(d.value.avgSpeed, self.speedLimit);
+        return self.colorService.perc2color2(d.avgSpeed, self.speedLimit);
       });
 
     self.rects
       .transition()
       .attr('x', function(d,i) {
         if (self.groupBy === 'days') {
-          return self.xScale(moment(d.key).format('dddd')) + self.padding;
+          return self.xScale(moment(d.timestamp).format('dddd')) + self.padding;
         } else {
-          return self.xScale(d.key) + self.padding;
+          return self.xScale(d.timestamp) + self.padding;
         }
       })
       .attr('y', function(d) {
-        return self.yScale(d.value.avgSpeed) + self.padding;
+        return self.yScale(d.avgSpeed) + self.padding;
       })
       // .attr("transform","translate(" + (self.padding -5  + 25) + "," + (self.padding - 5) + ")")
       .attr('height', function(d) {
-        return self.height - self.yScale(d.value.avgSpeed) - (2*self.padding)})
+        return self.height - self.yScale(d.avgSpeed) - (2*self.padding)})
       .attr('width', self.xScale.bandwidth())
       .attr('fill', function(d, i) {
-        return self.colorService.perc2color2(d.value.avgSpeed, self.speedLimit);
+        return self.colorService.perc2color2(d.avgSpeed, self.speedLimit);
       });
   }
 }

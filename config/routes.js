@@ -55,6 +55,8 @@ module.exports.routes = {
   'get  /Radar/radarWithAvgSpeedAndSpeedingQuote' : 'RadarController.getRadarWithAvgSpeedAndSpeedingQuote',
   'post /Record/addRecords' : 'RecordController.addRecords',
   'get /Record/recordsOfRadar' : 'RecordController.getRecordsOfRadar',
+  'get /Record/recordForDetailView' : 'RecordController.getRecordForDetailView',
+  'get /Record/measurementWeeks' : 'RecordController.getMeasurementWeeks',
   // 'get /Radar/getRecordCount/:id' : 'RadarController.getRecordCount',
   'put /Radar/updateRecordCount' : 'RadarController.updateRecordCount',
 

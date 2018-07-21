@@ -27,6 +27,7 @@ import { AddRecordsBtnComponent } from './admin/utility/add-records-btn.componen
 import {CalculatorService} from "./shared/calculator.service";
 import { DatepickerComponent } from './admin/utility/datepicker.component';
 import { AngularFontAwesomeModule } from 'angular-font-awesome';
+import {LoadingModalComponent} from "./shared/loading-modal/loading-modal.component";
 
 
 @NgModule({
@@ -42,7 +43,8 @@ import { AngularFontAwesomeModule } from 'angular-font-awesome';
     AdminComponent,
     SelectCoordinatesComponent,
     AddRecordsBtnComponent,
-    DatepickerComponent,
+    DatepickerComponent
+    // LoadingModalComponent
   ],
   imports: [
     BrowserModule,

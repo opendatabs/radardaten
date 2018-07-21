@@ -1,10 +1,14 @@
-import {ApplicationRef, ChangeDetectorRef, Component, OnInit} from '@angular/core';
+import {ApplicationRef, ChangeDetectorRef, Component, OnInit, ViewChild} from '@angular/core';
 import {Radar} from "../../shared/radar";
 import { Record } from "../../shared/record";
 import {DataService} from "../../shared/data-service.service";
 import { RecordService } from '../../shared/record.service';
 declare const $: any;
 import * as moment from 'moment';
+import {LoadingModalComponent} from "../../shared/loading-modal/loading-modal.component";
+import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
+import {WeeklyRecord} from "../../shared/weekly-record";
+import {MeasurementWeek} from "../../shared/measurement-week";
 
 @Component({
   selector: 'app-map-detail',
@@ -13,12 +17,18 @@ import * as moment from 'moment';
 })
 export class MapDetailComponent implements OnInit {
 
-  graphDataDir1: Record[];
-  graphDataDir2: Record[];
-  measurements: string[];
-  selectedMeasurement: string;
+  @ViewChild(LoadingModalComponent) loadingModalComponent: LoadingModalComponent;
+
+  graphData: WeeklyRecord[];
+  measurements: MeasurementWeek[];
+  selectedMeasurement: MeasurementWeek;
   radar: Radar;
   groupBy: string = 'days';
+  visible: boolean = false;
+  loading: boolean = true;
+  header: string = "";
+  currentWeek: WeeklyRecord[];
+  directionOne: boolean = true;
 
   constructor(
     private dataService: DataService,
@@ -30,32 +40,34 @@ export class MapDetailComponent implements OnInit {
   }
 
   open(radar: Radar) {
-    this.recordService.getRecordOfRadar(radar.id).subscribe(data => {
-      this.radar = radar;
-      this.radar.records = data;
-      this.measurements = $.unique(radar.records.map(d => {
-        return this.formatTimestampWeek(d.timestamp);
-      }));
+    this.visible = true;
+    this.header = radar.streetName;
+    this.radar = radar;
+    // document.getElementById('map-detail').scrollIntoView();
+    // we need this because the action is called from leaflet.
+    // and leaflet has a bug that it'doesn't trigger update circle after changes
+    this.getMeasurementWeeks();
+  }
+
+  getMeasurementWeeks() {
+    this.loading = true;
+    let direction;
+    (this.directionOne) ? direction = 1 : direction = 2;
+    this.recordService.getMeasurementWeeks(this.radar.id, direction).subscribe(data => {
+      this.measurements = data;
       this.selectMesaurement(this.measurements[0]);
-      /*
-      we need this because the action is called from leaflet.
-      and leaflet has a bug that it'doesn't trigger update circle after changes
-       */
-      this.ref.tick();
-      document.getElementById('map-detail').scrollIntoView();
-    })
-  }
-
-  selectMesaurement(measurement: string) {
-    this.selectedMeasurement = measurement;
-    this.graphDataDir1 = this.radar.records.filter(d => {
-      return this.formatTimestampWeek(d.timestamp) === measurement;
+      this.loading = false;
     });
-    console.log(this);
   }
 
-  private formatTimestampWeek(timestamp: string) {
-    return moment(timestamp).format("YYYY-MM") + " Woche " + moment(timestamp).format('ww')
+  selectMesaurement(measurement: MeasurementWeek) {
+    this.loading = true;
+    this.selectedMeasurement = measurement;
+    this.recordService.getRecordsForDetailView(this.radar).subscribe(data => {
+      this.currentWeek = data;
+      this.loading = false;
+      this.ref.tick();
+    });
   }
 
   tick() {

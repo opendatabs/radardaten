@@ -1,5 +1,5 @@
 import {
-  ApplicationRef, ChangeDetectorRef, Component, EventEmitter, Input, OnInit, Output,
+  ApplicationRef, ChangeDetectorRef, Component, EventEmitter, Input, NgZone, OnInit, Output,
   ViewChild
 } from '@angular/core';
 import {divIcon, latLng, Layer, marker, tileLayer, Map, tooltip} from "leaflet";
@@ -33,8 +33,11 @@ export class MapComponent implements OnInit {
     center: latLng(47.55814, 7.58769)
   };
 
-  constructor(private ref: ApplicationRef,
-              private colorService: ColorService) {
+  constructor(
+    private ref: ApplicationRef,
+    private colorService: ColorService,
+    private zone: NgZone
+  ) {
   }
 
   ngOnInit() {
@@ -81,7 +84,9 @@ export class MapComponent implements OnInit {
       }).on('click', function () {
         $('#map').find('.active').removeClass('active');
         $("#circle" + index).addClass('active');
-        self.openDetails(d);
+        self.zone.run(() => {
+          self.openDetails(d);
+        });
       });
       this.circleMarkers.push(mark);
     })
@@ -153,7 +158,8 @@ export class MapComponent implements OnInit {
   }
 
   openDetails(radar: Radar) {
-    this.bubbleClickEvent.emit(radar);
+    const self = this;
+    self.bubbleClickEvent.emit(radar);
   }
 
   angleFromCoordinate(lat1:number, lng1:number, lat2:number, lng2:number) {

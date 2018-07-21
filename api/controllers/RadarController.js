@@ -100,6 +100,8 @@ module.exports = {
   ) AS speedingQuoteDir2
 FROM radar`;
     Radar.query(sql, [], function (error, data) {
+      if (error)
+        res.status(500).send(error);
       res.json(data);
     })
   }

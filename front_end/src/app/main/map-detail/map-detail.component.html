@@ -1,53 +1,94 @@
 <div class="card mt-2" id="map-detail">
   <div class="card-body">
-    <div class="row">
-      <div class="col-12">
-        <div ngbDropdown class="d-inline-block">
-          <button class="btn btn-outline-primary" id="dropdownBasic1" ngbDropdownToggle>{{selectedMeasurement}}</button>
-          <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
-            <button class="dropdown-item" *ngFor="let measurement of measurements" (click)="selectMesaurement(measurement)">
-              {{measurement}}
+    <h2 class="mb-3">{{header}}</h2>
+    <div *ngIf="loading">
+      <i class="fa fa-refresh fa-spin fa-3x fa-fw"></i>
+      <span class="sr-only">Laden...</span>
+    </div>
+    <div *ngIf="!loading">
+      <div class="row">
+        <div class="col-12">
+          <div ngbDropdown class="d-inline-block">
+            <button class="btn btn-outline-primary" id="dropdownBasic1" ngbDropdownToggle>
+              {{selectedMeasurement.startDay | date:'dd.MM.yyyy'}} (Woche {{selectedMeasurement.week}})
             </button>
+            <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
+              <button class="dropdown-item" *ngFor="let measurement of measurements"
+                      (click)="selectMesaurement(measurement)">
+                {{measurement.startDay | date:'dd.MM.yyyy'}} (Woche {{measurement.week}})
+              </button>
+            </div>
+          </div>
+          <div class="btn-group btn-group-toggle" (click)="tick()" ngbRadioGroup name="direction" [(ngModel)]="directionOne">
+            <label ngbButtonLabel class="btn-primary">
+              <input ngbButton type="radio" [value]="true"> Richtung 1
+            </label>
+            <label ngbButtonLabel class="btn-primary">
+              <input ngbButton type="radio" [value]="false"> Richtung 2
+            </label>
+          </div>
+          <div class="btn-group btn-group-toggle" ngbRadioGroup name="groupBy" [(ngModel)]="groupBy">
+            <label ngbButtonLabel class="btn-primary">
+              <input ngbButton type="radio" [value]="'days'"> Tage
+            </label>
+            <label ngbButtonLabel class="btn-primary">
+              <input ngbButton type="radio" [value]="'hours'"> Stunden
+            </label>
           </div>
         </div>
-        <div class="btn-group btn-group-toggle" ngbRadioGroup name="radioBasic" [(ngModel)]="groupBy">
-          <label ngbButtonLabel class="btn-primary">
-            <input ngbButton type="radio" [value]="'days'"> Tage
-          </label>
-          <label ngbButtonLabel class="btn-primary">
-            <input ngbButton type="radio" [value]="'hours'"> Stunden
-          </label>
+        <button (click)="groupBy = 'hours'">hours</button> {{groupBy}}
+      </div>
+      <div class="row">
+        <app-d3graph *ngIf="radar" [data]="currentWeek" [radar]="radar" [speedLimit]="radar?.speedLimit"
+                     [groupBy]="groupBy"></app-d3graph>
+      </div>
+      <div class="row mt-5" *ngIf="radar">
+        <div class="col-12">
+          <h3>Details:</h3>
+          <div class="pt-2">
+            <table class="table table-striped">
+              <tr>
+                <td>Strassenname:</td>
+                <td>{{radar.streetName}}</td>
+              </tr>
+              <tr>
+                <td>Datum:</td>
+                <td>{{radar.date | date:'dd.MM.yyyy hh:mm'}}</td>
+              </tr>
+              <tr>
+                <td>Übertretungsquote Richtung 1:</td>
+                <td>
+                  {{radar.speedingQuoteDir1 * 100 | number:"1.2-2"}}%
+                </td>
+              </tr>
+              <tr>
+                <td>Ø (km/h) Richtung 1:</td>
+                <td>{{radar.avgDir1}}</td>
+              </tr>
+              <tr>
+                <td>Übertretungsquote Richtung 2:</td>
+                <td>
+                  {{radar.speedingQuoteDir2 * 100 | number:"1.2-2"}}%
+                </td>
+              </tr>
+              <tr>
+                <td>Ø (km/h) Richtung 2:</td>
+                <td>{{radar.avgDir2}}</td>
+              </tr>
+              <tr>
+                <td>Geschwindigkeitslimite:</td>
+                <td>{{radar.speedLimit}} km/h</td>
+              </tr>
+              <tr>
+                <td>Toleranz:</td>
+                <td>5 km/h</td>
+              </tr>
+            </table>
+          </div>
         </div>
-      </div>
-    </div>
-    <div class="row">
-      <app-d3graph *ngIf="radar" [records]="graphDataDir1" [speedLimit]="radar?.speedLimit" [groupBy]="groupBy"></app-d3graph>
-    </div>
-    <div class="row mt-5" *ngIf="radar">
-      <div class="col-12">
-        <h3>Details:</h3>
-        <div class="pt-2">
-        <table class="table table-striped">
-          <tr>
-            <td>Strassenname:</td>
-            <td>{{radar.streetName}}</td>
-          </tr>
-          <tr>
-            <td>Datum:</td>
-            <td>{{radar.date}}</td>
-          </tr>
-          <tr>
-            <td>Ø (km/h) Richtung 1:</td>
-            <td>{{radar.avgDir1}}</td>
-          </tr>
-          <tr>
-            <td>Ø (km/h) Richtung 2:</td>
-            <td>{{radar.avgDir2}}</td>
-          </tr>
-        </table>
-      </div>
       </div>
     </div>
   </div>
 </div>
-<button type="button" class="btn" (click)="tick()">refresh</button>
+
+<button (click)="tick()">tick</button>
