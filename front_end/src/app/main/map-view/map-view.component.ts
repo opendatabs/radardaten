@@ -24,7 +24,7 @@ export class MapViewComponent implements OnInit {
 
   ngOnInit() {
     // this.dataService.getMapData().subscribe((data:Radar[]) => {
-    this.radarService.getRadarWithAvgSpeed()
+    this.radarService.getRadarWithAvgSpeedAndSpeedingQuote()
       .subscribe(
         res => {
           this.data = res;

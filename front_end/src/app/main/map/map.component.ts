@@ -64,8 +64,8 @@ export class MapComponent implements OnInit {
     let mark;
     let self = this;
     this.data.forEach((d: Radar, index: number) => {
-      let maxSpeed = Math.max(d.avgDir1, d.avgDir2);
-      let color = this.colorService.perc2color2(maxSpeed, d.speedLimit);
+      let maxSpeed = Math.max(d.speedingQuoteDir1, d.speedingQuoteDir2);
+      let color = this.colorService.perc2color(maxSpeed * 100);
       let i = divIcon({
         html: "<svg width='12' height='12' class='svg-marker'>" +
         "<circle cx='7' cy='7' fill='" + color + "' class='circle' r='7' id='circle" + index + "'></circle>" +
@@ -93,8 +93,8 @@ export class MapComponent implements OnInit {
     this.data.forEach((d: Radar, index: number) => {
       let directionDegrees = this.calculateDirectionDegrees(d);
       // todo: replace by speeding quote and for two directions
-      let color1 = this.colorService.perc2color2(d.avgDir1, d.speedLimit);
-      let color2 = this.colorService.perc2color2(d.avgDir2, d.speedLimit);
+      let color1 = this.colorService.perc2color(d.speedingQuoteDir1 * 100);
+      let color2 = this.colorService.perc2color(d.speedingQuoteDir2 * 100);
       // create a random ID for marker to ensure unique ids.
       let randomId = Math.floor(Math.random() * Math.floor(100000));
       let i = divIcon({
@@ -157,7 +157,6 @@ export class MapComponent implements OnInit {
   }
 
   angleFromCoordinate(lat1:number, lng1:number, lat2:number, lng2:number) {
-    debugger;
     let dLon = (lng2 - lng1);
     let y = Math.sin(dLon) * Math.cos(lat2);
     let x = Math.cos(lat1) * Math.sin(lat2) - Math.sin(lat1) * Math.cos(lat2) * Math.cos(dLon);

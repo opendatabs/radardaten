@@ -14,8 +14,8 @@ export class ColorService {
 
   perc2color(perc: number) {
     this.colorScale = this.d3.scaleLinear<string, number>()
-      .domain([0, 50, 100])
-      .range(["#d73027", "#fee08b", "#1a9850"])
+      .domain([0, 20, 50])
+      .range(["#1a9850", "#fee08b", "#d73027"])
       .interpolate(this.d3.interpolateHcl);
     return this.colorScale(perc);
   }

@@ -1,3 +1,8 @@
+.container {
+  max-width: none;
+  width: 90%;
+}
+
 input.search {
   width: 250px;
 }

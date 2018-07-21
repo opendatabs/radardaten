@@ -1,5 +1,6 @@
 import {Component, Input, OnChanges, OnInit} from '@angular/core';
 import {Radar} from "../../shared/radar";
+import {ColorService} from "../../shared/color.service";
 declare var $:any;
 
 @Component({
@@ -15,7 +16,9 @@ export class MapTooltipComponent implements OnInit {
   transform: string = '';
   content: Radar;
 
-  constructor() { }
+  constructor(
+    private colorService: ColorService
+  ) { }
 
   ngOnInit() {
   }
@@ -30,6 +33,10 @@ export class MapTooltipComponent implements OnInit {
 
   hideTooltip() {
     this.display = 'none';
+  }
+
+  perc2Color(perc: number): string {
+    return this.colorService.perc2color(perc);
   }
 
 
