@@ -56,9 +56,9 @@ module.exports = {
   updateRecordCount(req, res){
     Record.find({ radar: req.body.id })
     .exec( (err, recordTotal) => {
-      if (err) {
-        return res.json(500, { error: 'Validierungsfehler: Keine assozierte Messungen' })
-      }
+      // void => signal that the return value is unimportant. TODO add handleError(err) function
+      if (err) return void res.json(500, { error: 'Validierungsfehler: Keine assozierte Messungen' });
+
       const total = recordTotal.length;
       Radar.update({ id: req.body.id }, { recordCount: total })
         .exec( (err, updated) => {
