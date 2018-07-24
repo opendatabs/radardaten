@@ -1,4 +1,4 @@
-import {Component, ElementRef, Input, NgZone, OnChanges, OnDestroy, OnInit} from '@angular/core';
+import {Component, ElementRef, EventEmitter, Input, NgZone, OnChanges, OnDestroy, OnInit, Output} from '@angular/core';
 
 import {
   D3Service,
@@ -15,7 +15,8 @@ import {
 import {DataService} from "../../shared/data-service.service";
 import * as moment from 'moment';
 import {ColorService} from "../../shared/color.service";
-import {Record} from "../../shared/record";
+import {WeeklyRecord} from "../../shared/weekly-record";
+import {Radar} from "../../shared/radar";
 
 declare var $:any;
 
@@ -26,11 +27,14 @@ declare var $:any;
 })
 export class D3graphComponent implements OnInit, OnChanges {
 
-  @Input() records: Record[];
+  @Input() data: WeeklyRecord[];
+  @Input() radar: Radar;
   @Input() speedLimit: number;
   @Input() groupBy: string;
+  @Input() clickable: boolean;
+  @Input() measure: string;
 
-  stackedData: any[];
+  @Output() clickEvent: EventEmitter<WeeklyRecord> = new EventEmitter<WeeklyRecord>();
 
   private d3: D3;
   private parentNativeElement: any;
@@ -62,39 +66,16 @@ export class D3graphComponent implements OnInit, OnChanges {
   }
 
   ngOnChanges(changes: any) {
-    if (changes.records && changes.records.currentValue && !changes.records.previousValue) {
-      this.stackedData = this.stackData(changes.records.currentValue);
+    debugger;
+    if (changes.data && changes.data.currentValue && !changes.data.previousValue) {
       this.initChart();
       this.updateChart();
-    } else if (changes.records && changes.records.currentValue) {
-      this.stackedData = this.stackData(changes.records.currentValue);
+    } else if (changes.data && changes.data.currentValue) {
       this.updateChart();
-    } else if ( changes.groupBy && changes.groupBy.currentValue) {
-      this.stackedData = this.stackData(this.records);
+    } else if (this.data && changes.measure && changes.measure.currentValue) {
       this.initChart();
       this.updateChart();
     }
-  }
-
-  stackData(records: Record[]) {
-    const self = this;
-    let nested = this.d3.nest<Record, {count:number, avgSpeed:number}>()
-      .key(function(d: Record) {
-        if (self.groupBy === 'days') {
-          return moment(d.timestamp).format('YYYY-MM-DD');
-        } else {
-          return moment(d.timestamp).format('HH')
-        }
-      })
-      .rollup(function(v:any) {
-        return {
-          count: v.length,
-          avgSpeed: self.d3.mean(v, function (d:any) {return d.kmh})
-        };
-      })
-      .entries(records);
-    console.log(nested);
-    return nested;
   }
 
   initChart() {
@@ -109,7 +90,7 @@ export class D3graphComponent implements OnInit, OnChanges {
         .attr('width', self.width) // set its dimensions
         .attr('height', self.height);
 
-      self.stackedData = this.stackedData;
+      self.data = this.data;
 
       const weekDomain = ['Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag', 'Samstag', 'Sonntag'];
       const hoursDomain = ['00', '01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12', '13', '14', '15',
@@ -121,8 +102,12 @@ export class D3graphComponent implements OnInit, OnChanges {
         .range([0, (self.width - (2*self.padding))])
         .padding(.1);
 
+      const avgDomain = [self.speedLimit, 0];
+      const speedingQuoteDomain = [.7, 0];
+      (self.measure === 'average') ? domain = avgDomain : domain = speedingQuoteDomain;
+
       self.yScale = d3.scaleLinear()
-        .domain([self.speedLimit, 0])
+        .domain(domain)
         .range([0, (self.height- (2*self.padding))]);
 
       self.xAxis = d3.axisBottom(self.xScale) // d3.js v.4
@@ -146,49 +131,108 @@ export class D3graphComponent implements OnInit, OnChanges {
   }
 
   updateChart() {
+
     let self = this;
+
+    let countMax = self.d3.max(self.data.map(d => d.count));
+
+    let div = this.d3.select("body").append("div")
+      .attr("class", "tooltip")
+      .style("opacity", 0);
+
     self.rects = self.svg.selectAll('rect')
-      .data(self.stackedData);
+      .data(self.data);
 
     self.rects
       .enter()
       .append('rect')
       .attr('x', function(d,i) {
         if (self.groupBy === 'days') {
-          return self.xScale(moment(d.key).format('dddd')) + self.padding;
+          return self.xScale(moment(d.timestamp).format('dddd')) + self.padding;
         } else {
-          return self.xScale(d.key) + self.padding;
+          return self.xScale(("0" + d.hour).slice(-2)) + self.padding;
         }
       })
       .attr('y', function(d) {
-        return self.yScale(d.value.avgSpeed) + self.padding;
+        if (self.measure === 'average') {
+          return self.yScale(d.avgSpeed) + self.padding;
+        } else {
+          return self.yScale(d.speedingQuote) + self.padding;
+        }
       })
       // .attr("transform","translate(" + (self.padding -5  + 25) + "," + (self.padding - 5) + ")")
       .attr('height', function(d) {
-        return self.height - self.yScale(d.value.avgSpeed) - (2*self.padding)})
+        if (self.measure === 'average') {
+          return self.height - self.yScale(d.avgSpeed) - (2 * self.padding)
+        } else {
+          return self.height - self.yScale(d.speedingQuote) - (2 * self.padding)
+        }
+      })
       .attr('width', self.xScale.bandwidth())
       .attr('fill', function(d, i) {
-        return self.colorService.perc2color2(d.value.avgSpeed, self.speedLimit);
+        return self.colorService.numberToColor(d.count, countMax);
+      })
+      .attr('opacity', function(d, i) {
+        return self.colorService.numberToOpacity(d.count, countMax);
+      })
+      .attr('stroke', 'black')
+      .classed('clickable', this.clickable)
+      .on("mouseover", function(d) {
+        div.transition()
+          .duration(200)
+          .style("opacity", .9);
+        div.html(`Anzahl Fahrzeuge: ${d.count}<br/>Ø (km/h): ${d.avgSpeed}<br/>Übertretungsquote: ${Math.round(d.speedingQuote * 100)}%`)
+          .style("left", (self.d3.event.pageX + 20) + "px")
+          .style("top", (self.d3.event.pageY - 28) + "px");
+      })
+      .on('mousemove', function (d) {
+        div.style("left", (self.d3.event.pageX + 20) + "px")
+          .style("top", (self.d3.event.pageY - 28) + "px");
+      })
+      .on("mouseout", function(d) {
+        div.transition()
+          .duration(500)
+          .style("opacity", 0);
+      })
+      .on('click', function(d) {
+        if (self.clickable) {
+          self.clickEvent.emit(d);
+        }
       });
 
     self.rects
       .transition()
       .attr('x', function(d,i) {
         if (self.groupBy === 'days') {
-          return self.xScale(moment(d.key).format('dddd')) + self.padding;
+          return self.xScale(moment(d.timestamp).format('dddd')) + self.padding;
         } else {
-          return self.xScale(d.key) + self.padding;
+          return self.xScale(("0" + d.hour).slice(-2)) + self.padding;
         }
       })
       .attr('y', function(d) {
-        return self.yScale(d.value.avgSpeed) + self.padding;
+        if (self.measure === 'average') {
+          return self.yScale(d.avgSpeed) + self.padding;
+        } else {
+          return self.yScale(d.speedingQuote) + self.padding;
+        }
       })
       // .attr("transform","translate(" + (self.padding -5  + 25) + "," + (self.padding - 5) + ")")
       .attr('height', function(d) {
-        return self.height - self.yScale(d.value.avgSpeed) - (2*self.padding)})
+        if (self.measure === 'average') {
+          return self.height - self.yScale(d.avgSpeed) - (2 * self.padding)
+        } else {
+          return self.height - self.yScale(d.speedingQuote) - (2 * self.padding)
+        }
+      })
       .attr('width', self.xScale.bandwidth())
       .attr('fill', function(d, i) {
-        return self.colorService.perc2color2(d.value.avgSpeed, self.speedLimit);
-      });
+        return self.colorService.numberToColor(d.count, countMax);
+      })
+      .attr('opacity', function(d, i) {
+        return self.colorService.numberToOpacity(d.count, countMax);
+      })
+      .attr('stroke', 'black');
+
+    self.rects.exit().remove();
   }
 }

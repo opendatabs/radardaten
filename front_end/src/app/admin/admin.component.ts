@@ -54,14 +54,26 @@ export class AdminComponent implements OnInit {
         title: 'Limite (km/h)',
         filter: false,
       },
-      avgSpeed: {
-        title: 'Ø (km/h)',
+      avgDir1: {
+        title: 'Ø (km/h) R1',
         filter: false,
         editable: false,
         addable: false,
       },
-      speedingQuote: {
-        title: 'Übertr.quote',
+      avgDir2: {
+        title: 'Ø (km/h) R2',
+        filter: false,
+        editable: false,
+        addable: false,
+      },
+      speedingQuoteDir1: {
+        title: 'Übertr.quote R1',
+        filter: false,
+        editable: false,
+        addable: false,
+      },
+      speedingQuoteDir2: {
+        title: 'Übertr.quote R2',
         filter: false,
         editable: false,
         addable: false,
@@ -133,8 +145,7 @@ export class AdminComponent implements OnInit {
 
   constructor(
     private radarService: RadarService,
-    private recordService: RecordService,
-    private calculatorService: CalculatorService
+    private recordService: RecordService
   ) {
     moment.locale('de-ch');
   }
@@ -190,8 +201,8 @@ export class AdminComponent implements OnInit {
 
   onClickCreate(event) {
     event.newData.speedLimit = this.validateSpeed(event.newData.speedLimit);
-    event.newData.avgSpeed = Number(event.newData.avgSpeed);
-    event.newData.speedingQuote = Number(event.newData.speedingQuote);
+    // event.newData.avgSpeed1 = Number(event.newData.avgSpeed1);
+    // event.newData.speedingQuote1 = Number(event.newData.speedingQuote1);
     console.log(this.data);
     this.radarService.addRadar(event.newData)
       .subscribe(
@@ -212,13 +223,10 @@ export class AdminComponent implements OnInit {
   }
 
   private getData(): void {
-    this.radarService.getRadars()
+    this.radarService.getRadarWithAvgSpeedAndSpeedingQuote()
       .subscribe(
         res => {
           this.data = res;
-          this.data.forEach(d => {
-            d.avgSpeed = this.calculatorService.calculateAvgSpeed(d.records);
-          });
           this.source = new LocalDataSource(this.data);
         },
         err => {

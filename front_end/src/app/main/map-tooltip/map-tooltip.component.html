@@ -7,23 +7,37 @@
     </tr>
     <tr>
       <td>Datum:</td>
-      <td>{{content.date}}</td>
+      <td>{{content.date | date:'dd.MM.yyyy hh:mm'}}</td>
+    </tr>
+    <tr>
+      <td>Übertretungsquote Richtung 1:</td>
+      <td>
+        {{content.speedingQuoteDir1 * 100 | number:"1.2-2"}}%
+        <svg class="colorSvg"><rect height="10" width="10" [attr.fill]="perc2Color(content.speedingQuoteDir1 * 100)"></rect></svg>
+      </td>
     </tr>
     <tr>
       <td>Ø (km/h) Richtung 1:</td>
       <td>{{content.avgDir1}}</td>
     </tr>
     <tr>
+      <td>Übertretungsquote Richtung 2:</td>
+      <td>
+        {{content.speedingQuoteDir2 * 100 | number:"1.2-2"}}%
+        <svg class="colorSvg"><rect height="10" width="10" [attr.fill]="perc2Color(content.speedingQuoteDir2 * 100)"></rect></svg>
+      </td>
+    </tr>
+    <tr>
       <td>Ø (km/h) Richtung 2:</td>
       <td>{{content.avgDir2}}</td>
     </tr>
     <tr>
-      <td>Geschwindigkeitslimit:</td>
-      <td>{{content.speedLimit}}</td>
+      <td>Geschwindigkeitslimite:</td>
+      <td>{{content.speedLimit}} km/h</td>
     </tr>
     <tr>
-      <td>Übertretungsquote:</td>
-      <td><i>Noch nicht sichtbar</i></td>
+      <td>Toleranz:</td>
+      <td>5 km/h</td>
     </tr>
   </table>
 </div>

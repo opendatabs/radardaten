@@ -1,5 +1,5 @@
 import {
-  ApplicationRef, ChangeDetectorRef, Component, EventEmitter, Input, OnInit, Output,
+  ApplicationRef, ChangeDetectorRef, Component, EventEmitter, Input, NgZone, OnInit, Output,
   ViewChild
 } from '@angular/core';
 import {divIcon, latLng, Layer, marker, tileLayer, Map, tooltip} from "leaflet";
@@ -33,8 +33,11 @@ export class MapComponent implements OnInit {
     center: latLng(47.55814, 7.58769)
   };
 
-  constructor(private ref: ApplicationRef,
-              private colorService: ColorService) {
+  constructor(
+    private ref: ApplicationRef,
+    private colorService: ColorService,
+    private zone: NgZone
+  ) {
   }
 
   ngOnInit() {
@@ -64,11 +67,11 @@ export class MapComponent implements OnInit {
     let mark;
     let self = this;
     this.data.forEach((d: Radar, index: number) => {
-      let maxSpeed = Math.max(d.avgDir1, d.avgDir2);
-      let color = this.colorService.perc2color2(maxSpeed, d.speedLimit);
+      let maxSpeed = Math.max(d.speedingQuoteDir1, d.speedingQuoteDir2);
+      let color = this.colorService.perc2color(maxSpeed * 100);
       let i = divIcon({
-        html: "<svg width='15' height='15' class='svg-marker'>" +
-        "<circle fill='" + color + "' class='circle' r='10' id='circle" + index + "'></circle>" +
+        html: "<svg width='12' height='12' class='svg-marker'>" +
+        "<circle cx='7' cy='7' fill='" + color + "' class='circle' r='7' id='circle" + index + "'></circle>" +
         "</svg>"
       });
 
@@ -81,7 +84,9 @@ export class MapComponent implements OnInit {
       }).on('click', function () {
         $('#map').find('.active').removeClass('active');
         $("#circle" + index).addClass('active');
-        self.openDetails(d);
+        self.zone.run(() => {
+          self.openDetails(d);
+        });
       });
       this.circleMarkers.push(mark);
     })
@@ -93,8 +98,8 @@ export class MapComponent implements OnInit {
     this.data.forEach((d: Radar, index: number) => {
       let directionDegrees = this.calculateDirectionDegrees(d);
       // todo: replace by speeding quote and for two directions
-      let color1 = this.colorService.perc2color2(d.avgDir1, d.speedLimit);
-      let color2 = this.colorService.perc2color2(d.avgDir2, d.speedLimit);
+      let color1 = this.colorService.perc2color(d.speedingQuoteDir1 * 100);
+      let color2 = this.colorService.perc2color(d.speedingQuoteDir2 * 100);
       // create a random ID for marker to ensure unique ids.
       let randomId = Math.floor(Math.random() * Math.floor(100000));
       let i = divIcon({
@@ -153,7 +158,8 @@ export class MapComponent implements OnInit {
   }
 
   openDetails(radar: Radar) {
-    this.bubbleClickEvent.emit(radar);
+    const self = this;
+    self.bubbleClickEvent.emit(radar);
   }
 
   angleFromCoordinate(lat1:number, lng1:number, lat2:number, lng2:number) {
@@ -162,10 +168,10 @@ export class MapComponent implements OnInit {
     let x = Math.cos(lat1) * Math.sin(lat2) - Math.sin(lat1) * Math.cos(lat2) * Math.cos(dLon);
     let rad = Math.atan2(y, x);
     let brng = rad * 180 / Math.PI;
-    return 360 - ((brng + 360) % 360);
+    return 360 - ((brng + 360) % 360) + 90;
 }
 
   private calculateDirectionDegrees(d: Radar) {
-    return this.angleFromCoordinate(d.directionOneLat, d.directionTwoLat, d.directionOneLong, d.directionTwoLong)
+    return this.angleFromCoordinate(d.directionOneLat, d.directionOneLong, d.directionTwoLat, d.directionTwoLong)
   }
 }

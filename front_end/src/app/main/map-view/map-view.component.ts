@@ -1,4 +1,4 @@
-import {ChangeDetectorRef, Component, OnInit, ViewChild} from '@angular/core';
+import {ApplicationRef, ChangeDetectorRef, Component, OnInit, ViewChild} from '@angular/core';
 import {DataService} from "../../shared/data-service.service";
 import {Radar} from "../../shared/radar";
 import {Record} from "../../shared/record";
@@ -15,16 +15,16 @@ export class MapViewComponent implements OnInit {
   @ViewChild(MapDetailComponent) mapDetailComponent: MapDetailComponent;
 
   data: Radar[];
-  hideDetail: boolean = true;
 
   constructor(
     private dataService: DataService,
     private radarService: RadarService,
+    private ref: ApplicationRef
 ) { }
 
   ngOnInit() {
     // this.dataService.getMapData().subscribe((data:Radar[]) => {
-    this.radarService.getRadarWithAvgSpeed()
+    this.radarService.getRadarWithAvgSpeedAndSpeedingQuote()
       .subscribe(
         res => {
           this.data = res;
@@ -35,7 +35,10 @@ export class MapViewComponent implements OnInit {
   }
 
   openDetails(radar: Radar) {
-    this.hideDetail = false;
     this.mapDetailComponent.open(radar);
+  }
+
+  open() {
+    this.mapDetailComponent.open(this.data[0]);
   }
 }

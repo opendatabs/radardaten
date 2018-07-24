@@ -4,6 +4,10 @@ import { environment } from '../../environments/environment';
 import { Observable } from 'rxjs/Observable';
 import { Record } from './record';
 import * as moment from 'moment'
+import {Radar} from "./radar";
+import {WeeklyRecord} from "./weekly-record";
+import {MeasurementWeek} from "./measurement-week";
+import {DailyRecord} from "./daily-record";
 
 
 @Injectable()
@@ -27,10 +31,23 @@ export class RecordService {
     return this.http.get<Record[]>(this.api + `recordsOfRadar?radarId=${radarId}`);
   }
 
+  getMeasurementWeeks(radarId: number, direction: number): Observable<MeasurementWeek[]> {
+    return this.http.get<MeasurementWeek[]>(this.api + `measurementWeeks?radarId=${radarId}&direction=${direction}`);
+  }
+
   addRecords(records: Record[]): Observable<any> { //TODO why not possible to choose returntype Record[]?!
     return this.http.post<Record[]>(this.api + 'addRecords', records);
   }
 
+  getRecordsForDetailView(radarId: number, direction: number, startDay: string, endDay: string): Observable<WeeklyRecord[]> {
+    return this.http.get<WeeklyRecord[]>(this.api + `getRecordForDetailView?radarId=${radarId}&direction=${direction}
+    &startDay=${startDay}&endDay=${endDay}`);
+  }
+
+  getRecordsForDailyView(radarId: number, direction: number, startDay: string, endDay: string): Observable<DailyRecord[]> {
+    return this.http.get<DailyRecord[]>(this.api + `getRecordForDailyView?radarId=${radarId}&direction=${direction}
+    &startDay=${startDay}&endDay=${endDay}`);
+  }
   updateRecord(record: any): Observable<Record> {
     return this.http.patch<Record>(this.api + record.id, record); //TODO add input "record" But what about non existing ID?!?!
   }
@@ -63,5 +80,4 @@ export class RecordService {
     const weekdays = ['montag', 'dienstag', 'mittwoch', 'donnerstag', 'freitag', 'samstag', 'sonntag'];
     return weekdays[day-1];
   }
-
 }

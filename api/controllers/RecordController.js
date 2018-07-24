@@ -25,18 +25,79 @@ module.exports = {
     }
   },
 
+  getRecordsOfRadar(req, res) {
+    Record.find({
+      radar: req.query.radarId
+    }).exec( (err, data) => {
+      if (err) {
+        res.serverError(err);
+        return;
+      }
+      return res.json(data);
+    })
+  },
 
-  // getRecordsOfRadar(req, res) {
-  //   Record.find({
-  //     radar: req.query.radarId
-  //   }).exec( (err, data) => {
-  //     if (err) {
-  //       res.serverError(err);
-  //       return;
-  //     }
-  //     return res.json(data);
-  //   })
-  // },
+  getRecordForDetailView(req, res) {
+    const radarId = req.query.radarId;
+    const direction = req.query.direction;
+    const startDay = req.query.startDay;
+    const endDay = req.query.endDay;
+    const sql = `SELECT ROUND(sum(if(kmh > speedLimit, 1, 0))/count(kmh), 2) as speedingQuote,
+  ROUND(avg(kmh),2) as avgSpeed,
+  weekday,
+  timestamp,
+  count(timestamp) as count
+    FROM record INNER JOIN radar ON radar.id = record.radar
+    WHERE direction = ?
+    AND record.radar = ?
+    AND record.timestamp > ? AND record.timestamp < ?
+    GROUP BY weekday`;
+
+    Record.query(sql, [direction, radarId, startDay, endDay], function (error, data) {
+      if (error)
+        res.status(500).send(error);
+      res.json(data);
+    })
+  },
+  getRecordForDailyView(req, res) {
+    const radarId = req.query.radarId;
+    const direction = req.query.direction;
+    const startDay = req.query.startDay;
+    const endDay = req.query.endDay;
+    const sql = `SELECT ROUND(sum(if(kmh > speedLimit, 1, 0))/count(kmh), 2) as speedingQuote,
+  ROUND(avg(kmh),2) as avgSpeed,
+  hour(timestamp) as hour,
+  count(timestamp) as count
+    FROM record INNER JOIN radar ON radar.id = record.radar
+    WHERE direction = ?
+    AND record.radar = ?
+    AND record.timestamp > ? 
+    AND record.timestamp < ?
+    GROUP BY hour`;
+
+    Record.query(sql, [direction, radarId, startDay, endDay], function (error, data) {
+      if (error)
+        res.status(500).send(error);
+      res.json(data);
+    })
+  },
+
+  getMeasurementWeeks(req, res) {
+    const radarId = req.query.radarId;
+    const direction = req.query.direction;
+
+    const sql = `SELECT DISTINCT weekofyear(timestamp) as week, MIN(timestamp) as startDay
+FROM record INNER JOIN radar ON radar.id = record.radar
+WHERE radar.id = ?
+AND record.direction = ?
+GROUP BY week`;
+
+    Record.query(sql, [radarId, direction], function (error, data) {
+      if (error)
+        res.status(500).send(error);
+      res.json(data);
+    })
+  },
 
 };
 

@@ -10,6 +10,8 @@ export interface Radar {
   directionTwoLong: number;
   avgDir1?: number;
   avgDir2?: number;
+  speedingQuoteDir1?: number;
+  speedingQuoteDir2?: number;
   id: number;
   lat: number;
   long: number;

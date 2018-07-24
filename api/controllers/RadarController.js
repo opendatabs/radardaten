@@ -71,23 +71,37 @@ module.exports = {
   },
 
 
-  getRadarWithAvgSpeed(req, res) {
+  getRadarWithAvgSpeedAndSpeedingQuote(req, res) {
     const sql = `SELECT
   radar.*,
   (
-    SELECT avg(kmh)
+    SELECT ROUND(avg(kmh), 2)
     FROM record
     WHERE direction = 1
           AND record.radar = radar.id
   ) AS avgDir1,
   (
-    SELECT avg(kmh)
+    SELECT ROUND(avg(kmh), 2)
     FROM record
     WHERE direction = 2
           AND record.radar = radar.id
-  ) AS avgDir2
+  ) AS avgDir2,
+  (
+    SELECT ROUND(sum(if((kmh-5) > speedLimit, 1, 0))/count(kmh), 4)
+    FROM record
+    WHERE direction = 1
+          AND record.radar = radar.id
+  ) AS speedingQuoteDir1,
+  (
+    SELECT ROUND(sum(if((kmh-5) > speedLimit, 1, 0))/count(kmh), 4)
+    FROM record
+    WHERE direction = 2
+          AND record.radar = radar.id
+  ) AS speedingQuoteDir2
 FROM radar`;
     Radar.query(sql, [], function (error, data) {
+      if (error)
+        res.status(500).send(error);
       res.json(data);
     })
   }

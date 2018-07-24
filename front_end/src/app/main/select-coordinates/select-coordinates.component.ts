@@ -25,13 +25,7 @@ export class SelectCoordinatesComponent implements OnInit, ViewCell {
   @Output() open: EventEmitter<any> = new EventEmitter();
 
   closeResult: string;
-  options = {
-    layers: [
-      tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 18, attribution: '...' }),
-    ],
-    zoom: 13,
-    center: latLng(47.55814, 7.58769)
-  };
+  options = {};
   map: Map;
   coordinates: LatLng = new LatLng(0,0);
   direction1: LatLng;
@@ -39,6 +33,7 @@ export class SelectCoordinatesComponent implements OnInit, ViewCell {
   status: Status;
   markers: Layer[] = [];
   Status = Status; // copy class to local reference
+  adapted: boolean = false;
 
   coordinatesBtnLabel: String = 'Ändern';
 
@@ -55,18 +50,45 @@ export class SelectCoordinatesComponent implements OnInit, ViewCell {
     }
   }
 
+  // every time we open the map, we have to recreate the options. Otherwise the tiles of leaflet map aren't initialized correctly (blank map)
+  setOptions() {
+    this.options = {
+      layers: [
+        tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 18, attribution: '...' }),
+      ],
+      zoom: 13,
+      center: latLng(47.55814, 7.58769)
+    };
+  }
+
+  // open modal and add points to map if coordinates exist
   onOpen(content) {
+    this.setOptions();
+    this.status = Status.initial;
     this.coordinates = new LatLng(this.rowData.lat, this.rowData.long);
+    this.addCoordinates(this.coordinates);
+    this.status = Status.direction1;
     this.direction1 = new LatLng(this.rowData.directionOneLat, this.rowData.directionOneLong);
+    this.addCoordinates(this.direction1);
+    this.status = Status.direction2;
     this.direction2 = new LatLng(this.rowData.directionTwoLat, this.rowData.directionTwoLong);
+    this.addCoordinates(this.direction2);
+
+    //set status again to initial after drawing coordinates
+    this.status = Status.initial;
+
     this.modalService.open(content, { windowClass: 'big-modal' }).result.then((result) => {
       this.closeResult = `Closed with: ${result}`;
     }, (reason) => {
       this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
     });
+    this.adapted = false;
   }
 
   onMapReady(map: Map) {
+    setTimeout(() => {
+      map.invalidateSize();
+    }, 0);
     this.map = map;
     this.map.setMaxBounds(this.map.getBounds());
     this.map.setMinZoom(13);
@@ -76,7 +98,7 @@ export class SelectCoordinatesComponent implements OnInit, ViewCell {
   }
 
   addCoordinates(latLng: LatLng) {
-    if (this.status === Status.finished)
+    if (this.status === Status.finished || !latLng)
       return null;
 
     let color: string;
@@ -95,7 +117,7 @@ export class SelectCoordinatesComponent implements OnInit, ViewCell {
         break;
     }
     let i = divIcon({html: "<svg width='15' height='15' class='svg-marker'>" +
-      "<circle cx='5' cy='5' r='10' fill='"+color+"' class='circle'></circle>" +
+      "<circle cx='7' cy='7' r='7' fill='"+color+"' class='circle'></circle>" +
       "</svg>"});
     let mark: Marker = marker(latLng, {
       icon: i
@@ -129,6 +151,7 @@ export class SelectCoordinatesComponent implements OnInit, ViewCell {
     this.radarService.updateRadar(this.rowData).subscribe();
     this.coordinatesBtnLabel = 'Ändern';
     this.open.emit(this.rowData); // <-- TODO needed to update component data? Evt. remove
+    this.adapted = true;
   }
 
   private getDismissReason(reason: any): string {

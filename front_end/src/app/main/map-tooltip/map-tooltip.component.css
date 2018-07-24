@@ -22,3 +22,10 @@ app-map-tooltip {
   padding-left: 5px;
   padding-right: 5px;
 }
+
+.colorSvg {
+  width: 10px;
+  height: 10px;
+  overflow: visible;
+  margin-left: 5px;
+}

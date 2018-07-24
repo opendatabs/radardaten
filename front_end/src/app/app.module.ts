@@ -42,7 +42,8 @@ import { AngularFontAwesomeModule } from 'angular-font-awesome';
     AdminComponent,
     SelectCoordinatesComponent,
     AddRecordsBtnComponent,
-    DatepickerComponent,
+    DatepickerComponent
+    // LoadingModalComponent
   ],
   imports: [
     BrowserModule,

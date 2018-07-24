@@ -34,8 +34,8 @@ export class RadarService {
     return this.http.delete<Radar>(this.api + radar.id);
   }
 
-  getRadarWithAvgSpeed(): Observable<Radar[]> {
-    return this.http.get<Radar[]>(this.api + 'radarWithAvgSpeed')
+  getRadarWithAvgSpeedAndSpeedingQuote(): Observable<Radar[]> {
+    return this.http.get<Radar[]>(this.api + 'radarWithAvgSpeedAndSpeedingQuote')
   }
 
   updateRecordCount(radar: Radar): Observable<any> {
