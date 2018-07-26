@@ -80,6 +80,7 @@ export class MapDetailComponent implements OnInit {
       moment(this.selectedMeasurement.startDay).format('YYYY-MM-DD'),
       moment(this.selectedMeasurement.startDay).add(7, 'day').format('YYYY-MM-DD')
     ).subscribe(data => {
+      console.log(data);
       this.currentWeek = data;
       this.ref.tick();
     });

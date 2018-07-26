@@ -187,11 +187,11 @@ export class D3graphComponent implements OnInit, OnChanges {
         div.transition()
           .duration(200)
           .style("opacity", .9);
-        div.html(`
-<span class="kmh-limit mb-2">${self.speedLimit}</span><br>
+        div.html(`Geschwindigkeitslimite: 
+<span class="kmh-limit mb-2 ml-2">${self.speedLimit}</span><br>
 Übertretungsquote: ${Math.round(d.speedingQuote * 100)}%<br>
 Durchschnittsgeschwindigkeit: ${Math.round(d.avgSpeed*100)/100}<br>
-Anzahl Fahrzeuge: ${d.count}<br/>Ø (km/h): ${d.avgSpeed}
+Anzahl Fahrzeuge: ${d.count}<br/>
 <br/>`)
           .style("left", (self.d3.event.pageX + 20) + "px")
           .style("top", (self.d3.event.pageY - 28) + "px");
