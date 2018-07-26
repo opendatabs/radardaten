@@ -1,2 +1,29 @@
 <app-navbar></app-navbar>
 <router-outlet></router-outlet>
+<ng-template #content let-c="close" let-d="dismiss">
+  <div class="modal-header">
+    <h4 class="modal-title">Informationen zu den Radardaten</h4>
+    <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <p><strong>Informationen über die Radardaten</strong></p>
+    <p><span>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aliquid dignissimos ducimus fugiat fugit itaque labore magnam molestiae natus, neque odit omnis porro quaerat quasi ratione similique suscipit voluptate voluptates voluptatibus.</span><span>Accusantium amet architecto assumenda, dicta dignissimos ducimus eligendi facere harum natus nulla qui quis reiciendis soluta suscipit, vel, veniam voluptatum. A asperiores deserunt dicta dolores reiciendis. Ad beatae commodi mollitia.</span><span>Aliquam architecto consequatur cum doloribus eligendi enim error esse hic inventore magnam natus, officiis quisquam similique sunt tempora? A dicta dolor labore minus non odio quos sapiente voluptas? Blanditiis, sapiente.</span><span>Ad, at delectus dolore dolores ipsam odio officia. Accusamus aliquam cupiditate, dolor doloribus enim error illo inventore ipsam ipsum, laudantium natus non quaerat quia, quo suscipit ullam vel velit voluptatibus?</span><span>A adipisci alias aperiam aspernatur cum debitis deleniti deserunt eos iste itaque iusto labore laborum laudantium molestias, mollitia odit optio porro quaerat quas quibusdam, quod rem suscipit tenetur veritatis voluptatibus.</span>
+    </p>
+    <p><strong>Benutzungshinweise</strong></p>
+      <ul>
+        <li>Daten, die in den Tooltips sowie in den Details (nach Auswählen einer Messung) angezeigt werden beziehen sich auf alle Messungen, die für die entsprechende Strasse gemacht wurden.<br>
+          Zum Beispiel ist der Durchschnitt (Richtung 1) aus allen Messungen für diese Strasse (Richtung 1) berechnet. </li>
+        <li>Auf die Punkte auf der Karte kann geklickt werden. Danach erscheint ein Säulendiagramm, welches die Messungen an einzelnen Wochentagen zeigt.<br>
+        Wird auf einen Wochentag geklickt, wird eine detaillierte Ansicht geöffnet, welche die Messungen zu den einzelnen Stunden im Tagesverlauf zeigt</li>
+        <li>In die Karte kann gezoomt werden. Ist die Zoomstufe genügend hoch, erscheinen Pfeile für die einzelnen Richtungen anstatt der Punkte</li>
+
+      </ul>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-light" (click)="c('Close click')">Schliessen</button>
+  </div>
+</ng-template>
+<button class="btn btn-primary m-2 p-2 px-3 infoBtn" id="openModal" (click)="openLg(content)">i</button>
+

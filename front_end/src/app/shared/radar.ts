@@ -20,4 +20,6 @@ export interface Radar {
   speedingQuote: number;
   streetName: string;
   updatedAt: string;
+  count1: number;
+  count2: number;
 }

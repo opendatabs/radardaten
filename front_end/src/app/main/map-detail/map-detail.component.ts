@@ -74,7 +74,7 @@ export class MapDetailComponent implements OnInit {
   getMeasurementsForWeek() {
     let direction;
     (this.directionOne) ? direction = 1 : direction = 2;
-    this.recordService.getRecordsForDetailView(
+    this.recordService.getRecordsForWeeklyView(
       this.radar.id,
       direction,
       moment(this.selectedMeasurement.startDay).format('YYYY-MM-DD'),

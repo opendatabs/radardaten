@@ -97,7 +97,19 @@ module.exports = {
     FROM record
     WHERE direction = 2
           AND record.radar = radar.id
-  ) AS speedingQuoteDir2
+  ) AS speedingQuoteDir2,
+  (
+    SELECT count(*)
+    FROM record
+    WHERE direction = 1
+          AND record.radar = radar.id
+  ) AS count1,
+  (
+    SELECT count(*)
+    FROM record
+    WHERE direction = 2
+          AND record.radar = radar.id
+  ) AS count2
 FROM radar`;
     Radar.query(sql, [], function (error, data) {
       if (error)

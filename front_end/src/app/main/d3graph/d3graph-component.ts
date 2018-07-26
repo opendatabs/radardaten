@@ -41,7 +41,7 @@ export class D3graphComponent implements OnInit, OnChanges {
 
   private svg: any;
   private colors: any = [];
-  private padding: number = 25;
+  private padding: number = 50;
   private width: number;
   private height: number = 300;
   private xScale: any;
@@ -66,7 +66,6 @@ export class D3graphComponent implements OnInit, OnChanges {
   }
 
   ngOnChanges(changes: any) {
-    debugger;
     if (changes.data && changes.data.currentValue && !changes.data.previousValue) {
       this.initChart();
       this.updateChart();
@@ -93,8 +92,8 @@ export class D3graphComponent implements OnInit, OnChanges {
       self.data = this.data;
 
       const weekDomain = ['Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag', 'Samstag', 'Sonntag'];
-      const hoursDomain = ['00', '01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12', '13', '14', '15',
-        '16', '17', '18', '19', '20', '21', '22', '23'];
+      const hoursDomain = ['00:00', '01:00', '02:00', '03:00', '04:00', '05:00', '06:00', '07:00', '08:00', '09:00', '10:00', '11:00', '12:00', '13:00', '14:00', '15:00',
+        '16:00', '17:00', '18:00', '19:00', '20:00', '21:00', '22:00', '23:00'];
       let domain;
       (self.groupBy === 'days') ? domain = weekDomain : domain = hoursDomain;
       self.xScale = d3.scaleBand()
@@ -114,9 +113,16 @@ export class D3graphComponent implements OnInit, OnChanges {
         .scale(self.xScale)
         .ticks(7);
 
-      self.yAxis = d3.axisLeft(self.xScale) // d3.js v.4
+      const avgAxis = d3.axisLeft(self.yScale) // d3.js v.4
         .scale(self.yScale)
-        .ticks(7);
+        .ticks(7)
+        .tickFormat(d => d + " km/h");
+      const speedingQuoteAxis = d3.axisLeft(self.yScale) // d3.js v.4
+        .scale(self.yScale)
+        .ticks(7)
+        .tickFormat(self.d3.format(".0%"));
+
+      (self.measure === 'average') ? self.yAxis = avgAxis : self.yAxis = speedingQuoteAxis;
 
       self.svg.append("g")
         .attr("class", "axis")
@@ -150,7 +156,7 @@ export class D3graphComponent implements OnInit, OnChanges {
         if (self.groupBy === 'days') {
           return self.xScale(moment(d.timestamp).format('dddd')) + self.padding;
         } else {
-          return self.xScale(("0" + d.hour).slice(-2)) + self.padding;
+          return self.xScale(d.hour) + self.padding;
         }
       })
       .attr('y', function(d) {
@@ -181,7 +187,12 @@ export class D3graphComponent implements OnInit, OnChanges {
         div.transition()
           .duration(200)
           .style("opacity", .9);
-        div.html(`Anzahl Fahrzeuge: ${d.count}<br/>Ø (km/h): ${d.avgSpeed}<br/>Übertretungsquote: ${Math.round(d.speedingQuote * 100)}%`)
+        div.html(`
+<span class="kmh-limit mb-2">${self.speedLimit}</span><br>
+Übertretungsquote: ${Math.round(d.speedingQuote * 100)}%<br>
+Durchschnittsgeschwindigkeit: ${Math.round(d.avgSpeed*100)/100}<br>
+Anzahl Fahrzeuge: ${d.count}<br/>Ø (km/h): ${d.avgSpeed}
+<br/>`)
           .style("left", (self.d3.event.pageX + 20) + "px")
           .style("top", (self.d3.event.pageY - 28) + "px");
       })
@@ -206,7 +217,7 @@ export class D3graphComponent implements OnInit, OnChanges {
         if (self.groupBy === 'days') {
           return self.xScale(moment(d.timestamp).format('dddd')) + self.padding;
         } else {
-          return self.xScale(("0" + d.hour).slice(-2)) + self.padding;
+          return self.xScale(d.hour) + self.padding;
         }
       })
       .attr('y', function(d) {

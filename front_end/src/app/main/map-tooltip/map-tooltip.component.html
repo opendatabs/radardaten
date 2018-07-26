@@ -6,14 +6,20 @@
       <td>{{content.streetName}}</td>
     </tr>
     <tr>
-      <td>Datum:</td>
-      <td>{{content.date | date:'dd.MM.yyyy hh:mm'}}</td>
+      <td>Geschwindigkeitslimite:</td>
+      <td><span class="kmh-limit">{{content.speedLimit}}</span></td>
     </tr>
     <tr>
       <td>Übertretungsquote Richtung 1:</td>
       <td>
         {{content.speedingQuoteDir1 * 100 | number:"1.2-2"}}%
         <svg class="colorSvg"><rect height="10" width="10" [attr.fill]="perc2Color(content.speedingQuoteDir1 * 100)"></rect></svg>
+      </td>
+    </tr>
+    <tr>
+      <td>Anzahl Fahrzeuge Richtung 1:</td>
+      <td>
+        {{content.count1}}
       </td>
     </tr>
     <tr>
@@ -32,12 +38,14 @@
       <td>{{content.avgDir2}}</td>
     </tr>
     <tr>
-      <td>Geschwindigkeitslimite:</td>
-      <td>{{content.speedLimit}} km/h</td>
+      <td>Anzahl Fahrzeuge Richtung 2:</td>
+      <td>
+        {{content.count2}}
+      </td>
     </tr>
     <tr>
-      <td>Toleranz:</td>
-      <td>5 km/h</td>
+      <td>Letzte Messung:</td>
+      <td>{{content.date | date:'dd.MM.yyyy hh:mm'}}</td>
     </tr>
   </table>
 </div>

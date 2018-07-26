@@ -58,8 +58,8 @@
                 <td>{{radar.streetName}}</td>
               </tr>
               <tr>
-                <td>Datum:</td>
-                <td>{{radar.date | date:'dd.MM.yyyy hh:mm'}}</td>
+                <td>Geschwindigkeitslimite:</td>
+                <td><span class="kmh-limit">{{radar.speedLimit}}</span></td>
               </tr>
               <tr>
                 <td>Übertretungsquote Richtung 1:</td>
@@ -70,6 +70,12 @@
               <tr>
                 <td>Ø (km/h) Richtung 1:</td>
                 <td>{{radar.avgDir1}}</td>
+              </tr>
+              <tr>
+                <td>Anzahl Fahrzeuge Richtung 1:</td>
+                <td>
+                  {{radar.count1}}
+                </td>
               </tr>
               <tr>
                 <td>Übertretungsquote Richtung 2:</td>
@@ -86,10 +92,18 @@
                 <td>{{radar.speedLimit}} km/h</td>
               </tr>
               <tr>
-                <td>Toleranz:</td>
-                <td>5 km/h</td>
+                <td>Anzahl Fahrzeuge Richtung 2:</td>
+                <td>
+                  {{radar.count2}}
+                </td>
+              </tr>
+              <tr>
+                <td>Letzte Messung:</td>
+                <td>{{radar.date | date:'dd.MM.yyyy hh:mm'}}</td>
               </tr>
             </table>
+            <i>Information: Diese Daten, sowie die Daten in den Tooltips beziehen sich auf alle Messungen die für die entsprechende Strasse gemacht wurden.<br>
+            Zum Beispiel ist der Durchschnitt (Richtung 1) aus allen Messungen für diese Strasse ({{radar.streetName}}, Richtung 1) berechnet. </i>
           </div>
         </div>
       </div>

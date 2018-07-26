@@ -62,3 +62,15 @@ rect.clickable:hover {
   stroke-width: 3px;
 }
 
+span.kmh-limit {
+  height: 40px;
+  width: 40px;
+  display: inline-block;
+  text-align: center;
+  border-radius: 20px;
+  vertical-align: middle;
+  font-weight: bold;
+  border: 7px solid red;
+  font-size: 17px;
+}
+
