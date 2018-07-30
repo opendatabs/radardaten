@@ -136,6 +136,7 @@ export class MapComponent implements OnInit {
       }).on('click', function () {
         $('#map').find('.active').removeClass('active');
         $("#circle" + index).addClass('active');
+        self.showPopup(this, self, d)
         self.openDetails(d);
       });
       this.arrowMarkers.push(mark);

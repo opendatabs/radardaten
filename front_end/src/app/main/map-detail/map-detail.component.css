@@ -5,3 +5,7 @@
 .dropdown-item {
   cursor: pointer;
 }
+
+.header span.kmh-limit {
+  margin-bottom: 10px;
+}

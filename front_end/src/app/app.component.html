@@ -1,2 +1,21 @@
 <app-navbar></app-navbar>
 <router-outlet></router-outlet>
+<ng-template #content let-c="close" let-d="dismiss">
+  <div class="modal-header">
+    <h4 class="modal-title">Informationen zu den Radardaten</h4>
+    <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <p>Die Visualisierung der Radardaten basiert auf Messdaten der Kantonspolizei Basel-Stadt (Link hinterlegen), welche zu statistischen Zwecken erhoben wurden. Die Daten wurde im Rahmen eines Open Government Data Pilotprojektes von der Forschungsstelle Digitale Nachhaltigkeit (Link hinterlegen) der Universität Bern visualisiert.</p>
+
+    <p class="pt-2">In der Karte abgebildet wird die Übertretungsquote in der jeweiligen Strasse für den abgebildeten Zeitraum. Durch näheres Heranzoomen erscheinen in der Karte statt der Punkte Pfeile für die einzelnen Richtungen. Für jeden Punkt bzw. Pfeil sind in einem Anzeigefeld weitere Informationen (wie die Durchschnittsgeschwindigkeit und die Anzahl passierender Autos) einsehbar. Durch Klicken auf einen Punkt bzw. Pfeil erscheint ein Säulendiagramm, welches die Messungen für einzelne Wochentage zeigt. Wird auf die Säule für einen Wochentag geklickt, erscheint ein weiteres Diagramm, in dem die Messungen pro Stunden an einem Tag angegeben werden.</p>
+
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-light" (click)="c('Close click')">Schliessen</button>
+  </div>
+</ng-template>
+<button class="btn btn-primary m-2 p-2 px-3 infoBtn" id="openModal" (click)="openLg(content)">i</button>
+

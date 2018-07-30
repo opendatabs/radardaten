@@ -6,8 +6,8 @@
       <td>{{content.streetName}}</td>
     </tr>
     <tr>
-      <td>Datum:</td>
-      <td>{{content.date | date:'dd.MM.yyyy hh:mm'}}</td>
+      <td>Geschwindigkeitslimite:</td>
+      <td><span class="kmh-limit">{{content.speedLimit}}</span></td>
     </tr>
     <tr>
       <td>Übertretungsquote Richtung 1:</td>
@@ -17,8 +17,14 @@
       </td>
     </tr>
     <tr>
-      <td>Ø (km/h) Richtung 1:</td>
+      <td>Durchschnittsgeschwindigkeit Richtung 1:</td>
       <td>{{content.avgDir1}}</td>
+    </tr>
+    <tr>
+      <td>Anzahl Fahrzeuge Richtung 1:</td>
+      <td>
+        {{content.count1}}
+      </td>
     </tr>
     <tr>
       <td>Übertretungsquote Richtung 2:</td>
@@ -28,16 +34,18 @@
       </td>
     </tr>
     <tr>
-      <td>Ø (km/h) Richtung 2:</td>
+      <td>Durchschnittsgeschwindigkeit Richtung 2:</td>
       <td>{{content.avgDir2}}</td>
     </tr>
     <tr>
-      <td>Geschwindigkeitslimite:</td>
-      <td>{{content.speedLimit}} km/h</td>
+      <td>Anzahl Fahrzeuge Richtung 2:</td>
+      <td>
+        {{content.count2}}
+      </td>
     </tr>
     <tr>
-      <td>Toleranz:</td>
-      <td>5 km/h</td>
+      <td>Letzte Messung (Start):</td>
+      <td>{{content.date | date:'dd.MM.yyyy'}}</td>
     </tr>
   </table>
 </div>

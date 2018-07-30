@@ -1,6 +1,9 @@
 <div class="card mt-2" id="map-detail" *ngIf="visible">
   <div class="card-body">
-    <h2 class="mb-3">{{header}}</h2>
+    <div class="mb-3 header">
+      <h2 class="mb-3 d-inline pb-1">{{header}}</h2>
+      <p class="d-inline pb-1 ml-2"><span class="kmh-limit">{{radar.speedLimit}}</span></p>
+    </div>
     <div *ngIf="loading">
       <i class="fa fa-refresh fa-spin fa-3x fa-fw"></i>
       <span class="sr-only">Laden...</span>
@@ -58,8 +61,8 @@
                 <td>{{radar.streetName}}</td>
               </tr>
               <tr>
-                <td>Datum:</td>
-                <td>{{radar.date | date:'dd.MM.yyyy hh:mm'}}</td>
+                <td>Geschwindigkeitslimite:</td>
+                <td><span class="kmh-limit">{{radar.speedLimit}}</span></td>
               </tr>
               <tr>
                 <td>Übertretungsquote Richtung 1:</td>
@@ -68,8 +71,14 @@
                 </td>
               </tr>
               <tr>
-                <td>Ø (km/h) Richtung 1:</td>
+                <td>Durchschnittsgeschwindigkeit Richtung 1:</td>
                 <td>{{radar.avgDir1}}</td>
+              </tr>
+              <tr>
+                <td>Anzahl Fahrzeuge Richtung 1:</td>
+                <td>
+                  {{radar.count1}}
+                </td>
               </tr>
               <tr>
                 <td>Übertretungsquote Richtung 2:</td>
@@ -78,7 +87,7 @@
                 </td>
               </tr>
               <tr>
-                <td>Ø (km/h) Richtung 2:</td>
+                <td>Durchschnittsgeschwindigkeit Richtung 2:</td>
                 <td>{{radar.avgDir2}}</td>
               </tr>
               <tr>
@@ -86,10 +95,18 @@
                 <td>{{radar.speedLimit}} km/h</td>
               </tr>
               <tr>
-                <td>Toleranz:</td>
-                <td>5 km/h</td>
+                <td>Anzahl Fahrzeuge Richtung 2:</td>
+                <td>
+                  {{radar.count2}}
+                </td>
+              </tr>
+              <tr>
+                <td>Letzte Messung (Start):</td>
+                <td>{{radar.date | date:'dd.MM.yyyy'}}</td>
               </tr>
             </table>
+            <i>Information: Diese Daten, sowie die Daten in den Tooltips beziehen sich auf alle Messungen die für die entsprechende Strasse gemacht wurden.<br>
+            Zum Beispiel ist der Durchschnitt (Richtung 1) aus allen Messungen für diese Strasse ({{radar.streetName}}, Richtung 1) berechnet. </i>
           </div>
         </div>
       </div>

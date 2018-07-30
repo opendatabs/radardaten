@@ -74,12 +74,13 @@ export class MapDetailComponent implements OnInit {
   getMeasurementsForWeek() {
     let direction;
     (this.directionOne) ? direction = 1 : direction = 2;
-    this.recordService.getRecordsForDetailView(
+    this.recordService.getRecordsForWeeklyView(
       this.radar.id,
       direction,
       moment(this.selectedMeasurement.startDay).format('YYYY-MM-DD'),
       moment(this.selectedMeasurement.startDay).add(7, 'day').format('YYYY-MM-DD')
     ).subscribe(data => {
+      console.log(data);
       this.currentWeek = data;
       this.ref.tick();
     });

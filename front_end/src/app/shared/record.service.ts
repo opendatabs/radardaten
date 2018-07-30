@@ -39,8 +39,8 @@ export class RecordService {
     return this.http.post<Record[]>(this.api + 'addRecords', records);
   }
 
-  getRecordsForDetailView(radarId: number, direction: number, startDay: string, endDay: string): Observable<WeeklyRecord[]> {
-    return this.http.get<WeeklyRecord[]>(this.api + `getRecordForDetailView?radarId=${radarId}&direction=${direction}
+  getRecordsForWeeklyView(radarId: number, direction: number, startDay: string, endDay: string): Observable<WeeklyRecord[]> {
+    return this.http.get<WeeklyRecord[]>(this.api + `getRecordForWeeklyView?radarId=${radarId}&direction=${direction}
     &startDay=${startDay}&endDay=${endDay}`);
   }
 
