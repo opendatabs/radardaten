@@ -47,7 +47,7 @@ import * as $ from 'jquery';
           </div>
         </div>
         <div *ngIf="success" class="alert alert-success mt-2" role="alert">
-          <b>{{ recordsCreated }}</b> Messungen erfolgreich hochgeladen
+          <b>{{ recordsCreated }}</b> von {{ foundMatches }} Messungen erfolgreich hochgeladen
         </div>
       </div>
       <div class="modal-footer">
@@ -70,6 +70,7 @@ export class AddRecordsBtnComponent implements OnInit, ViewCell {
   loading: boolean = false;
   success: boolean = false;
   recordsCreated: number = 0;
+  foundMatches: number = 0;
   error: any;
   closeResult: string;
   txt: any;
@@ -143,6 +144,7 @@ export class AddRecordsBtnComponent implements OnInit, ViewCell {
       match = regex.exec(input);
       if (match) {
         if (match.length) {
+          this.foundMatches++;
           bundle.push(this.recordService.parseRecord(match[0], this.rowData.id));
           if (bundle.length >= 500) {
             this.saveBundle(bundle);
@@ -152,6 +154,14 @@ export class AddRecordsBtnComponent implements OnInit, ViewCell {
       }
     } while (match);
     this.saveBundle(bundle); //save the last package (<500)
+    setTimeout(_ => {
+      if (this.foundMatches !== this.recordsCreated) {
+        this.loading = false;
+        this.success = false;
+        this.error = `Timeout: Leider konnten nicht alle Messungen hochgeladen werden. 
+        Es wurden ${this.recordsCreated} von ${this.foundMatches} gespeichert.`;
+      }
+    }, 60000);
   }
 
   private saveBundle(records: any): void {
@@ -160,13 +170,13 @@ export class AddRecordsBtnComponent implements OnInit, ViewCell {
       this.recordService.addRecords(records)
         .subscribe(
           res => {
-            this.loading = false;
             this.success = true;
-            this.recordsCreated = res;
+            this.recordsCreated += res;
+            if (this.foundMatches === this.recordsCreated)
+              this.loading = false;
             console.log('Added new records: ' +res )
           },
           (err: HttpErrorResponse) => {
-            debugger;
             if (err.error instanceof Error) {
               console.log("Client-side error occured.");
               this.error = err.message;

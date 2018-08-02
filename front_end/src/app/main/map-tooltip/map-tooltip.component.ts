@@ -1,4 +1,4 @@
-import {Component, Input, OnChanges, OnInit} from '@angular/core';
+import {Component, Input, OnChanges, OnInit, ElementRef} from '@angular/core';
 import {Radar} from "../../shared/radar";
 import {ColorService} from "../../shared/color.service";
 declare var $:any;
@@ -17,15 +17,20 @@ export class MapTooltipComponent implements OnInit {
   content: Radar;
 
   constructor(
-    private colorService: ColorService
+    private colorService: ColorService,
   ) { }
 
   ngOnInit() {
   }
 
   showTooltip(pxLeft: number, pxTop: number, radar: Radar) {
-    this.pxLeft = pxLeft;
+    // TODO adaptable tooltip
+    // let tooltipWidht = $("#tooltip").width();
     this.pxTop = pxTop;
+    // if (this.pxLeft <= $("#map").width() / 2)
+    //   this.pxLeft = pxLeft - tooltipWidht - 10;
+    // else
+      this.pxLeft = pxLeft;
     this.display = 'block';
     this.transform = $('.leaflet-map-pane').css('transform');
     this.content = radar;

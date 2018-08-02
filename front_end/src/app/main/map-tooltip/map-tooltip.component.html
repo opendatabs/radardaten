@@ -1,4 +1,4 @@
-<div  *ngIf="content" class="map-tooltip" [style.left]="pxLeft + 'px'" [style.top]="pxTop + 'px'" [style.display]="display"
+<div  *ngIf="content" class="map-tooltip" id="tooltip" [style.left]="pxLeft + 'px'" [style.top]="pxTop + 'px'" [style.display]="display"
      [style.transform]="transform">
   <table>
     <tr>
@@ -10,35 +10,35 @@
       <td><span class="kmh-limit">{{content.speedLimit}}</span></td>
     </tr>
     <tr>
-      <td>Übertretungsquote Richtung 1:</td>
+      <td>Übertretungsquote Fahrtrichtung 1:</td>
       <td>
         {{content.speedingQuoteDir1 * 100 | number:"1.2-2"}}%
         <svg class="colorSvg"><rect height="10" width="10" [attr.fill]="perc2Color(content.speedingQuoteDir1 * 100)"></rect></svg>
       </td>
     </tr>
     <tr>
-      <td>Durchschnittsgeschwindigkeit Richtung 1:</td>
+      <td>Durchschnittsgeschwindigkeit Fahrtrichtung 1:</td>
       <td>{{content.avgDir1}}</td>
     </tr>
     <tr>
-      <td>Anzahl Fahrzeuge Richtung 1:</td>
+      <td>Anzahl Fahrzeuge Fahrtrichtung 1:</td>
       <td>
         {{content.count1}}
       </td>
     </tr>
     <tr>
-      <td>Übertretungsquote Richtung 2:</td>
+      <td>Übertretungsquote Fahrtrichtung 2:</td>
       <td>
         {{content.speedingQuoteDir2 * 100 | number:"1.2-2"}}%
         <svg class="colorSvg"><rect height="10" width="10" [attr.fill]="perc2Color(content.speedingQuoteDir2 * 100)"></rect></svg>
       </td>
     </tr>
     <tr>
-      <td>Durchschnittsgeschwindigkeit Richtung 2:</td>
+      <td>Durchschnittsgeschwindigkeit Fahrtrichtung 2:</td>
       <td>{{content.avgDir2}}</td>
     </tr>
     <tr>
-      <td>Anzahl Fahrzeuge Richtung 2:</td>
+      <td>Anzahl Fahrzeuge Fahrtrichtung 2:</td>
       <td>
         {{content.count2}}
       </td>
