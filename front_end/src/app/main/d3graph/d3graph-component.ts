@@ -101,7 +101,7 @@ export class D3graphComponent implements OnInit, OnChanges {
         .range([0, (self.width - (2*self.padding))])
         .padding(.1);
 
-      const avgDomain = [self.speedLimit, 0];
+      const avgDomain = [self.speedLimit + 15, 0];
       const speedingQuoteDomain = [.7, 0];
       (self.measure === 'average') ? domain = avgDomain : domain = speedingQuoteDomain;
 
@@ -245,5 +245,17 @@ Anzahl Fahrzeuge: ${d.count}<br/>
       .attr('stroke', 'black');
 
     self.rects.exit().remove();
+
+    self.svg.selectAll('.line').remove();
+    if (self.measure === 'average') {
+      self.svg
+        .append('line')
+        .attr('y1', self.yScale(self.speedLimit) + self.padding)
+        .attr('y2', self.yScale(self.speedLimit) + self.padding)
+        .attr('x1', self.padding)
+        .attr('x2', self.width + self.padding)
+        .style('stroke', "rgb(255,0,0)")
+        .style('stroke-width', '2')
+    }
   }
 }

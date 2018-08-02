@@ -15,12 +15,12 @@ export class ColorService {
   perc2color(perc: number) {
     this.colorScale = this.d3.scaleLinear<string, number>()
       .domain([0, 50])
-      .range(["#0003ff", "#d73027"])
+      .range(["#208ce0", "#7d011b"])
       .interpolate(this.d3.interpolateHcl);
     return this.colorScale(perc);
   }
 
-  perc2color2(avgSpeed: number, limit: number) {
+  perc2color2(avgSpeed: number, limit: number) {cd
     let perc = (avgSpeed / limit) - 1;
     this.colorScale = this.d3.scaleLinear<string, number>()
       .domain([0, 0.2, 1])
