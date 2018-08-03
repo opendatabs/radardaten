@@ -20,7 +20,7 @@ export class ColorService {
     return this.colorScale(perc);
   }
 
-  perc2color2(avgSpeed: number, limit: number) {cd
+  perc2color2(avgSpeed: number, limit: number) {
     let perc = (avgSpeed / limit) - 1;
     this.colorScale = this.d3.scaleLinear<string, number>()
       .domain([0, 0.2, 1])
