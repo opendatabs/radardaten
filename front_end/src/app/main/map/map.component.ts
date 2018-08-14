@@ -27,17 +27,15 @@ export class MapComponent implements OnInit {
 
   options = {
     layers: [
-      tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {maxZoom: 18, attribution: '...'}),
+      tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {attribution: '...'}),
     ],
     zoom: 13,
     center: latLng(47.55814, 7.58769)
   };
 
-  constructor(
-    private ref: ApplicationRef,
-    private colorService: ColorService,
-    private zone: NgZone
-  ) {
+  constructor(private ref: ApplicationRef,
+              private colorService: ColorService,
+              private zone: NgZone) {
   }
 
   ngOnInit() {
@@ -48,8 +46,13 @@ export class MapComponent implements OnInit {
 
   onMapReady(map: Map) {
     this.map = map;
-    this.map.setMaxBounds(this.map.getBounds());
-    this.map.setMinZoom(13);
+    this.map.setMaxBounds(
+      {
+        _southWest: {lat: 47.370186632026545, lng: 6.575416289269925},
+        _northEast: {lat: 47.740904422894914, lng: 8.601020537316801}
+      }
+    );
+    this.map.setMinZoom(10);
     const self = this;
     this.map.on('zoomend', this.onZoom.bind(this, self))
   }
@@ -163,14 +166,14 @@ export class MapComponent implements OnInit {
     self.bubbleClickEvent.emit(radar);
   }
 
-  angleFromCoordinate(lat1:number, lng1:number, lat2:number, lng2:number) {
+  angleFromCoordinate(lat1: number, lng1: number, lat2: number, lng2: number) {
     let dLon = (lng2 - lng1);
     let y = Math.sin(dLon) * Math.cos(lat2);
     let x = Math.cos(lat1) * Math.sin(lat2) - Math.sin(lat1) * Math.cos(lat2) * Math.cos(dLon);
     let rad = Math.atan2(y, x);
     let brng = rad * 180 / Math.PI;
     return 360 - ((brng + 360) % 360) + 90;
-}
+  }
 
   private calculateDirectionDegrees(d: Radar) {
     return this.angleFromCoordinate(d.directionOneLat, d.directionOneLong, d.directionTwoLat, d.directionTwoLong)

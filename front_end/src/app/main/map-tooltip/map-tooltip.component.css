@@ -29,3 +29,7 @@ app-map-tooltip {
   overflow: visible;
   margin-left: 5px;
 }
+
+tr.header td {
+  padding-top: 20px;
+}

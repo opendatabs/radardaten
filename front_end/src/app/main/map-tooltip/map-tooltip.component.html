@@ -2,49 +2,56 @@
      [style.transform]="transform">
   <table>
     <tr>
-      <td>Strassenname:</td>
+      <td><strong>Strassenname:</strong></td>
       <td>{{content.streetName}}</td>
     </tr>
     <tr>
-      <td>Geschwindigkeitslimite:</td>
+      <td><strong>Geschwindigkeitslimite:</strong></td>
       <td><span class="kmh-limit">{{content.speedLimit}}</span></td>
     </tr>
+    <tr class="header">
+      <td><strong>Fahrtrichtung 1</strong></td>
+      <td></td>
+    </tr>
     <tr>
-      <td>Übertretungsquote Fahrtrichtung 1:</td>
+      <td>Übertretungsquote:</td>
       <td>
         {{content.speedingQuoteDir1 * 100 | number:"1.2-2"}}%
         <svg class="colorSvg"><rect height="10" width="10" [attr.fill]="perc2Color(content.speedingQuoteDir1 * 100)"></rect></svg>
       </td>
     </tr>
     <tr>
-      <td>Durchschnittsgeschwindigkeit Fahrtrichtung 1:</td>
-      <td>{{content.avgDir1}}</td>
+      <td>Durchschnittsgeschwindigkeit:</td>
+      <td>{{content.avgDir1}}&nbsp;km/h</td>
     </tr>
     <tr>
-      <td>Anzahl Fahrzeuge Fahrtrichtung 1:</td>
+      <td>Anzahl gemessener Fahrzeuge:</td>
       <td>
         {{content.count1}}
       </td>
     </tr>
+    <tr class="header">
+      <td><strong>Fahrtrichtung 2</strong></td>
+    </tr>
     <tr>
-      <td>Übertretungsquote Fahrtrichtung 2:</td>
+      <td>Übertretungsquote:</td>
       <td>
         {{content.speedingQuoteDir2 * 100 | number:"1.2-2"}}%
         <svg class="colorSvg"><rect height="10" width="10" [attr.fill]="perc2Color(content.speedingQuoteDir2 * 100)"></rect></svg>
       </td>
     </tr>
     <tr>
-      <td>Durchschnittsgeschwindigkeit Fahrtrichtung 2:</td>
-      <td>{{content.avgDir2}}</td>
+      <td>Durchschnittsgeschwindigkeit:</td>
+      <td>{{content.avgDir2}}&nbsp;km/h</td>
     </tr>
     <tr>
-      <td>Anzahl Fahrzeuge Fahrtrichtung 2:</td>
+      <td>Anzahl gemessener Fahrzeuge:</td>
       <td>
         {{content.count2}}
       </td>
     </tr>
-    <tr>
-      <td>Letzte Messung (Start):</td>
+    <tr class="header">
+      <td><strong>Letzte Messung (Start):</strong></td>
       <td>{{content.date | date:'dd.MM.yyyy'}}</td>
     </tr>
   </table>

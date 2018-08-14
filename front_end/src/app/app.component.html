@@ -2,15 +2,30 @@
 <router-outlet></router-outlet>
 <ng-template #content let-c="close" let-d="dismiss">
   <div class="modal-header">
-    <h4 class="modal-title">Informationen zu den Radardaten</h4>
+    <h4 class="modal-title">
+      Informationen zu statistischen Geschwindigkeitserhebungen des Kantons Basel-Stadt
+    </h4>
     <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
       <span aria-hidden="true">&times;</span>
     </button>
   </div>
   <div class="modal-body">
-    <p>Die Visualisierung der Radardaten basiert auf Messdaten der <a target="_blank" href="http://www.polizei.bs.ch/">Kantonspolizei Basel-Stadt</a>, welche zu statistischen Zwecken erhoben wurden. Die Daten wurden im Rahmen eines Open Government Data Pilotprojektes von der <a target="_blank" href="http://www.digitale-nachhaltigkeit.unibe.ch/">Forschungsstelle Digitale Nachhaltigkeit</a> der Universität Bern visualisiert.</p>
+    <p>Die Visualisierung der Geschwindigkeitserhebungen basiert auf Messdaten der <a href="http://www.polizei.bs.ch/" target="_blank">Kantonspolizei Basel-Stadt</a>, welche zu statistischen Zwecken erhoben wurden. Die Daten wurden im Rahmen eines Open Government Data Pilotprojektes von der <a target="_blank" href="http://www.digitale-nachhaltigkeit.unibe.ch/">Forschungsstelle Digitale Nachhaltigkeit</a> der Universität Bern visualisiert.</p>
 
-    <p class="pt-2">In der Karte abgebildet wird die Übertretungsquote in der jeweiligen Strasse für den abgebildeten Zeitraum. Durch näheres Heranzoomen erscheinen in der Karte statt der Punkte Pfeile für die einzelnen Richtungen. Für jeden Punkt bzw. Pfeil sind in einem Anzeigefeld weitere Informationen (wie die Durchschnittsgeschwindigkeit und die Anzahl passierender Autos) einsehbar. Durch Klicken auf einen Punkt bzw. Pfeil erscheint ein Säulendiagramm, welches die Messungen für einzelne Wochentage zeigt. Wird auf die Säule für einen Wochentag geklickt, erscheint ein weiteres Diagramm, in dem die Messungen pro Stunde an einem Tag angegeben werden.</p>
+    <ul>
+      <li>
+        Die Punkte in der Karte bilden die Übertretungsquote in der jeweiligen Strasse ab.
+      </li>
+      <li>
+        Durch näheres Heranzoomen erscheinen in der Karte statt der Punkte Pfeile für die einzelnen Richtungen.
+      </li>
+      <li>
+        Für jeden Punkt bzw. Pfeil sind in einem Anzeigefeld weitere Informationen (wie die Anzahl gemessener Fahrzeuge und die Durchschnittsgeschwindigkeit) einsehbar.
+      </li>
+      <li>
+        Durch Klicken auf einen Punkt bzw. Pfeil erscheint ein Säulendiagramm, welches die Messungen für einzelne Wochentage zeigt. Wird auf die Säule für einen Wochentag geklickt, erscheint ein weiteres Diagramm, in dem die Messungen pro Stunde an einem Tag angegeben werden. Die Farbe der Säulen bildet die Anzahl gemessener Fahrzeuge ab.
+      </li>
+    </ul>
 
   </div>
   <div class="modal-footer">

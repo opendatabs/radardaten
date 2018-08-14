@@ -7,7 +7,7 @@ import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
   styleUrls: ['./app.component.css']
 })
 export class AppComponent implements OnInit {
-  title = 'Radardaten';
+  title = 'Geschwindigkeitserhebungen des Kantons Basel-Stadt';
   firstDisplay: boolean = true;
   @ViewChild('content') content: ElementRef;
 

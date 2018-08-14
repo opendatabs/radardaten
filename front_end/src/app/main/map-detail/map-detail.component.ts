@@ -9,6 +9,7 @@ import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
 import {WeeklyRecord} from "../../shared/weekly-record";
 import {MeasurementWeek} from "../../shared/measurement-week";
 import {DailyRecord} from "../../shared/daily-record";
+import {ColorService} from "../../shared/color.service";
 
 @Component({
   selector: 'app-map-detail',
@@ -34,6 +35,7 @@ export class MapDetailComponent implements OnInit {
     private dataService: DataService,
     private recordService: RecordService,
     private ref: ApplicationRef,
+    private colorService: ColorService
   ) { }
 
   ngOnInit() {
@@ -100,5 +102,9 @@ export class MapDetailComponent implements OnInit {
       console.log(data);
       this.currentDay = data;
     })
+  }
+
+  perc2Color(perc: number): string {
+    return this.colorService.perc2color(perc);
   }
 }

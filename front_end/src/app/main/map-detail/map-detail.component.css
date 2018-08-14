@@ -9,3 +9,14 @@
 .header span.kmh-limit {
   margin-bottom: 10px;
 }
+
+.colorSvg {
+  width: 10px;
+  height: 10px;
+  overflow: visible;
+  margin-left: 5px;
+}
+
+.table-fixed-width td:nth-child(2n + 1) {
+  width: 300px;
+}

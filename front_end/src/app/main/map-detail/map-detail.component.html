@@ -22,7 +22,8 @@
               </button>
             </div>
           </div>
-          <div class="btn-group btn-group-toggle" (change)="changeDirection()" ngbRadioGroup name="direction" [(ngModel)]="directionOne">
+          <div class="btn-group btn-group-toggle" (change)="changeDirection()" ngbRadioGroup name="direction"
+               [(ngModel)]="directionOne">
             <label ngbButtonLabel class="btn-primary">
               <input ngbButton type="radio" [value]="true"> Richtung 1
             </label>
@@ -42,71 +43,95 @@
       </div>
       <div class="row">
         <app-d3graph *ngIf="radar" [data]="currentWeek" [radar]="radar" [speedLimit]="radar?.speedLimit"
-                     [groupBy]="'days'" [measure]="measure" [clickable]="true" (clickEvent)="openDailyView($event)"></app-d3graph>
+                     [groupBy]="'days'" [measure]="measure" [clickable]="true"
+                     (clickEvent)="openDailyView($event)"></app-d3graph>
       </div>
       <div class="row">
         <div class="col s12">
           <h3 *ngIf="currentDay">{{dailyHeader}}</h3>
         </div>
-        <app-d3graph *ngIf="currentDay" [measure]="measure" [data]="currentDay" [radar]="radar" [speedLimit]="radar?.speedLimit"
+        <app-d3graph *ngIf="currentDay" [measure]="measure" [data]="currentDay" [radar]="radar"
+                     [speedLimit]="radar?.speedLimit"
                      [groupBy]="'hours'" [clickable]="false"></app-d3graph>
       </div>
       <div class="row mt-5" *ngIf="radar">
         <div class="col-12">
           <h3>Details:</h3>
           <div class="pt-2">
-            <table class="table table-striped">
-              <tr>
-                <td>Strassenname:</td>
-                <td>{{radar.streetName}}</td>
-              </tr>
-              <tr>
-                <td>Geschwindigkeitslimite:</td>
-                <td><span class="kmh-limit">{{radar.speedLimit}}</span></td>
-              </tr>
-              <tr>
-                <td>Übertretungsquote Fahrtrichtung 1:</td>
-                <td>
-                  {{radar.speedingQuoteDir1 * 100 | number:"1.2-2"}}%
-                </td>
-              </tr>
-              <tr>
-                <td>Durchschnittsgeschwindigkeit Fahrtrichtung 1:</td>
-                <td>{{radar.avgDir1}}</td>
-              </tr>
-              <tr>
-                <td>Anzahl Fahrzeuge Fahrtrichtung 1:</td>
-                <td>
-                  {{radar.count1}}
-                </td>
-              </tr>
-              <tr>
-                <td>Übertretungsquote Fahrtrichtung 2:</td>
-                <td>
-                  {{radar.speedingQuoteDir2 * 100 | number:"1.2-2"}}%
-                </td>
-              </tr>
-              <tr>
-                <td>Durchschnittsgeschwindigkeit Fahrtrichtung 2:</td>
-                <td>{{radar.avgDir2}}</td>
-              </tr>
-              <tr>
-                <td>Geschwindigkeitslimite:</td>
-                <td>{{radar.speedLimit}} km/h</td>
-              </tr>
-              <tr>
-                <td>Anzahl Fahrzeuge Fahrtrichtung 2:</td>
-                <td>
-                  {{radar.count2}}
-                </td>
-              </tr>
-              <tr>
-                <td>Letzte Messung (Start):</td>
-                <td>{{radar.date | date:'dd.MM.yyyy'}}</td>
-              </tr>
-            </table>
-            <i>Information: Diese Daten, sowie die Daten in den Tooltips beziehen sich auf alle Messungen die für die entsprechende Strasse gemacht wurden.<br>
-            Zum Beispiel ist der Durchschnitt (Richtung 1) aus allen Messungen für diese Strasse ({{radar.streetName}}, Richtung 1) berechnet. </i>
+            <div class="row">
+              <div class="col-12 col-lg-6">
+                <table class="table-fixed-width">
+                  <tr>
+                    <td><strong>Strassenname:</strong></td>
+                    <td>{{radar.streetName}}</td>
+                  </tr>
+                  <tr>
+                    <td><strong>Geschwindigkeitslimite:</strong></td>
+                    <td><span class="kmh-limit">{{radar.speedLimit}}</span></td>
+                  </tr>
+                  <tr>
+                    <td><strong>Letzte Messung:</strong></td>
+                    <td>{{radar.date | date:'dd.MM.yyyy'}}</td>
+                  </tr>
+                </table>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-12 col-lg-6 mt-2">
+                <p class="mt-2"><strong>Fahrtrichtung 1</strong></p>
+                <table class="table-fixed-width">
+                  <tr>
+                    <td>Übertretungsquote:</td>
+                    <td>
+                      {{radar.speedingQuoteDir1 * 100 | number:"1.2-2"}}%
+                      <svg class="colorSvg">
+                        <rect height="10" width="10" [attr.fill]="perc2Color(radar.speedingQuoteDir1 * 100)"></rect>
+                      </svg>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Durchschnittsgeschwindigkeit:</td>
+                    <td>{{radar.avgDir1}}&nbsp;km/h</td>
+                  </tr>
+                  <tr>
+                    <td>Anzahl gemessener Fahrzeuge:</td>
+                    <td>
+                      {{radar.count1}}
+                    </td>
+                  </tr>
+                </table>
+              </div>
+            </div>
+            <div class="row mb-5">
+              <div class="col-12 col-lg-6 mt-2">
+                <p class="mt-2"><strong>Fahrtrichtung 2</strong></p>
+                <table class="table-fixed-width">
+                  <tr>
+                    <td>Übertretungsquote:</td>
+                    <td>
+                      {{radar.speedingQuoteDir2 * 100 | number:"1.2-2"}}%
+                      <svg class="colorSvg">
+                        <rect height="10" width="10" [attr.fill]="perc2Color(radar.speedingQuoteDir2 * 100)"></rect>
+                      </svg>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Durchschnittsgeschwindigkeit:</td>
+                    <td>{{radar.avgDir2}}&nbsp;km/h</td>
+                  </tr>
+                  <tr>
+                    <td>Anzahl gemessener Fahrzeuge:</td>
+                    <td>
+                      {{radar.count2}}
+                    </td>
+                  </tr>
+                </table>
+              </div>
+            </div>
+            <i>Information: Diese Daten, sowie die Daten in den Tooltips beziehen sich auf alle Messungen die für die
+              entsprechende Strasse gemacht wurden.<br>
+              Zum Beispiel ist der Durchschnitt (Richtung 1) aus allen Messungen für diese Strasse
+              ({{radar.streetName}}, Richtung 1) berechnet. </i>
           </div>
         </div>
       </div>
