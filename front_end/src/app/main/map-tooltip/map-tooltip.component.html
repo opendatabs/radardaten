@@ -14,6 +14,12 @@
       <td></td>
     </tr>
     <tr>
+      <td>Anzahl gemessener Fahrzeuge:</td>
+      <td>
+        {{content.count1}}
+      </td>
+    </tr>
+    <tr>
       <td>Übertretungsquote:</td>
       <td>
         {{content.speedingQuoteDir1 * 100 | number:"1.2-2"}}%
@@ -24,14 +30,14 @@
       <td>Durchschnittsgeschwindigkeit:</td>
       <td>{{content.avgDir1}}&nbsp;km/h</td>
     </tr>
+    <tr class="header">
+      <td><strong>Fahrtrichtung 2</strong></td>
+    </tr>
     <tr>
       <td>Anzahl gemessener Fahrzeuge:</td>
       <td>
-        {{content.count1}}
+        {{content.count2}}
       </td>
-    </tr>
-    <tr class="header">
-      <td><strong>Fahrtrichtung 2</strong></td>
     </tr>
     <tr>
       <td>Übertretungsquote:</td>
@@ -43,12 +49,6 @@
     <tr>
       <td>Durchschnittsgeschwindigkeit:</td>
       <td>{{content.avgDir2}}&nbsp;km/h</td>
-    </tr>
-    <tr>
-      <td>Anzahl gemessener Fahrzeuge:</td>
-      <td>
-        {{content.count2}}
-      </td>
     </tr>
     <tr class="header">
       <td><strong>Letzte Messung (Start):</strong></td>
