@@ -35,4 +35,15 @@ module.exports = {
   //   level: "silent"
   // }
 
+  dumpConnection: {
+    host: process.env.HOST,
+    user: process.env.USER,
+    password: process.env.PASSWORD,
+    database: process.env.DATABASE
+  },
+  dumpUser: {
+    username: process.env.DUMPUSERNAME,
+    password: process.env.DUMPUSERPASSWORD,
+  }
+
 };

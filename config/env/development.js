@@ -10,6 +10,11 @@
  *
  */
 
+let local = {};
+if (!process.env.NODE_ENV || process.env.NODE_ENV === 'development') {
+  local = require('../local.js');
+}
+
 module.exports = {
 
   /***************************************************************************
@@ -22,9 +27,19 @@ module.exports = {
     // connection: 'localhostDb'
     connection: 'devDbLocal'
   },
-  cors:{
+  cors: {
     allRoutes: true,
     origin: '*'
+  },
+  dumpConnection: {
+    host: local.localHOST,
+    user: local.localUSER,
+    password: local.localPASSWORD,
+    database: local.localDATABASE
+  },
+  dumpUser: {
+    username: local.localDUMPUSERNAME,
+    password: local.localDUMPUSERPASSWORD,
   }
 
 };

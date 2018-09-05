@@ -60,5 +60,7 @@ module.exports.routes = {
   'get /Record/measurementWeeks' : 'RecordController.getMeasurementWeeks',
   // 'get /Radar/getRecordCount/:id' : 'RadarController.getRecordCount',
   'put /Radar/updateRecordCount' : 'RadarController.updateRecordCount',
+  'get /Data/getMysqlDump' : 'DataController.getMysqlDump',
+
 
 };
