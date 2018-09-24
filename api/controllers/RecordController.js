@@ -47,7 +47,7 @@ module.exports = {
               return res.json(500, { error: 'Es ist ein Fehler beim Speichern der Daten aufgetreten: ' + err });
             }
           }
-          return res.json(200, { recordsCreated: created.length, foundMatches: foundMatches, created: created });
+          return res.json(200, { recordsCreated: created.length, foundMatches: foundMatches});
       });
     } else {
       return res.json(500, { error: 'Upload enthält keine Daten' })

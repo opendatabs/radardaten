@@ -45,8 +45,8 @@ import * as $ from 'jquery';
             <fa class="alingn" name="refresh" size="4x" animation="spin"></fa>
           </div>
         </div>
-        <div *ngIf="fileSize > 500000" class="alert alert-warning mt-2" role="alert">
-          <b>Warnung</b> Sie laden mehr als 500KB an Daten hoch. Das Parsen der Daten kann mehrere Minuten in Anspuch
+        <div *ngIf="fileSize > 300000" class="alert alert-warning mt-2" role="alert">
+          <b>Warnung</b> Sie laden mehr als 300KB an Daten hoch. Das Parsen der Daten kann mehrere Minuten in Anspuch
           nehmen.
         </div>
         <div *ngIf="success" class="alert alert-success mt-2" role="alert">
@@ -132,8 +132,6 @@ export class AddRecordsBtnComponent implements ViewCell {
             this.success = true;
             this.foundMatches = res.foundMatches;
             this.recordsCreated = res.recordsCreated;
-            console.log(res);
-            console.log(res.created)
           },
           err => {
             this.loading = false;
