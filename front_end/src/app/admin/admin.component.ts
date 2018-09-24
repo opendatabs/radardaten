@@ -43,7 +43,7 @@ export class AdminComponent implements OnInit {
         filter: false,
         type: 'html',
         valuePrepareFunction: value => {
-          return moment(value).format('LL');
+          return moment(value).format('L');
         },
         editor: {
           type: 'custom',

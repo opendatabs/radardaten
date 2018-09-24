@@ -20,20 +20,19 @@ export class DatepickerComponent extends DefaultEditor{
     super();
     moment.locale('de-ch');
   }
-''
+
   ngOnInit() {
     this.setDate = this.cell.getValue();
     // If no date is entered
     if (this.cell.getValue().length)
-      this.cell.newValue = moment().format();
+      this.cell.newValue = moment().toDate();
   }
 
   onChange(event: any) {
     this.cell.newValue = event.target.value;
-    /*  TODO
-    * invalid date on first creation. Need for a default value because at fist
-    * the value is empty. But according to GitHub page there is an issue with
-    * adding defaults on type: html */
+    // TODO: store previous date value when edit is open
+
+
   }
 
 }

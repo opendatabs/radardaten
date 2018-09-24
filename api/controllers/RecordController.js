@@ -1,3 +1,4 @@
+const moment = require('moment');
 /**
  * RecordController
  *
@@ -6,19 +7,47 @@
  */
 
 module.exports = {
-
   addRecords(req, res) {
-    if (req.body.length) {
-      Record.create(req.body)
+    const bundle = [];
+    let foundMatches = 0;
+    if (req.body && req.body.id && req.body.text) {
+      try {
+        const txt = req.body.text;
+        const regex = /[0-2]\d\d\s[0-2]\d:[0-6]\d:[0-6]\d\s\d\d\.[01]\d\.[0-3]\d\s[012]\s\d*\.\d$/gm;
+        let match = [];
+        do {
+          match = regex.exec(txt);
+          if (match) {
+            if (match.length) {
+              foundMatches++;
+              const arr = match[0].split('\t');
+              if (arr.length === 5) {
+                const timestamp = moment([arr[2].slice(0, 6), '20', arr[2].slice(6)].join('') + " " + arr[1], 'DD.MM.YYYY HH:mm:ss').toDate();
+                bundle.push({
+                  timestamp: timestamp,
+                  kmh: Number(arr[0]),
+                  length: Number(arr[4]),
+                  weekday: moment(timestamp).format('dddd'),
+                  direction: Number(arr[3]),
+                  radar: req.body.id
+                });
+              }
+            }
+          }
+        } while (match);
+      } catch(error) {
+        return res.json(500, { error: 'Es ist ein Fehler aufgetreten: ' + error })
+      }
+      Record.create(bundle)
         .exec( (err, created) => {
           if (err) {
             if (err.details.includes('duplicate record')) {
-              return res.json(500, { error: 'Messungen enthält Duplikate oder wurde bereits erfasst' });
+              return res.json(500, { error: 'Messungen enthalten Duplikate oder wurden bereits erfasst' });
             } else {
-              return res.serverError(err);
+              return res.json(500, { error: 'Es ist ein Fehler beim Speichern der Daten aufgetreten: ' + err });
             }
           }
-          return res.json(created.length);
+          return res.json(200, { recordsCreated: created.length, foundMatches: foundMatches, created: created });
       });
     } else {
       return res.json(500, { error: 'Upload enthält keine Daten' })
