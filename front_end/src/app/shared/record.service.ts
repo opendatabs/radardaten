@@ -34,10 +34,6 @@ export class RecordService {
     return this.http.get<MeasurementWeek[]>(this.api + `measurementWeeks?radarId=${radarId}&direction=${direction}`);
   }
 
-  // addRecords(records: Record[]): Observable<Record[]> { // TODO: why not possible to choose returntype Record[]?!
-  //   return this.http.post<Record[]>(this.api + 'addRecords', records);
-  // }
-
   // TODO: Add interface, change returntype
   addRecords(records: { id: number, text: string }): Observable<any> {
     return this.http.post<{ id: number, text: string }>(this.api + 'addRecords', records);

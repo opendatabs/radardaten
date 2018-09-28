@@ -9,7 +9,7 @@
       "outDir": "../assets",
       "assets": [
         "assets",
-        "favicon.ico"
+        "faviconBS.ico"
       ],
       "index": "index.html",
       "main": "main.ts",
@@ -25,6 +25,7 @@
         "../node_modules/font-awesome/css/font-awesome.css"
       ],
       "scripts": [
+        "assets/sails.io.js",
         "../node_modules/jquery/dist/jquery.min.js",
         "../node_modules/moment/min/moment.min.js"
       ],

@@ -8,8 +8,15 @@ const moment = require('moment');
 
 module.exports = {
   addRecords(req, res) {
-    const bundle = [];
-    let foundMatches = 0;
+    console.log('New socket connection!', req)
+    return res.send('myreply')
+  },
+
+
+
+
+  async batchCreate(req, res) {
+    const matches = [];
     if (req.body && req.body.id && req.body.text) {
       try {
         const txt = req.body.text;
@@ -19,11 +26,10 @@ module.exports = {
           match = regex.exec(txt);
           if (match) {
             if (match.length) {
-              foundMatches++;
               const arr = match[0].split('\t');
               if (arr.length === 5) {
                 const timestamp = moment([arr[2].slice(0, 6), '20', arr[2].slice(6)].join('') + " " + arr[1], 'DD.MM.YYYY HH:mm:ss').toDate();
-                bundle.push({
+                matches.push({
                   timestamp: timestamp,
                   kmh: Number(arr[0]),
                   length: Number(arr[4]),
@@ -38,17 +44,18 @@ module.exports = {
       } catch(error) {
         return res.json(500, { error: 'Es ist ein Fehler aufgetreten: ' + error })
       }
-      Record.create(bundle)
-        .exec( (err, created) => {
+      for (let i = 0; i < matches.length; i += 50) {
+        await Record.create(matches.slice(i, i + 50)).exec( (err, created) => {
           if (err) {
-            if (err.details.includes('duplicate record')) {
-              return res.json(500, { error: 'Messungen enthalten Duplikate oder wurden bereits erfasst' });
-            } else {
-              return res.json(500, { error: 'Es ist ein Fehler beim Speichern der Daten aufgetreten: ' + err });
-            }
+            return res.json(500, { error: 'Es ist ein Fehler beim Speichern der Daten aufgetreten: ' + err });
           }
-          return res.json(200, { recordsCreated: created.length, foundMatches: foundMatches});
-      });
+          sails.sockets.broadcast(sails.sockets.getId(req), 'newRecords', { 
+            progress: i / matches.length,
+            recordsCreated: i
+          });
+        });
+      }
+      return res.json(200, { foundMatches: matches.length});
     } else {
       return res.json(500, { error: 'Upload enthält keine Daten' })
     }

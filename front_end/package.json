@@ -24,6 +24,7 @@
     "@asymmetrik/ngx-leaflet": "^3.0.2",
     "@ng-bootstrap/ng-bootstrap": "^1.1.2",
     "angular-font-awesome": "^3.1.2",
+    "angular2-sails": "^0.2.8",
     "bootstrap": "^4.1.0",
     "core-js": "^2.4.1",
     "d3": "^5.4.0",

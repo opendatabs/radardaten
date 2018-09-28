@@ -1,9 +1,12 @@
-import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { Component, Input, Output, EventEmitter, OnInit, OnDestroy } from '@angular/core';
 import { ViewCell} from 'ng2-smart-table';
 import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { RecordService } from '../../shared/record.service';
 import { RadarService } from '../../shared/radar.service';
 import * as $ from 'jquery';
+import { SailsClientService } from '../../shared/sails-client.service';
+import { environment } from '../../../environments/environment';
+import { Observable } from 'rxjs/Observable';
+import { count } from 'rxjs/operators';
 
 @Component({
   selector: 'app-add-records-btn',
@@ -44,13 +47,16 @@ import * as $ from 'jquery';
           <div class="row h-100 justify-content-center align-items-center">
             <fa class="alingn" name="refresh" size="4x" animation="spin"></fa>
           </div>
+          <div class="row h-100 justify-content-center align-items-center">
+            <p class="mt-3">Anzahl Messungen: <strong>{{ foundMatches }}</strong> | Gespeichert: <strong>{{ progress }}%</strong><p>
+          </div>
         </div>
-        <div *ngIf="fileSize > 300000" class="alert alert-warning mt-2" role="alert">
+        <div *ngIf="!success && fileSize > 300000" class="alert alert-warning mt-2" role="alert">
           <b>Warnung</b> Sie laden mehr als 300KB an Daten hoch. Das Parsen der Daten kann mehrere Minuten in Anspuch
           nehmen.
         </div>
         <div *ngIf="success" class="alert alert-success mt-2" role="alert">
-          <b>{{ recordsCreated }}</b> von {{ foundMatches }} Messungen erfolgreich hochgeladen
+          {{ foundMatches }} Messungen erfolgreich hochgeladen
         </div>
       </div>
       <div class="modal-footer">
@@ -61,7 +67,7 @@ import * as $ from 'jquery';
   `,
   styles: []
 })
-export class AddRecordsBtnComponent implements ViewCell {
+export class AddRecordsBtnComponent implements ViewCell, OnInit, OnDestroy {
 
   @Input() value: string | number;
   @Input() rowData: any;
@@ -73,17 +79,41 @@ export class AddRecordsBtnComponent implements ViewCell {
   validFiletype = false;
   loading = false;
   success = false;
-  recordsCreated = 0;
+  progress = 0;
+  creationCounter: number;
+  // recordsCreated = 0;
   foundMatches = 0;
   error: any;
   closeResult: string;
   isClicked = false;
+  public users$: Observable<any>;
+  sub: any;
 
   constructor(
     private modalService: NgbModal,
-    private recordService: RecordService,
     private radarService: RadarService,
+    private sailsClientService: SailsClientService,
   ) {
+  }
+
+  ngOnInit() {
+    this.sub = this.sailsClientService.on('newRecords').subscribe(
+      () => {
+        if (this.foundMatches > 0) {
+          this.creationCounter += 50;
+          this.progress = Math.ceil((this.creationCounter / this.foundMatches) * 100 );
+        }
+        if (this.progress > 98 || this.foundMatches < 50) {
+          this.loading = false;
+          this.success = true;
+        }
+      }
+    );
+    // this.sailsClientService.get('newRecords').subscribe(() => console.log('msg'));
+  }
+
+  ngOnDestroy() {
+    this.sub.unsubscribe();
   }
 
   onOpen(content) {
@@ -123,23 +153,23 @@ export class AddRecordsBtnComponent implements ViewCell {
     const fileReader = new FileReader();
     fileReader.onload = e => {
       this.loading = true;
+      this.creationCounter = 0;
       this.error = null;
-      debugger;
-      this.recordService.addRecords({ id: this.rowData.id, text: fileReader.result.toString() })
+      this.sailsClientService.post(environment.api + 'record/batchCreate', {
+        id: this.rowData.id, text: fileReader.result.toString()
+      })
         .subscribe(
           res => {
-            this.loading = false;
-            this.success = true;
             this.foundMatches = res.foundMatches;
-            this.recordsCreated = res.recordsCreated;
           },
           err => {
             this.loading = false;
             this.error = err.message;
-            console.log(err)
-          })
+            console.log(err);
+          });
     };
     fileReader.readAsText(this.file);
+    this.file = null; // discard file after upload
   }
 
   changePathValue(event: any): void {

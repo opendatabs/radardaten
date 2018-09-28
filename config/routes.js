@@ -22,9 +22,15 @@
 
 module.exports.routes = {
 
-  'r|^\/?(home|karte|admin)$|': {
+  // 'r|^\/?(home|karte|admin)$|': {
+  //   skipAssets: true,
+  //   view: 'homepage'
+  // },
+
+  'get /*': {
+    view: 'homepage',
     skipAssets: true,
-    view: 'homepage'
+    skipRegex: /^(\/record)|(\/radar)|(\/data)|(\/__getcookie)/
   },
 
   /***************************************************************************
@@ -50,6 +56,8 @@ module.exports.routes = {
   * for configuration options and examples.                                  *
   *                                                                          *
   ***************************************************************************/
+  'post /Record/batchCreate': 'RecordController.batchCreate',
+
   'post /Radar/addRadar' : 'RadarController.addRadar',
   'post /Radar/updateRadar' : 'RadarController.updateRadar',
   'get  /Radar/radarWithAvgSpeedAndSpeedingQuote' : 'RadarController.getRadarWithAvgSpeedAndSpeedingQuote',
