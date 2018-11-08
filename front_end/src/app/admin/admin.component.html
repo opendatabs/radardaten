@@ -1,21 +1,24 @@
 <div class="container">
-  <input #search class="search p-1 my-3"
-         type="text" placeholder="Strasse suchen..."
-         (keydown.enter)="onSearch(search.value)"> <!--TODO input action on keystroke-->
-  <button class="btn btn-outline-primary py-2 px-3 m-2"
-          *ngIf="filterActive" (click)="onClearFilter()">
-    <fa name="filter" size="lg"></fa>&nbsp;X
-  </button>
-
-  <ng2-smart-table [settings]="settings"
-                   [source]="source"
-                   (editConfirm)="onClickEdit($event)"
-                   (createConfirm)="onClickCreate($event)"
-                   (deleteConfirm)="onClickDelete($event)">
-  </ng2-smart-table>
-  <div class="container h-100" *ngIf="!data">
-    <div class="row h-100 justify-content-center align-items-center">
-      <fa class="alingn" name="refresh" size="4x" animation="spin"></fa>
+  <div *ngIf="admin">
+    <input #search class="search p-1 my-3" type="text" placeholder="Strasse suchen..." (keydown.enter)="onSearch(search.value)">
+    <!--TODO input action on keystroke-->
+    <button class="btn btn-outline-primary py-2 px-3 m-2" *ngIf="filterActive" (click)="onClearFilter()">
+      <fa name="filter" size="lg"></fa>&nbsp;X
+    </button>
+    
+    <ng2-smart-table [settings]="settings" [source]="source" (editConfirm)="onClickEdit($event)" (createConfirm)="onClickCreate($event)"
+      (deleteConfirm)="onClickDelete($event)">
+    </ng2-smart-table>
+    <div class="container h-100" *ngIf="!data">
+      <div class="row h-100 justify-content-center align-items-center">
+        <fa class="alingn" name="refresh" size="4x" animation="spin"></fa>
+      </div>
+    </div>
+  </div>
+  <div class="card my-3" *ngIf="!admin">
+    <div class="m-2">
+      <h1>Kein Zugriff</h1>
+      <p>Bitte Authorisieren Sie sich <b><a [routerLink]="['/login']">hier</a></b> um Zugriff zu erhalten</p>
     </div>
   </div>
 </div>

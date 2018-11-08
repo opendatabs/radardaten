@@ -3,3 +3,39 @@ app-map-tooltip {
   top: 0;
   left: 0;
 }
+
+/* Small screen */
+/* Used for small screen or phone */
+@media (min-width: 576px) {
+  /* change this, by default 540px */
+   .container {
+     max-width: 530px;
+  }
+}
+
+/* Medium screen */
+/* Used for medium screen or tablet */
+@media (min-width: 768px) {
+  /* change this, by default 720px */
+  .container {
+  max-width: 710px;
+  }
+}
+
+/* Large screen */
+/* Used for large screen, Laptop or Desktop */
+@media (min-width: 992px) {
+  /* change this, by default 960px */
+  .container {
+    max-width: 950px;
+  }
+}
+
+/* Extra large screen */
+/* Used for extra large screen or desktop */
+@media (min-width: 1200px) {
+  /* change this, by default 1140px */
+  .container {
+    max-width: 970px;
+  }
+}

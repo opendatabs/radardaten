@@ -47,5 +47,10 @@ module.exports.policies = {
 		// Apply the `isNiceToAnimals` AND `hasRabbitFood` policies
 		// before letting any users feed our rabbits
 		// feed : ['isNiceToAnimals', 'hasRabbitFood']
-	// }
+  // }
+  
+  AuthController: {
+    // Apply the 'sessionAuth' policy to the 'auth' action of 'AuthController'
+    auth: 'sessionAuth' 
+  }
 };

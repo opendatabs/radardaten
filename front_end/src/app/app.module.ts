@@ -29,7 +29,7 @@ import { DatepickerComponent } from './admin/utility/datepicker.component';
 import { AngularFontAwesomeModule } from 'angular-font-awesome';
 import { SailsClientService } from './shared/sails-client.service';
 import { SailsModule } from 'angular2-sails';
-
+import { AuthService } from './shared/auth.service';
 
 @NgModule({
   declarations: [
@@ -67,6 +67,7 @@ import { SailsModule } from 'angular2-sails';
     RecordService,
     CalculatorService,
     SailsClientService,
+    AuthService,
   ],
   bootstrap: [AppComponent]
 })

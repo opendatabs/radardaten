@@ -40,6 +40,10 @@ module.exports = {
   dumpUser: {
     username: local.localDUMPUSERNAME,
     password: local.localDUMPUSERPASSWORD,
+  },
+  authCredentials: {
+    username: local.authUSER,
+    password: local.authPASSWORD
   }
 
 };

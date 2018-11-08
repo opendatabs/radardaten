@@ -10,6 +10,7 @@ import { CalculatorService } from '../shared/calculator.service';
 import { DatepickerComponent } from './utility/datepicker.component';
 import * as moment from 'moment';
 import * as $ from 'jquery';
+import { AuthService } from '../shared/auth.service';
 
 @Component({
   selector: 'app-admin',
@@ -25,6 +26,7 @@ export class AdminComponent implements OnInit {
 
   @Output() selectClick: EventEmitter<any> = new EventEmitter();
 
+  admin: boolean;
   data: any[];
   source: LocalDataSource;
 
@@ -88,7 +90,6 @@ export class AdminComponent implements OnInit {
         onComponentInitFunction(instance) {
           instance.open.subscribe(row => {
             // probably no action needed
-            console.log(row)
           });
         }
       },
@@ -101,7 +102,7 @@ export class AdminComponent implements OnInit {
         renderComponent: AddRecordsBtnComponent,
         onComponentInitFunction(instance) {
           instance.open.subscribe(row => {
-            //TODO overwrite old entries in case of duplicates
+            // TODO: overwrite old entries in case of duplicates
           });
         }
       },
@@ -145,12 +146,13 @@ export class AdminComponent implements OnInit {
 
   constructor(
     private radarService: RadarService,
-    private recordService: RecordService
+    private authService: AuthService
   ) {
     moment.locale('de-ch');
   }
 
   ngOnInit() {
+    this.authService.currentAdminState.subscribe(admin => this.admin = admin);
     if (!this.data) {
       this.getData();
     }
@@ -169,10 +171,10 @@ export class AdminComponent implements OnInit {
             },
             (err: HttpErrorResponse) => {
               if (err.error instanceof Error) {
-                console.log("Client-side error occured.");
+                console.log('Client-side error occured.');
               } else {
-                console.log("Server-side error occured.");
-                console.log(err)
+                console.log('Server-side error occured.');
+                console.log(err);
               }
             }
           );
@@ -190,9 +192,9 @@ export class AdminComponent implements OnInit {
         },
         (err: HttpErrorResponse) => {
           if (err.error instanceof Error) {
-            console.log("Client-side error occured.");
+            console.log('Client-side error occured.');
           } else {
-            console.log("Server-side error occured.");
+            console.log('Server-side error occured.');
             console.log(err);
           }
         }
@@ -203,7 +205,7 @@ export class AdminComponent implements OnInit {
     event.newData.speedLimit = this.validateSpeed(event.newData.speedLimit);
     // event.newData.avgSpeed1 = Number(event.newData.avgSpeed1);
     // event.newData.speedingQuote1 = Number(event.newData.speedingQuote1);
-    console.log(this.data);
+    // console.log(this.data);
     this.radarService.addRadar(event.newData)
       .subscribe(
         res => {
@@ -213,10 +215,10 @@ export class AdminComponent implements OnInit {
         },
         (err: HttpErrorResponse) => {
           if (err.error instanceof Error) {
-            console.log("Client-side error occured.");
+            console.log('Client-side error occured.');
           } else {
-            console.log("Server-side error occured.");
-            console.log(err)
+            console.log('Server-side error occured.');
+            console.log(err);
           }
         }
       );

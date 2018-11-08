@@ -7,15 +7,33 @@
  * @docs        :: http://sailsjs.org/#!/documentation/concepts/Policies
  *
  */
-module.exports = function(req, res, next) {
 
-  // User is allowed, proceed to the next policy, 
-  // or if this is the last policy, the controller
-  if (req.session.authenticated) {
+let env = {};
+if (!process.env.NODE_ENV || process.env.NODE_ENV === 'development') {
+  env = require('../../config/env/development');
+} else {
+  env = require('../../config/env/production');
+}
+let authCredentials = env.authCredentials;
+
+// using basic-auth https://www.npmjs.com/package/basic-auth
+const basicAuth = require('basic-auth');
+
+module.exports = function sessionAuth(req, res, next) {
+  function unauthorized(res) {
+    res.set('WWW-Authenticate', 'Basic realm=Authorization Required');
+    return res.send(401);
+  };
+
+  const user = basicAuth(req);
+
+  if (!user || !user.name || !user.pass) {
+    return unauthorized(res);
+  };
+
+  if (user.name === authCredentials.username && user.pass === authCredentials.password) {
     return next();
-  }
-
-  // User is not allowed
-  // (default res.forbidden() behavior can be overridden in `config/403.js`)
-  return res.forbidden('You are not permitted to perform this action.');
+  } else {
+    return unauthorized(res);
+  };
 };

@@ -2,6 +2,8 @@ import { OnInit, AfterViewInit, Component, ElementRef, ViewChild } from '@angula
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { SailsService } from 'angular2-sails';
 import { environment } from '../environments/environment';
+import { AuthService } from './shared/auth.service';
+import { Router, ActivatedRoute } from '@angular/router';
 
 
 @Component({
@@ -11,13 +13,29 @@ import { environment } from '../environments/environment';
 })
 export class AppComponent implements OnInit, AfterViewInit {
   title = 'Geschwindigkeitserhebungen des Kantons Basel-Stadt';
+  admin: boolean;
   firstDisplay = true;
   @ViewChild('content') content: ElementRef;
 
   constructor(
+    private router: Router,
+    private authService: AuthService,
     private _sailsService: SailsService,
     private modalService: NgbModal
-  ) { }
+  ) {
+    router.events.subscribe(() => {
+      if (this.router.url.indexOf('login') > -1) {
+        this.authService.requestLogin().subscribe(
+          event => {
+            if (event) {
+              this.admin = event;
+              this.authService.changeAdminState(this.admin);
+            }
+          },
+          error => console.log(error));
+      }
+    });
+  }
 
   ngOnInit() {
     // Init Sails service and request CSRF Token and check login

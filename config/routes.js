@@ -30,7 +30,7 @@ module.exports.routes = {
   'get /*': {
     view: 'homepage',
     skipAssets: true,
-    skipRegex: /^(\/record)|(\/radar)|(\/data)|(\/__getcookie)/
+    skipRegex: /^(\/record)|(\/radar)|(\/data)|(\/auth)|(\/__getcookie)/
   },
 
   /***************************************************************************
@@ -69,6 +69,7 @@ module.exports.routes = {
   // 'get /Radar/getRecordCount/:id' : 'RadarController.getRecordCount',
   'put /Radar/updateRecordCount' : 'RadarController.updateRecordCount',
   'get /Data/getMysqlDump' : 'DataController.getMysqlDump',
+  'get /Auth/auth': 'AuthController.auth',
 
 
 };

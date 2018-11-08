@@ -44,6 +44,9 @@ module.exports = {
   dumpUser: {
     username: process.env.DUMPUSERNAME,
     password: process.env.DUMPUSERPASSWORD,
-  }
-
+  },
+  authCredentials:{
+    username: process.env.AUTHUSER,
+    password: process.env.AUTHPASSWORD,
+  } 
 };

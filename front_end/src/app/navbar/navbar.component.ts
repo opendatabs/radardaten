@@ -6,7 +6,7 @@ import {Component, Input, OnInit} from '@angular/core';
   styleUrls: ['./navbar.component.css']
 })
 export class NavbarComponent implements OnInit {
-  // @Input() admin: boolean;
+  @Input() admin: boolean;
 
   constructor() { }
 

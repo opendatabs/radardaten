@@ -1,11 +1,9 @@
 import {ApplicationRef, ChangeDetectorRef, Component, OnInit, ViewChild} from '@angular/core';
 import {Radar} from "../../shared/radar";
-import { Record } from "../../shared/record";
 import {DataService} from "../../shared/data-service.service";
 import { RecordService } from '../../shared/record.service';
 declare const $: any;
 import * as moment from 'moment';
-import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
 import {WeeklyRecord} from "../../shared/weekly-record";
 import {MeasurementWeek} from "../../shared/measurement-week";
 import {DailyRecord} from "../../shared/daily-record";
@@ -70,7 +68,7 @@ export class MapDetailComponent implements OnInit {
 
   changeDirection() {
     this.currentDay = null;
-    this.getMeasurementsForWeek()
+    this.getMeasurementsForWeek();
   }
 
   getMeasurementsForWeek() {
@@ -82,7 +80,6 @@ export class MapDetailComponent implements OnInit {
       moment(this.selectedMeasurement.startDay).format('YYYY-MM-DD'),
       moment(this.selectedMeasurement.startDay).add(7, 'day').format('YYYY-MM-DD')
     ).subscribe(data => {
-      console.log(data);
       this.currentWeek = data;
       this.ref.tick();
     });
@@ -90,7 +87,7 @@ export class MapDetailComponent implements OnInit {
 
   openDailyView(weeklyRecord: WeeklyRecord) {
     this.dailyHeader = weeklyRecord.weekday.charAt(0).toUpperCase() + weeklyRecord.weekday.slice(1);
-    this.dailyHeader += " ("+moment(weeklyRecord.timestamp).format('DD.MM.YYYY') +")";
+    this.dailyHeader += " (" + moment(weeklyRecord.timestamp).format('DD.MM.YYYY') + ")";
     let direction;
     (this.directionOne) ? direction = 1 : direction = 2;
     this.recordService.getRecordsForDailyView(
@@ -99,9 +96,8 @@ export class MapDetailComponent implements OnInit {
       moment(weeklyRecord.timestamp).format('YYYY-MM-DD'),
       moment(weeklyRecord.timestamp).add(1, 'day' ).format('YYYY-MM-DD')
     ).subscribe((data: DailyRecord[]) => {
-      console.log(data);
       this.currentDay = data;
-    })
+    });
   }
 
   perc2Color(perc: number): string {

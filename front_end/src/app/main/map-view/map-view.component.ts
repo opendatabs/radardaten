@@ -28,7 +28,6 @@ export class MapViewComponent implements OnInit {
       .subscribe(
         res => {
           this.data = res;
-          console.log(this.data)
         },
         err => console.log(err)
       );

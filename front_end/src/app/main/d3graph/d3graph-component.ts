@@ -56,7 +56,7 @@ export class D3graphComponent implements OnInit, OnChanges {
     d3Service: D3Service,
     private dataService: DataService,
     private colorService: ColorService
-  ){
+  ) {
     this.d3 = d3Service.getD3();
     this.parentNativeElement = element.nativeElement;
     moment.locale('de-ch');
@@ -92,13 +92,14 @@ export class D3graphComponent implements OnInit, OnChanges {
       self.data = this.data;
 
       const weekDomain = ['Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag', 'Samstag', 'Sonntag'];
-      const hoursDomain = ['00:00', '01:00', '02:00', '03:00', '04:00', '05:00', '06:00', '07:00', '08:00', '09:00', '10:00', '11:00', '12:00', '13:00', '14:00', '15:00',
-        '16:00', '17:00', '18:00', '19:00', '20:00', '21:00', '22:00', '23:00'];
+      const hoursDomain = ['00:00', '01:00', '02:00', '03:00', '04:00', '05:00', '06:00', '07:00', '08:00',
+      '09:00', '10:00', '11:00', '12:00', '13:00', '14:00', '15:00', '16:00', '17:00', '18:00', '19:00',
+      '20:00', '21:00', '22:00', '23:00'];
       let domain;
       (self.groupBy === 'days') ? domain = weekDomain : domain = hoursDomain;
       self.xScale = d3.scaleBand()
         .domain(domain)
-        .range([0, (self.width - (2*self.padding))])
+        .range([0, (self.width - (2 * self.padding))])
         .padding(.1);
 
       const avgDomain = [self.speedLimit + 15, 0];
