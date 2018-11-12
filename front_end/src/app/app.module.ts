@@ -4,7 +4,6 @@ import {NgModule} from '@angular/core';
 import {AppRoutingModule} from './app-routing.module';
 
 import {AppComponent} from './app.component';
-import {MainComponent} from './main/main.component';
 import {NavbarComponent} from './navbar/navbar.component';
 import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 import {MapComponent} from './main/map/map.component';
@@ -34,7 +33,6 @@ import { AuthService } from './shared/auth.service';
 @NgModule({
   declarations: [
     AppComponent,
-    MainComponent,
     NavbarComponent,
     MapComponent,
     MapViewComponent,
