@@ -1,4 +1,4 @@
-import {Record} from "./record";
+import { Record } from './record';
 
 export interface Radar {
   avgSpeed: number;

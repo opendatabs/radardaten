@@ -7,35 +7,49 @@ app-map-tooltip {
 /* Small screen */
 /* Used for small screen or phone */
 @media (min-width: 576px) {
-  /* change this, by default 540px */
+  /* default 540px */
    .container {
-     max-width: 530px;
+     max-width: 540px;
   }
 }
 
 /* Medium screen */
 /* Used for medium screen or tablet */
 @media (min-width: 768px) {
-  /* change this, by default 720px */
+  /* default 720px */
   .container {
-  max-width: 710px;
+  max-width: 720px;
   }
 }
 
 /* Large screen */
 /* Used for large screen, Laptop or Desktop */
 @media (min-width: 992px) {
-  /* change this, by default 960px */
+  /* 960px */
   .container {
-    max-width: 950px;
+    max-width: 960px;
   }
 }
 
 /* Extra large screen */
 /* Used for extra large screen or desktop */
 @media (min-width: 1200px) {
-  /* change this, by default 1140px */
+  /* default 1140px */
   .container {
-    max-width: 970px;
+    max-width: 1140px;
+  }
+}
+
+/* All bigger screens */
+@media (min-width: 1400px) {
+  .container {
+    max-width: 1320px;
+  }
+}
+
+/* All bigger screens */
+@media (min-width: 1600px) {
+  .container {
+    max-width: 1520px;
   }
 }

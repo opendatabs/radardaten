@@ -1,3 +1,4 @@
+const moment = require('moment');
 /**
  * RadarController
  *
@@ -6,10 +7,13 @@
  */
 
 module.exports = {
+
   addRadar(req, res) {
+    moment.locale('de-ch');
     const radar = {
       streetName: req.body.streetName,
       speedLimit: parseInt(req.body.speedLimit),
+      date: moment().format('L'),
       long: 0,
       lat: 0,
       directionOneLong: 0,

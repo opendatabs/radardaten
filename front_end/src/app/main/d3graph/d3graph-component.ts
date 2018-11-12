@@ -12,13 +12,13 @@ import {
   Selection,
   Transition
 } from 'd3-ng2-service';
-import {DataService} from "../../shared/data-service.service";
+import { DataService } from '../../shared/data-service.service';
 import * as moment from 'moment';
-import {ColorService} from "../../shared/color.service";
-import {WeeklyRecord} from "../../shared/weekly-record";
-import {Radar} from "../../shared/radar";
+import { ColorService } from '../../shared/color.service';
+import { WeeklyRecord } from '../../shared/weekly-record';
+import { Radar } from '../../shared/radar';
 
-declare var $:any;
+declare var $: any;
 
 @Component({
   selector: 'app-d3graph',
@@ -41,9 +41,9 @@ export class D3graphComponent implements OnInit, OnChanges {
 
   private svg: any;
   private colors: any = [];
-  private padding: number = 50;
+  private padding = 50;
   private width: number;
-  private height: number = 300;
+  private height = 300;
   private xScale: any;
   private yScale: any;
   private xAxis: any;
@@ -52,9 +52,7 @@ export class D3graphComponent implements OnInit, OnChanges {
 
   constructor(
     element: ElementRef,
-    private ngZone: NgZone,
     d3Service: D3Service,
-    private dataService: DataService,
     private colorService: ColorService
   ) {
     this.d3 = d3Service.getD3();
@@ -62,8 +60,7 @@ export class D3graphComponent implements OnInit, OnChanges {
     moment.locale('de-ch');
   }
 
-  ngOnInit() {
-  }
+  ngOnInit() { }
 
   ngOnChanges(changes: any) {
     if (changes.data && changes.data.currentValue && !changes.data.previousValue) {
@@ -78,9 +75,9 @@ export class D3graphComponent implements OnInit, OnChanges {
   }
 
   initChart() {
-    let self = this;
-    let d3 = this.d3;
-    this.width = $("#map").width();
+    const self = this;
+    const d3 = this.d3;
+    this.width = $('#map').width();
 
     $(this.parentNativeElement).find('svg').remove();
     if (this.parentNativeElement !== null) {
@@ -108,7 +105,7 @@ export class D3graphComponent implements OnInit, OnChanges {
 
       self.yScale = d3.scaleLinear()
         .domain(domain)
-        .range([0, (self.height- (2*self.padding))]);
+        .range([0, (self.height - (2 * self.padding))]);
 
       self.xAxis = d3.axisBottom(self.xScale) // d3.js v.4
         .scale(self.xScale)
@@ -117,35 +114,35 @@ export class D3graphComponent implements OnInit, OnChanges {
       const avgAxis = d3.axisLeft(self.yScale) // d3.js v.4
         .scale(self.yScale)
         .ticks(7)
-        .tickFormat(d => d + " km/h");
+        .tickFormat(d => d + ' km/h');
       const speedingQuoteAxis = d3.axisLeft(self.yScale) // d3.js v.4
         .scale(self.yScale)
         .ticks(7)
-        .tickFormat(self.d3.format(".0%"));
+        .tickFormat(self.d3.format('.0%'));
 
       (self.measure === 'average') ? self.yAxis = avgAxis : self.yAxis = speedingQuoteAxis;
 
-      self.svg.append("g")
-        .attr("class", "axis")
-        .attr("transform", "translate(" + (self.padding) + "," + self.padding + ")")
+      self.svg.append('g')
+        .attr('class', 'axis')
+        .attr('transform', 'translate(' + (self.padding) + ',' + self.padding + ')')
         .call(self.yAxis);
 
       self.svg.append('g')            // create a <g> element
         .attr('class', 'axis')   // specify classes
-        .attr("transform", "translate(" + self.padding + "," + (self.height - self.padding) + ")")
+        .attr('transform', 'translate(' + self.padding + ',' + (self.height - self.padding) + ')')
         .call(self.xAxis);            // let the axis do its thing
     }
   }
 
   updateChart() {
 
-    let self = this;
+    const self = this;
 
-    let countMax = self.d3.max(self.data.map(d => d.count));
+    const countMax = self.d3.max(self.data.map(d => d.count));
 
-    let div = this.d3.select("body").append("div")
-      .attr("class", "tooltip")
-      .style("opacity", 0);
+    const div = this.d3.select('body').append('div')
+      .attr('class', 'tooltip')
+      .style('opacity', 0);
 
     self.rects = self.svg.selectAll('rect')
       .data(self.data);
@@ -153,7 +150,7 @@ export class D3graphComponent implements OnInit, OnChanges {
     self.rects
       .enter()
       .append('rect')
-      .attr('x', function(d,i) {
+      .attr('x', function(d, i) {
         if (self.groupBy === 'days') {
           return self.xScale(moment(d.timestamp).format('dddd')) + self.padding;
         } else {
@@ -167,12 +164,12 @@ export class D3graphComponent implements OnInit, OnChanges {
           return self.yScale(d.speedingQuote) + self.padding;
         }
       })
-      // .attr("transform","translate(" + (self.padding -5  + 25) + "," + (self.padding - 5) + ")")
+      // .attr('transform','translate(' + (self.padding -5  + 25) + ',' + (self.padding - 5) + ')')
       .attr('height', function(d) {
         if (self.measure === 'average') {
-          return self.height - self.yScale(d.avgSpeed) - (2 * self.padding)
+          return self.height - self.yScale(d.avgSpeed) - (2 * self.padding);
         } else {
-          return self.height - self.yScale(d.speedingQuote) - (2 * self.padding)
+          return self.height - self.yScale(d.speedingQuote) - (2 * self.padding);
         }
       })
       .attr('width', self.xScale.bandwidth())
@@ -184,27 +181,27 @@ export class D3graphComponent implements OnInit, OnChanges {
       })
       .attr('stroke', 'black')
       .classed('clickable', this.clickable)
-      .on("mouseover", function(d) {
+      .on('mouseover', function(d) {
         div.transition()
           .duration(200)
-          .style("opacity", .9);
-        div.html(`Geschwindigkeitslimite: 
-<span class="kmh-limit mb-2 ml-2">${self.speedLimit}</span><br>
+          .style('opacity', .9);
+        div.html(`Geschwindigkeitslimite:
+<span class='kmh-limit mb-2 ml-2'>${self.speedLimit}</span><br>
 Übertretungsquote: ${Math.round(d.speedingQuote * 100)}%<br>
-Durchschnittsgeschwindigkeit: ${Math.round(d.avgSpeed*100)/100}<br>
+Durchschnittsgeschwindigkeit: ${Math.round(d.avgSpeed * 100) / 100}<br>
 Anzahl Fahrzeuge: ${d.count}<br/>
 <br/>`)
-          .style("left", (self.d3.event.pageX + 20) + "px")
-          .style("top", (self.d3.event.pageY - 28) + "px");
+          .style('left', (self.d3.event.pageX + 20) + 'px')
+          .style('top', (self.d3.event.pageY - 28) + 'px');
       })
       .on('mousemove', function (d) {
-        div.style("left", (self.d3.event.pageX + 20) + "px")
-          .style("top", (self.d3.event.pageY - 28) + "px");
+        div.style('left', (self.d3.event.pageX + 20) + 'px')
+          .style('top', (self.d3.event.pageY - 28) + 'px');
       })
-      .on("mouseout", function(d) {
+      .on('mouseout', function(d) {
         div.transition()
           .duration(500)
-          .style("opacity", 0);
+          .style('opacity', 0);
       })
       .on('click', function(d) {
         if (self.clickable) {
@@ -214,7 +211,7 @@ Anzahl Fahrzeuge: ${d.count}<br/>
 
     self.rects
       .transition()
-      .attr('x', function(d,i) {
+      .attr('x', function(d, i) {
         if (self.groupBy === 'days') {
           return self.xScale(moment(d.timestamp).format('dddd')) + self.padding;
         } else {
@@ -228,12 +225,12 @@ Anzahl Fahrzeuge: ${d.count}<br/>
           return self.yScale(d.speedingQuote) + self.padding;
         }
       })
-      // .attr("transform","translate(" + (self.padding -5  + 25) + "," + (self.padding - 5) + ")")
+      // .attr('transform','translate(' + (self.padding -5  + 25) + ',' + (self.padding - 5) + ')')
       .attr('height', function(d) {
         if (self.measure === 'average') {
-          return self.height - self.yScale(d.avgSpeed) - (2 * self.padding)
+          return self.height - self.yScale(d.avgSpeed) - (2 * self.padding);
         } else {
-          return self.height - self.yScale(d.speedingQuote) - (2 * self.padding)
+          return self.height - self.yScale(d.speedingQuote) - (2 * self.padding);
         }
       })
       .attr('width', self.xScale.bandwidth())
@@ -255,8 +252,8 @@ Anzahl Fahrzeuge: ${d.count}<br/>
         .attr('y2', self.yScale(self.speedLimit) + self.padding)
         .attr('x1', self.padding)
         .attr('x2', self.width + self.padding)
-        .style('stroke', "rgb(255,0,0)")
-        .style('stroke-width', '2')
+        .style('stroke', 'rgb(255,0,0)')
+        .style('stroke-width', '2');
     }
   }
 }

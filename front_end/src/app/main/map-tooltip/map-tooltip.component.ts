@@ -1,7 +1,7 @@
-import {Component, Input, OnChanges, OnInit, ElementRef} from '@angular/core';
-import {Radar} from "../../shared/radar";
-import {ColorService} from "../../shared/color.service";
-declare var $:any;
+import { Component, OnInit } from '@angular/core';
+import { Radar } from '../../shared/radar';
+import { ColorService } from '../../shared/color.service';
+declare var $: any;
 
 @Component({
   selector: 'app-map-tooltip',
@@ -12,8 +12,8 @@ export class MapTooltipComponent implements OnInit {
 
   pxLeft: number;
   pxTop: number;
-  display: string = 'none';
-  transform: string = '';
+  display = 'none';
+  transform = '';
   content: Radar;
 
   constructor(
@@ -25,9 +25,9 @@ export class MapTooltipComponent implements OnInit {
 
   showTooltip(pxLeft: number, pxTop: number, radar: Radar) {
     // TODO adaptable tooltip
-    // let tooltipWidht = $("#tooltip").width();
+    // let tooltipWidht = $('#tooltip').width();
     this.pxTop = pxTop;
-    // if (this.pxLeft <= $("#map").width() / 2)
+    // if (this.pxLeft <= $('#map').width() / 2)
     //   this.pxLeft = pxLeft - tooltipWidht - 10;
     // else
       this.pxLeft = pxLeft;

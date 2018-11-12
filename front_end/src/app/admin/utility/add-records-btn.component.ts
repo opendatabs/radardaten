@@ -103,6 +103,7 @@ export class AddRecordsBtnComponent implements ViewCell, OnInit, OnDestroy {
           this.creationCounter += 50;
           this.progress = Math.ceil((this.creationCounter / this.foundMatches) * 100 );
         }
+        // TODO: explain
         if (this.progress > 98 || this.foundMatches < 50) {
           this.loading = false;
           this.success = true;

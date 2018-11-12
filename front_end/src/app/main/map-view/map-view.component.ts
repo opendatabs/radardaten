@@ -1,10 +1,7 @@
-import {ApplicationRef, ChangeDetectorRef, Component, OnInit, ViewChild} from '@angular/core';
-import {DataService} from "../../shared/data-service.service";
-import {Radar} from "../../shared/radar";
-import {Record} from "../../shared/record";
-import {MapDetailComponent} from "../map-detail/map-detail.component";
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { Radar } from '../../shared/radar';
+import { MapDetailComponent} from '../map-detail/map-detail.component';
 import { RadarService } from '../../shared/radar.service';
-import {CalculatorService} from "../../shared/calculator.service";
 
 @Component({
   selector: 'app-map-view',
@@ -17,13 +14,10 @@ export class MapViewComponent implements OnInit {
   data: Radar[];
 
   constructor(
-    private dataService: DataService,
     private radarService: RadarService,
-    private ref: ApplicationRef
 ) { }
 
   ngOnInit() {
-    // this.dataService.getMapData().subscribe((data:Radar[]) => {
     this.radarService.getRadarWithAvgSpeedAndSpeedingQuote()
       .subscribe(
         res => {

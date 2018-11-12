@@ -6,17 +6,17 @@
  */
 
 const moment = require('moment');
+moment.locale('de-ch');
 
 module.exports = {
-
   attributes: {
     streetName: {
       type: 'string'
     },
     date: {
-      type: 'dateTime',
+      type: 'string',
       defaultsTo: () => {
-        moment().format("YYYY-MM-DD HH:mm:ss");
+        moment().format("L");
       }
     },
     long: {

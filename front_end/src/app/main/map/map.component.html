@@ -1,9 +1,11 @@
-<div id="map"
-    class="w-80"
-    style="height: 500px;"
-    leaflet
-    [leafletOptions]="options"
-    [leafletLayers]="layers"
-    (leafletMapReady)="onMapReady($event)">
+<div class="container">
+    <div id="map"
+        class="w-80"
+        style="height: 500px;"
+        leaflet
+        [leafletOptions]="options"
+        [leafletLayers]="layers"
+        (leafletMapReady)="onMapReady($event)">
+    </div>
+    <app-map-tooltip></app-map-tooltip>
 </div>
-<app-map-tooltip></app-map-tooltip>

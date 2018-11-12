@@ -14,7 +14,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 export class AppComponent implements OnInit, AfterViewInit {
   title = 'Geschwindigkeitserhebungen des Kantons Basel-Stadt';
   admin: boolean;
-  firstDisplay = true;
+  firstDisplay = true; // TODO: Change to "true" in production
   @ViewChild('content') content: ElementRef;
 
   constructor(

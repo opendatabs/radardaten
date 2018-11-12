@@ -1,11 +1,8 @@
-import {
-  ApplicationRef, ChangeDetectorRef, Component, EventEmitter, Input, NgZone, OnInit, Output,
-  ViewChild
-} from '@angular/core';
-import {divIcon, latLng, Layer, marker, tileLayer, Map, tooltip} from "leaflet";
-import {MapTooltipComponent} from "../map-tooltip/map-tooltip.component";
-import {Radar} from "../../shared/radar";
-import {ColorService} from "../../shared/color.service";
+import { ApplicationRef, Component, EventEmitter, Input, NgZone, OnInit, Output, ViewChild } from '@angular/core';
+import { divIcon, latLng, Layer, marker, tileLayer, Map } from 'leaflet';
+import { MapTooltipComponent } from '../map-tooltip/map-tooltip.component';
+import { Radar } from '../../shared/radar';
+import { ColorService } from '../../shared/color.service';
 
 declare var $: any;
 
@@ -29,14 +26,15 @@ export class MapComponent implements OnInit {
     layers: [
       tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {attribution: '...'}),
     ],
-    zoom: 13,
+    zoom: 14,
     center: latLng(47.55814, 7.58769)
   };
 
-  constructor(private ref: ApplicationRef,
-              private colorService: ColorService,
-              private zone: NgZone) {
-  }
+  constructor(
+    private ref: ApplicationRef,
+    private colorService: ColorService,
+    private zone: NgZone
+  ) { }
 
   ngOnInit() {
     this.createCircleMarkers();
@@ -54,7 +52,7 @@ export class MapComponent implements OnInit {
     );
     this.map.setMinZoom(10);
     const self = this;
-    this.map.on('zoomend', this.onZoom.bind(this, self))
+    this.map.on('zoomend', this.onZoom.bind(this, self));
   }
 
   onZoom(self) {
@@ -68,49 +66,49 @@ export class MapComponent implements OnInit {
 
   createCircleMarkers() {
     let mark;
-    let self = this;
+    const self = this;
     this.data.forEach((d: Radar, index: number) => {
-      let maxSpeed = Math.max(d.speedingQuoteDir1, d.speedingQuoteDir2);
-      let color = this.colorService.perc2color(maxSpeed * 100);
-      let i = divIcon({
-        html: "<svg width='12' height='12' class='svg-marker'>" +
-        "<circle cx='7' cy='7' fill='" + color + "' class='circle' r='7' id='circle" + index + "'></circle>" +
-        "</svg>"
+      const maxSpeed = Math.max(d.speedingQuoteDir1, d.speedingQuoteDir2);
+      const color = this.colorService.perc2color(maxSpeed * 100);
+      const i = divIcon({
+        html: `<svg width='12' height='12' class='svg-marker'>
+        <circle cx='7' cy='7' fill="${color}" class='circle' r='7' id=circle${index}></circle>
+        </svg>`
       });
 
       mark = marker([d.lat, d.long], {
         icon: i
       }).on('mouseover', function () {
-        self.showPopup(this, self, d)
+        self.showPopup(this, self, d);
       }).on('mouseout', function () {
-        self.hidePopup()
+        self.hidePopup();
       }).on('click', function () {
         $('#map').find('.active').removeClass('active');
-        $("#circle" + index).addClass('active');
+        $('#circle' + index).addClass('active');
         self.zone.run(() => {
           self.openDetails(d);
         });
       });
       this.circleMarkers.push(mark);
-    })
+    });
   }
 
   createArrowMarkers() {
     let mark;
-    let self = this;
+    const self = this;
     this.data.forEach((d: Radar, index: number) => {
-      let directionDegrees = this.calculateDirectionDegrees(d);
+      const directionDegrees = this.calculateDirectionDegrees(d);
       // todo: replace by speeding quote and for two directions
-      let color1 = this.colorService.perc2color(d.speedingQuoteDir1 * 100);
-      let color2 = this.colorService.perc2color(d.speedingQuoteDir2 * 100);
+      const color1 = this.colorService.perc2color(d.speedingQuoteDir1 * 100);
+      const color2 = this.colorService.perc2color(d.speedingQuoteDir2 * 100);
       // create a random ID for marker to ensure unique ids.
-      let randomId = Math.floor(Math.random() * Math.floor(100000));
-      let i = divIcon({
+      const randomId = Math.floor(Math.random() * Math.floor(100000));
+      const i = divIcon({
         html: `
         <svg width="34px" height="36px" class="arrowSvg">
         <defs>
           <marker id="arrow1_${randomId}" markerWidth="10" markerHeight="10" refX="0" refY="1.5" orient="auto" markerUnits="strokeWidth">
-            <path d="M0,0 L0,3 L3,1.5 z" fill="${color1}" /> 
+            <path d="M0,0 L0,3 L3,1.5 z" fill="${color1}" />
           </marker>
           <marker id="arrow2_${randomId}" markerWidth="10" markerHeight="10" refX="0" refY="1.5" orient="auto" markerUnits="strokeWidth">
             <path d="M0,0 L0,3 L3,1.5 z" fill="${color2}" />
@@ -125,7 +123,6 @@ export class MapComponent implements OnInit {
         <line x1="31" y1="25" x2="15" y2="25" stroke="black" stroke-width="6" marker-end="url(#arrow_black_${randomId})" />
         <line x1="30" y1="25" x2="15" y2="25" stroke="${color2}" stroke-width="4" marker-end="url(#arrow2_${randomId})" />
         </g>
-      
       </svg>
       `
       });
@@ -133,17 +130,17 @@ export class MapComponent implements OnInit {
       mark = marker([d.lat, d.long], {
         icon: i
       }).on('mouseover', function () {
-        self.showPopup(this, self, d)
+        self.showPopup(this, self, d);
       }).on('mouseout', function () {
-        self.hidePopup()
+        self.hidePopup();
       }).on('click', function () {
         $('#map').find('.active').removeClass('active');
-        $("#circle" + index).addClass('active');
-        self.showPopup(this, self, d)
+        $('circle' + index).addClass('active');
+        self.showPopup(this, self, d);
         self.openDetails(d);
       });
       this.arrowMarkers.push(mark);
-    })
+    });
   }
 
   showPopup(lefletElement: any, self: MapComponent, radar: Radar): void {
@@ -167,15 +164,15 @@ export class MapComponent implements OnInit {
   }
 
   angleFromCoordinate(lat1: number, lng1: number, lat2: number, lng2: number) {
-    let dLon = (lng2 - lng1);
-    let y = Math.sin(dLon) * Math.cos(lat2);
-    let x = Math.cos(lat1) * Math.sin(lat2) - Math.sin(lat1) * Math.cos(lat2) * Math.cos(dLon);
-    let rad = Math.atan2(y, x);
-    let brng = rad * 180 / Math.PI;
+    const dLon = (lng2 - lng1);
+    const y = Math.sin(dLon) * Math.cos(lat2);
+    const x = Math.cos(lat1) * Math.sin(lat2) - Math.sin(lat1) * Math.cos(lat2) * Math.cos(dLon);
+    const rad = Math.atan2(y, x);
+    const brng = rad * 180 / Math.PI;
     return 360 - ((brng + 360) % 360) + 90;
   }
 
   private calculateDirectionDegrees(d: Radar) {
-    return this.angleFromCoordinate(d.directionOneLat, d.directionOneLong, d.directionTwoLat, d.directionTwoLong)
+    return this.angleFromCoordinate(d.directionOneLat, d.directionOneLong, d.directionTwoLat, d.directionTwoLong);
   }
 }

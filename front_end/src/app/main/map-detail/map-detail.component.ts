@@ -1,13 +1,12 @@
-import {ApplicationRef, ChangeDetectorRef, Component, OnInit, ViewChild} from '@angular/core';
-import {Radar} from "../../shared/radar";
-import {DataService} from "../../shared/data-service.service";
+import { ApplicationRef, Component, OnInit } from '@angular/core';
+import { Radar } from '../../shared/radar';
 import { RecordService } from '../../shared/record.service';
-declare const $: any;
+import { WeeklyRecord } from '../../shared/weekly-record';
+import { MeasurementWeek } from '../../shared/measurement-week';
+import { DailyRecord } from '../../shared/daily-record';
+import { ColorService } from '../../shared/color.service';
 import * as moment from 'moment';
-import {WeeklyRecord} from "../../shared/weekly-record";
-import {MeasurementWeek} from "../../shared/measurement-week";
-import {DailyRecord} from "../../shared/daily-record";
-import {ColorService} from "../../shared/color.service";
+declare const $: any;
 
 @Component({
   selector: 'app-map-detail',
@@ -20,17 +19,16 @@ export class MapDetailComponent implements OnInit {
   measurements: MeasurementWeek[];
   selectedMeasurement: MeasurementWeek;
   radar: Radar;
-  visible: boolean = false;
-  loading: boolean = false;
-  header: string = "";
+  visible = false;
+  loading = false;
+  header = '';
   currentWeek: WeeklyRecord[];
-  directionOne: boolean = true;
-  measure: string = 'speedingQuote';
+  directionOne = true;
+  measure = 'speedingQuote';
   currentDay: DailyRecord[];
   dailyHeader: string;
 
   constructor(
-    private dataService: DataService,
     private recordService: RecordService,
     private ref: ApplicationRef,
     private colorService: ColorService
@@ -87,7 +85,7 @@ export class MapDetailComponent implements OnInit {
 
   openDailyView(weeklyRecord: WeeklyRecord) {
     this.dailyHeader = weeklyRecord.weekday.charAt(0).toUpperCase() + weeklyRecord.weekday.slice(1);
-    this.dailyHeader += " (" + moment(weeklyRecord.timestamp).format('DD.MM.YYYY') + ")";
+    this.dailyHeader += ' (' + moment(weeklyRecord.timestamp).format('DD.MM.YYYY') + ')';
     let direction;
     (this.directionOne) ? direction = 1 : direction = 2;
     this.recordService.getRecordsForDailyView(

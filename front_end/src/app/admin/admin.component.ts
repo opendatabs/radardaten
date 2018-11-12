@@ -1,16 +1,14 @@
-import { Component, Input, Output, OnInit, EventEmitter } from '@angular/core';
+import { Component, Output, OnInit, EventEmitter } from '@angular/core';
 import { RadarService } from '../shared/radar.service';
-import { RecordService } from '../shared/record.service';
-import { Ng2SmartTableModule, LocalDataSource } from 'ng2-smart-table';
+import { LocalDataSource } from 'ng2-smart-table';
 import { Radar } from '../shared/radar';
 import { AddRecordsBtnComponent } from './utility/add-records-btn.component';
 import { SelectCoordinatesComponent } from '../main/select-coordinates/select-coordinates.component';
 import { HttpErrorResponse } from '@angular/common/http';
-import { CalculatorService } from '../shared/calculator.service';
 import { DatepickerComponent } from './utility/datepicker.component';
-import * as moment from 'moment';
-import * as $ from 'jquery';
 import { AuthService } from '../shared/auth.service';
+// import * as moment from 'moment';
+import * as $ from 'jquery';
 
 @Component({
   selector: 'app-admin',
@@ -30,7 +28,7 @@ export class AdminComponent implements OnInit {
   data: any[];
   source: LocalDataSource;
 
-  filterActive: boolean = false;
+  filterActive = false;
   error: any;
 
 
@@ -41,16 +39,18 @@ export class AdminComponent implements OnInit {
         filter: false,
       },
       date: {
-        title: 'Messbeginn',
+        title: 'Hinzugefügt am',
         filter: false,
-        type: 'html',
-        valuePrepareFunction: value => {
-          return moment(value).format('L');
-        },
-        editor: {
-          type: 'custom',
-          component: DatepickerComponent,
-        },
+        editable: false,
+        addable: false,
+        // type: 'html',
+        // valuePrepareFunction: value => {
+        //   return moment(value).format('L');
+        // },
+        // editor: {
+        //   type: 'custom',
+        //   component: DatepickerComponent,
+        // },
       },
       speedLimit: {
         title: 'Limite (km/h)',
@@ -148,7 +148,7 @@ export class AdminComponent implements OnInit {
     private radarService: RadarService,
     private authService: AuthService
   ) {
-    moment.locale('de-ch');
+    // moment.locale('de-ch');
   }
 
   ngOnInit() {
@@ -158,9 +158,9 @@ export class AdminComponent implements OnInit {
     }
   }
 
-  onClickDelete(event){
+  onClickDelete(event) {
     if (confirm(`
-    Wollen Sie den Eintrag und alle damit verbundenen 
+    Wollen Sie den Eintrag und alle damit verbundenen
     Messungen und Koordinaten wirklich löschen?`)) {
       if (event.data.hasOwnProperty('id')) {
         const radar: Radar = event.data;
@@ -240,8 +240,9 @@ export class AdminComponent implements OnInit {
 
   private validateSpeed(speed: number): number {
       // cast string to number; NaN if cast is flawed
-      if (!isNaN(Number(speed)) && speed > 0 && speed < 120)
+      if (!isNaN(Number(speed)) && speed > 0 && speed < 120) {
         return Number(speed);
+      }
       return 1;
   }
 
