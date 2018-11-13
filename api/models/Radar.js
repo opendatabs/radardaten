@@ -13,12 +13,6 @@ module.exports = {
     streetName: {
       type: 'string'
     },
-    date: {
-      type: 'string',
-      defaultsTo: () => {
-        moment().format("L");
-      }
-    },
     long: {
       type: 'float',
       defaultsTo: 0
@@ -43,16 +37,8 @@ module.exports = {
       type: 'float',
       defaultsTo: 0
     },
-    speedingQuote: {
-      type: 'integer',
-      defaultsTo: 0
-    },
     speedLimit: {
       type: 'integer',
-      defaultsTo: 0
-    },
-    avgSpeed: {
-      type: 'float',
       defaultsTo: 0
     },
     records: {

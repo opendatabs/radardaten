@@ -5,7 +5,7 @@ import { AdminComponent } from './admin/admin.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'karte', pathMatch: 'full' },
-  { path: 'karte', component: MapViewComponent }, // TODO: Change to Main component
+  { path: 'karte', component: MapViewComponent },
   { path: 'admin', component: AdminComponent },
   { path: 'login', component: MapViewComponent },
 ];

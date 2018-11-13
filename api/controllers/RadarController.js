@@ -13,7 +13,6 @@ module.exports = {
     const radar = {
       streetName: req.body.streetName,
       speedLimit: parseInt(req.body.speedLimit),
-      date: moment().format('L'),
       long: 0,
       lat: 0,
       directionOneLong: 0,
@@ -40,8 +39,6 @@ module.exports = {
         speedLimit: parseInt(req.body.speedLimit),
         lat: req.body.lat,
         long: req.body.long,
-        date: req.body.date,
-        recordCount: req.body.recordCount,
         directionOneLat: req.body.directionOneLat,
         directionOneLong: req.body.directionOneLong,
         directionTwoLat: req.body.directionTwoLat,
@@ -57,11 +54,12 @@ module.exports = {
       })
   },
 
+  // TODO: Cron to do this
   updateRecordCount(req, res){
     Record.find({ radar: req.body.id })
     .exec( (err, recordTotal) => {
       // void => signal that the return value is unimportant. TODO add handleError(err) function
-      if (err) return void res.json(500, { error: 'Validierungsfehler: Keine assozierte Messungen' });
+      if (err) return void res.json(500, { error: 'Validierungsfehler: Keine assoziierten Messungen' });
 
       const total = recordTotal.length;
       Radar.update({ id: req.body.id }, { recordCount: total })

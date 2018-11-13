@@ -31,18 +31,17 @@ export class AdminComponent implements OnInit {
   filterActive = false;
   error: any;
 
-
   settings = {
     columns: {
       streetName: {
         title: 'Strasse & Nr.',
         filter: false,
       },
-      date: {
-        title: 'Hinzugefügt am',
-        filter: false,
-        editable: false,
-        addable: false,
+      // date: {
+      //   title: 'Hinzugefügt am',
+      //   filter: false,
+      //   editable: false,
+      //   addable: false,
         // type: 'html',
         // valuePrepareFunction: value => {
         //   return moment(value).format('L');
@@ -51,7 +50,7 @@ export class AdminComponent implements OnInit {
         //   type: 'custom',
         //   component: DatepickerComponent,
         // },
-      },
+      // },
       speedLimit: {
         title: 'Limite (km/h)',
         filter: false,
@@ -73,12 +72,24 @@ export class AdminComponent implements OnInit {
         filter: false,
         editable: false,
         addable: false,
+        valuePrepareFunction: (value) => {
+          if (value) {
+            return (value * 100).toFixed(2) + '%';
+          }
+          return 0;
+        }
       },
       speedingQuoteDir2: {
         title: 'Übertr.quote R2',
         filter: false,
         editable: false,
         addable: false,
+        valuePrepareFunction: (value) => {
+          if (value) {
+            return (value * 100).toFixed(2) + '%';
+          }
+          return 0;
+        }
       },
       locationButton: {
         title: 'Koordinaten',
@@ -155,6 +166,24 @@ export class AdminComponent implements OnInit {
     this.authService.currentAdminState.subscribe(admin => this.admin = admin);
     if (!this.data) {
       this.getData();
+    }
+  }
+
+/*
+  TODO: Eventually add something like the function below if too many onUserRowSelects
+  are to resource intensive
+  */
+  // onRefresh(selected, newValues) {
+  //   if (selected && newValues) {
+  //     this.source.update(selected, newValues);
+  //   }
+  // }
+
+  onUserRowSelect(event): void {
+    if (event.selected.length) {
+      this.radarService.getRadar(event.selected[0].id).subscribe(
+        e => this.source.update(event.selected[0], e) // update(selected object, new values)
+      );
     }
   }
 

@@ -6,7 +6,7 @@ import * as $ from 'jquery';
 import { SailsClientService } from '../../shared/sails-client.service';
 import { environment } from '../../../environments/environment';
 import { Observable } from 'rxjs/Observable';
-import { count } from 'rxjs/operators';
+// import { count } from 'rxjs/operators';
 
 @Component({
   selector: 'app-add-records-btn',
@@ -162,6 +162,8 @@ export class AddRecordsBtnComponent implements ViewCell, OnInit, OnDestroy {
         .subscribe(
           res => {
             this.foundMatches = res.foundMatches;
+            // console.log('Should be: ' + this.rowData.Recordcount);
+            this.updateRecordCount();
           },
           err => {
             this.loading = false;
@@ -180,8 +182,8 @@ export class AddRecordsBtnComponent implements ViewCell, OnInit, OnDestroy {
 
   updateRecordCount(): void {
     this.radarService.updateRecordCount(this.rowData).subscribe(
-      res => console.log(res),
-      err => console.log(err)
+      res => console.log('Recordcount updated', res),
+      err => console.error('Reocrdcount could not be updated', err)
     );
   }
 }

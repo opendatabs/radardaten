@@ -24,13 +24,12 @@ export class MapTooltipComponent implements OnInit {
   }
 
   showTooltip(pxLeft: number, pxTop: number, radar: Radar) {
-    // TODO adaptable tooltip
     // let tooltipWidht = $('#tooltip').width();
     this.pxTop = pxTop;
     // if (this.pxLeft <= $('#map').width() / 2)
     //   this.pxLeft = pxLeft - tooltipWidht - 10;
     // else
-      this.pxLeft = pxLeft;
+    this.pxLeft = pxLeft;
     this.display = 'block';
     this.transform = $('.leaflet-map-pane').css('transform');
     this.content = radar;

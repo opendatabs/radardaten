@@ -3,7 +3,7 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { SailsService } from 'angular2-sails';
 import { environment } from '../environments/environment';
 import { AuthService } from './shared/auth.service';
-import { Router, ActivatedRoute } from '@angular/router';
+import { Router } from '@angular/router';
 
 
 @Component({
@@ -14,7 +14,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 export class AppComponent implements OnInit, AfterViewInit {
   title = 'Geschwindigkeitserhebungen des Kantons Basel-Stadt';
   admin: boolean;
-  firstDisplay = true; // TODO: Change to "true" in production
+  firstDisplay = true; // Should be "true" in production
   @ViewChild('content') content: ElementRef;
 
   constructor(

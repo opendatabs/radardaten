@@ -8,7 +8,7 @@ const moment = require('moment');
 
 module.exports = {
   addRecords(req, res) {
-    console.log('New socket connection!', req)
+    // console.log('New socket connection!', req)
     return res.send('myreply')
   },
 

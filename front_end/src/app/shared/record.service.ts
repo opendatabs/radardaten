@@ -34,7 +34,6 @@ export class RecordService {
     return this.http.get<MeasurementWeek[]>(this.api + `measurementWeeks?radarId=${radarId}&direction=${direction}`);
   }
 
-  // TODO: Add interface, change returntype
   addRecords(records: { id: number, text: string }): Observable<any> {
     return this.http.post<{ id: number, text: string }>(this.api + 'addRecords', records);
   }
@@ -49,7 +48,7 @@ export class RecordService {
     &startDay=${startDay}&endDay=${endDay}`);
   }
   updateRecord(record: any): Observable<Record> {
-    return this.http.patch<Record>(this.api + record.id, record); // TODO: add input "record" But what about non existing ID?!?!
+    return this.http.patch<Record>(this.api + record.id, record);
   }
 
   deleteRecord(record: any): Observable<Record> {

@@ -31,6 +31,5 @@ export class DatepickerComponent extends DefaultEditor {
 
   onChange(event: any) {
     this.cell.newValue = event.target.value;
-    // TODO: store previous date value when edit is open
   }
 }

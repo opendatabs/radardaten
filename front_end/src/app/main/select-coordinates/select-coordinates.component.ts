@@ -1,6 +1,6 @@
 import {ApplicationRef, Component, OnInit, Input, Output, EventEmitter} from '@angular/core';
-import {ModalDismissReasons, NgbModal} from "@ng-bootstrap/ng-bootstrap";
-import {control, divIcon, LatLng, latLng, Layer, Map, marker, Marker, tileLayer} from "leaflet";
+import {ModalDismissReasons, NgbModal} from '@ng-bootstrap/ng-bootstrap';
+import {control, divIcon, LatLng, latLng, Layer, Map, marker, Marker, tileLayer} from 'leaflet';
 import layers = control.layers;
 import { ViewCell} from 'ng2-smart-table';
 import { RadarService } from '../../shared/radar.service';
@@ -104,22 +104,22 @@ export class SelectCoordinatesComponent implements OnInit, ViewCell {
     let color: string;
     switch (this.status) {
       case Status.initial:
-        color = "red";
+        color = 'red';
         this.coordinates = latLng;
         break;
       case Status.direction1:
-        color = "blue";
+        color = 'blue';
         this.direction1 = latLng;
         break;
       case Status.direction2:
-        color = "green";
+        color = 'green';
         this.direction2 = latLng;
         break;
     }
-    let i = divIcon({html: "<svg width='15' height='15' class='svg-marker'>" +
+    const i = divIcon({html: "<svg width='15' height='15' class='svg-marker'>" +
       "<circle cx='7' cy='7' r='7' fill='"+color+"' class='circle'></circle>" +
       "</svg>"});
-    let mark: Marker = marker(latLng, {
+    const mark: Marker = marker(latLng, {
       icon: i
     });
     this.markers.push(mark);
@@ -138,9 +138,9 @@ export class SelectCoordinatesComponent implements OnInit, ViewCell {
   }
 
   submit() {
-    // TODO no refresh after submit!
-    let str = this.coordinates.toString() + "\n" +
-      this.direction1.toString() + "\n" +
+    // TODO: no refresh after submit!
+    const str = this.coordinates.toString() + '\n' +
+      this.direction1.toString() + '\n' +
       this.direction2.toString();
     this.rowData.lat = this.coordinates.lat;
     this.rowData.long = this.coordinates.lng;
@@ -150,7 +150,7 @@ export class SelectCoordinatesComponent implements OnInit, ViewCell {
     this.rowData.directionTwoLong = this.direction2.lng;
     this.radarService.updateRadar(this.rowData).subscribe();
     this.coordinatesBtnLabel = 'Ändern';
-    this.open.emit(this.rowData); // <-- TODO needed to update component data? Evt. remove
+    this.open.emit(this.rowData); // <-- TODO: needed to update component data? Evt. remove
     this.adapted = true;
   }
 
