@@ -22,7 +22,7 @@ export class RadarService {
     return this.http.get<Radar>(this.api + id);
   }
 
-  addRadar(radar: object): Observable<object> { // TODO: how pass <Radar> insted of <object>? ID created in backend
+  addRadar(radar: object): Observable<object> {
     return this.http.post<object>(this.api + 'addRadar', radar);
   }
 

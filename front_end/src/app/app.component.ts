@@ -34,6 +34,9 @@ export class AppComponent implements OnInit, AfterViewInit {
           },
           error => console.log(error));
       }
+      if (this.router.url.indexOf('admin') > -1) {
+        this.firstDisplay = false;
+      }
     });
   }
 
@@ -51,7 +54,7 @@ export class AppComponent implements OnInit, AfterViewInit {
     if (this.firstDisplay) {
       // setTimeout necessary to avoid ExpressionChangedAfterItHasBeenCheckedError
       setTimeout( () => {
-        this.modalService.open(this.content, {size: 'lg'});
+        this.modalService.open(this.content, { size: 'lg' });
         this.firstDisplay = false;
       });
     }

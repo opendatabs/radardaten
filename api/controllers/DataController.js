@@ -5,18 +5,8 @@
  * @help        :: See https://sailsjs.com/docs/concepts/actions
  */
 
-const mysqldump = require('mysqldump');
 const basicAuth = require('basic-auth');
-
-let env = {};
-let connection;
-if (!process.env.NODE_ENV || process.env.NODE_ENV === 'development') {
-  env = require('../../config/env/development');
-  connection = env.dumpConnection;
-} else {
-  env = require('../../config/env/production');
-  connection = env.dumpConnection;
-}
+const fs = require('fs');
 
 module.exports = {
     getMysqlDump: function (req, res) {
@@ -28,14 +18,17 @@ module.exports = {
         return;
       }
       if (user.name === env.dumpUser.username && user.pass === env.dumpUser.password) {
-        let promise = new Promise((resolve, reject) => {
-          const result = mysqldump({ connection });
-          // mysqldump({ connection, dumpToFile: './radarDump.sql'}); // Save dump as file
-          resolve(result);
-        });
-        promise
-          .then(result => res.send(result))
-          .catch(reason => res.send('Error: ' + reason));
+        let file = require('path').resolve(sails.config.appPath + '//' + './download/radarDump.sql')
+
+        if (fs.existsSync(file)) {
+          res.setHeader('Content-disposition', 'attachment; filename=radardaten.sql');
+
+          let filestream = fs.createReadStream(file);
+          filestream.pipe(res);
+
+        } else {
+          res.json({ error: "File not Found" });
+        }
       } else {
         res.statusCode = 401;
         res.setHeader('WWW-Authenticate', 'Basic realm="Secure Area"');

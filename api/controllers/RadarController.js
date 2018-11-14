@@ -54,7 +54,7 @@ module.exports = {
       })
   },
 
-  // TODO: Cron to do this
+  // TODO: Evt. create as cron
   updateRecordCount(req, res){
     Record.find({ radar: req.body.id })
     .exec( (err, recordTotal) => {

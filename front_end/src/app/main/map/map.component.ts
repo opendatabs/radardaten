@@ -98,7 +98,7 @@ export class MapComponent implements OnInit {
     const self = this;
     this.data.forEach((d: Radar, index: number) => {
       const directionDegrees = this.calculateDirectionDegrees(d);
-      // todo: replace by speeding quote and for two directions
+      // TODO: replace by speeding quote and for two directions
       const color1 = this.colorService.perc2color(d.speedingQuoteDir1 * 100);
       const color2 = this.colorService.perc2color(d.speedingQuoteDir2 * 100);
       // create a random ID for marker to ensure unique ids.

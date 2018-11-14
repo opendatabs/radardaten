@@ -138,7 +138,6 @@ export class SelectCoordinatesComponent implements OnInit, ViewCell {
   }
 
   submit() {
-    // TODO: no refresh after submit!
     const str = this.coordinates.toString() + '\n' +
       this.direction1.toString() + '\n' +
       this.direction2.toString();
@@ -150,7 +149,7 @@ export class SelectCoordinatesComponent implements OnInit, ViewCell {
     this.rowData.directionTwoLong = this.direction2.lng;
     this.radarService.updateRadar(this.rowData).subscribe();
     this.coordinatesBtnLabel = 'Ändern';
-    this.open.emit(this.rowData); // <-- TODO: needed to update component data? Evt. remove
+    this.open.emit(this.rowData); // TODO: needed to update component data? Evt. remove
     this.adapted = true;
   }
 

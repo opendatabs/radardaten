@@ -5,7 +5,7 @@ import {Radar} from "./radar";
 
 @Injectable()
 export class DataService {
-  // todo:remove this
+  // TODO:remove this
   private loadSecondData = false;
 
   constructor(

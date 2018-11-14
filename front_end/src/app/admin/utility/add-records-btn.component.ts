@@ -6,7 +6,6 @@ import * as $ from 'jquery';
 import { SailsClientService } from '../../shared/sails-client.service';
 import { environment } from '../../../environments/environment';
 import { Observable } from 'rxjs/Observable';
-// import { count } from 'rxjs/operators';
 
 @Component({
   selector: 'app-add-records-btn',
@@ -103,14 +102,13 @@ export class AddRecordsBtnComponent implements ViewCell, OnInit, OnDestroy {
           this.creationCounter += 50;
           this.progress = Math.ceil((this.creationCounter / this.foundMatches) * 100 );
         }
-        // TODO: explain
-        if (this.progress > 98 || this.foundMatches < 50) {
+        // OK if more than 98% done
+        if (this.progress >= 98 || this.foundMatches < 50) {
           this.loading = false;
           this.success = true;
         }
       }
     );
-    // this.sailsClientService.get('newRecords').subscribe(() => console.log('msg'));
   }
 
   ngOnDestroy() {
