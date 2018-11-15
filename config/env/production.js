@@ -18,7 +18,7 @@ module.exports = {
    ***************************************************************************/
 
   models: {
-    connection: 'prodDb'
+    connection: 'prod'
   },
 
   /***************************************************************************
@@ -34,7 +34,7 @@ module.exports = {
   // log: {
   //   level: "silent"
   // }
-  
+
   cors: {
     allRoutes: true,
     origin: '*'
