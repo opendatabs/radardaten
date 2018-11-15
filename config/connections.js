@@ -66,6 +66,14 @@ module.exports.connections = {
     user: local.localUSER,
     password: local.localPASSWORD,
     database: local.localDATABASE
+  },
+
+  prodDB: {
+    adapter: 'sails-mysql',
+    host: process.env.HOST,
+    user: process.env.USER,
+    password: process.env.PASSWORD,
+    database: process.env.DATABASE
   }
 
   /***************************************************************************

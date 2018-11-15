@@ -18,7 +18,7 @@ module.exports = {
    ***************************************************************************/
 
   models: {
-    connection: 'devDb'
+    connection: 'prodDb'
   },
 
   /***************************************************************************
@@ -34,6 +34,11 @@ module.exports = {
   // log: {
   //   level: "silent"
   // }
+  
+  cors: {
+    allRoutes: true,
+    origin: '*'
+  },
 
   dumpConnection: {
     host: process.env.HOST,
