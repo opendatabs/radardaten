@@ -1,7 +1,7 @@
 const mysqldump = require('mysqldump');
-const fs = require('fs');
-const fsp = require('fs/promises');
-
+// const fs = require('fs');
+const { promisify } = require('util');
+const writeFile = promisify(fs.writeFile);
 
 let env = {};
 let connection;
@@ -19,15 +19,14 @@ module.exports.cron = {
         onTick: function () {
             let file = require('path').resolve(sails.config.appPath, './download/radarDump.sql');
 
-            try {
-                await fsp.writeFile(file, '', () => {
+            async function main() {
+                await writeFile(file, '', () => {
                     console.log('Writing new MYSQL Dump...');
                     mysqldump({ connection, dumpToFile: file });
                 });
                 console.info('Successfully created MYSQL Dump');
-            } catch (error) {
-                console.error(error);
             }
+            main().catch(error => console.error(error));
             // fs.writeFile(file, '', (err) => {
                 // if (err) throw err;
                 // console.log('Writing new MYSQL Dump...');
