@@ -37,12 +37,13 @@ module.exports = {
       }
     },
     createMysqlDump: function (req, res) {
-        fs.writeFile('./download/radarDump.sql', '', (err) => {
-          if (err) throw err;
-          console.log('Created new empty file');
-          console.log('Writing new MYSQL Dump...');
-          mysqldump({ connection, dumpToFile: './download/radarDump.sql' }); // Save dump as file
-        });
-      }
+      let file = require('path').resolve(sails.config.appPath + '//' + './download/radarDump.sql')
+      // fs.writeFile('./download/radarDump.sql', '', (err) => {
+        // if (err) throw err;
+        // console.log('Created new empty file');
+        // console.log('Writing new MYSQL Dump...');
+        mysqldump({ connection, dumpToFile: file }); // Save dump as file
+      // });
+    }
 };
 

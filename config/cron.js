@@ -17,12 +17,20 @@ module.exports.cron = {
         schedule: '0 */5 * * * *',
         // schedule: '0 0 */2 * * *', // Every night at 2AM
         onTick: function () {
-            fs.writeFile('./download/radarDump.sql', '', (err) => {
-                if (err) throw err;
-                console.log('Created new empty file');
+            let file = require('path').resolve(sails.config.appPath + '//' + './download/radarDump.sql')
+
+            // if (fs.existsSync(file)) {
                 console.log('Writing new MYSQL Dump...');
-                mysqldump({ connection, dumpToFile: './download/radarDump.sql' }); // Save dump as file
-            });
+                mysqldump({ connection, dumpToFile: file });
+
+
+            // } else {
+                // console.log('File not Found');
+            }
+            // fs.writeFile('./download/radarDump.sql', '', (err) => {
+                // if (err) throw err;
+                // console.log('Created new empty file');
+            // });
             // let promise = new Promise((resolve, reject) => {
             // const result = mysqldump({ connection });
             // resolve(result);
