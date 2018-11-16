@@ -18,7 +18,7 @@ module.exports = {
    ***************************************************************************/
 
   models: {
-    connection: 'devDb'
+    connection: 'prod' // env vars will adapt to dev or prod server
   },
 
   /***************************************************************************
