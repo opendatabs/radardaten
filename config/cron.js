@@ -26,7 +26,7 @@ module.exports.cron = {
 
             // } else {
                 // console.log('File not Found');
-            }
+            // }
             // fs.writeFile('./download/radarDump.sql', '', (err) => {
                 // if (err) throw err;
                 // console.log('Created new empty file');
