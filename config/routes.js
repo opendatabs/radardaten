@@ -70,7 +70,5 @@ module.exports.routes = {
   'put /Radar/updateRecordCount' : 'RadarController.updateRecordCount',
   'get /Data/getMysqlDump' : 'DataController.getMysqlDump',
   'get /Auth/auth': 'AuthController.auth',
-  'post /Data/createMysqlDump': 'DataController.createMysqlDump',
-
 
 };

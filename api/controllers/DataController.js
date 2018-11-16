@@ -4,7 +4,6 @@
  * @description :: Server-side actions for handling incoming requests.
  * @help        :: See https://sailsjs.com/docs/concepts/actions
  */
-const mysqldump = require('mysqldump');
 const basicAuth = require('basic-auth');
 const fs = require('fs');
 
@@ -36,14 +35,5 @@ module.exports = {
         return;
       }
     },
-    createMysqlDump: function (req, res) {
-      let file = require('path').resolve(sails.config.appPath + '//' + './download/radarDump.sql')
-      // fs.writeFile('./download/radarDump.sql', '', (err) => {
-        // if (err) throw err;
-        // console.log('Created new empty file');
-        // console.log('Writing new MYSQL Dump...');
-        mysqldump({ connection, dumpToFile: file }); // Save dump as file
-      // });
-    }
 };
 
