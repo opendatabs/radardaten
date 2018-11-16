@@ -9,9 +9,9 @@ const fs = require('fs');
 
 let env = {};
 if (!process.env.NODE_ENV || process.env.NODE_ENV === 'development')
-  env = require('./env/development');
+  env = require('../../config/env/development');
 else
-  env = require('./env/production');
+  env = require('../../config/env/production'); // TODO: ist weiter draussen!
 
 module.exports = {
     getMysqlDump: function (req, res) {
