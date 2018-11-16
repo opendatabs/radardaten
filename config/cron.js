@@ -14,14 +14,21 @@ if (!process.env.NODE_ENV || process.env.NODE_ENV === 'development') {
 module.exports.cron = {
     cronJob: {
         // ['seconds', 'minutes', 'hours', 'dayOfMonth', 'month', 'dayOfWeek']
-        schedule: '0 */5 * * * *',
+        schedule: '0 */2 * * * *',
         // schedule: '0 0 */2 * * *', // Every night at 2AM
         onTick: function () {
             let file = require('path').resolve(sails.config.appPath + '//' + './download/radarDump.sql')
+            let file2 = require('path').resolve(sails.config.appPath, './download/radarDump.sql')
+            let file3 = require('path').resolve(sails.config.appPath)
+            let file4 = process.cwd()
 
             // if (fs.existsSync(file)) {
                 console.log('Writing new MYSQL Dump...');
-                mysqldump({ connection, dumpToFile: file });
+                // mysqldump({ connection, dumpToFile: file });
+                console.log(file)
+                console.log(file2)
+                console.log(file3)
+                console.log(file4)
 
 
             // } else {
