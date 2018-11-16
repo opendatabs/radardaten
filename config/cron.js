@@ -20,11 +20,8 @@ module.exports.cron = {
             let file = require('path').resolve(sails.config.appPath, './download/radarDump.sql');
 
             async function main() {
-                await writeFile(file, '', () => {
-                    console.log('Writing new MYSQL Dump...');
-                    mysqldump({ connection, dumpToFile: file });
-                });
-                console.info('Successfully created MYSQL Dump');
+                await mysqldump({ connection, dumpToFile: file });
+                console.log('Writing new MYSQL Dump...');
             }
             main().catch(error => console.error(error));
             // fs.writeFile(file, '', (err) => {
