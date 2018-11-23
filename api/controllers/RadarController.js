@@ -111,7 +111,12 @@ module.exports = {
     FROM record
     WHERE direction = 2
           AND record.radar = radar.id
-  ) AS count2
+  ) AS count2,
+  (
+    SELECT MAX(timestamp)
+    FROM record
+    WHERE record.radar = radar.id
+  ) as maxDate
 FROM radar`;
     Radar.query(sql, [], function (error, data) {
       if (error)

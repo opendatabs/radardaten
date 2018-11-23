@@ -22,4 +22,5 @@ export interface Radar {
   updatedAt: string;
   count1: number;
   count2: number;
+  maxDate: string;
 }
