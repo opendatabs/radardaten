@@ -8,3 +8,6 @@ webappuser=username \
 && mysql -u $sqluser -p$password opendata_verkehrspolizeiradar < public_html/verkehrspolizei/mysqldump.sql \
 && mysql -u $sqluser -p$password --column-names=TRUE opendata_verkehrspolizeiradar -e "SELECT * from radar;" > public_html/verkehrspolizei/radar.tsv \
 && mysql -u $sqluser -p$password --column-names=TRUE opendata_verkehrspolizeiradar -e "SELECT * from record;" > public_html/verkehrspolizei/record.tsv 
+
+# or as a oneliner: 
+# webappuser=username && webappw=password && sqluser=opendata_verkehr && sqlpw=password && wget -O public_html/verkehrspolizei/mysqldump.sql https://$webappuser:$webappw@radardaten.fdn.iwi.unibe.ch/data/getmysqldump && mysql -u $sqluser -p$password opendata_verkehrspolizeiradar < public_html/verkehrspolizei/mysqldump.sql && mysql -u $sqluser -p$password --column-names=TRUE opendata_verkehrspolizeiradar -e "SELECT * from radar;" > public_html/verkehrspolizei/radar.tsv && mysql -u $sqluser -p$password --column-names=TRUE opendata_verkehrspolizeiradar -e "SELECT * from record;" > public_html/verkehrspolizei/record.tsv 
