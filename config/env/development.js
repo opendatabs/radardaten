@@ -44,6 +44,5 @@ module.exports = {
   authCredentials: {
     username: local.authUSER,
     password: local.authPASSWORD
-  }
-
+  },
 };

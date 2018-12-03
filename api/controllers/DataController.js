@@ -11,35 +11,64 @@ let env = {};
 if (!process.env.NODE_ENV || process.env.NODE_ENV === 'development')
   env = require('../../config/env/development');
 else
-  env = require('../../config/env/production'); // TODO: ist weiter draussen!
+  env = require('../../config/env/production');
+
+const auth = (req, res) => {
+  const user = basicAuth(req);
+  if (!user || !user.name || !user.pass) {
+    res.statusCode = 401;
+    res.setHeader('WWW-Authenticate', 'Basic realm="Secure Area"');
+    res.end('This request requires authentication');
+    return false;
+  }
+  if (user.name === env.dumpUser.username && user.pass === env.dumpUser.password) {
+    return true;
+  } else {
+    res.statusCode = 401;
+    res.setHeader('WWW-Authenticate', 'Basic realm="Secure Area"');
+    res.end('Access denied');
+    return false;
+  }
+}
+
+const download = (res, item, fileName) => {
+  let file = require('path').resolve(sails.config.appPath + '//' + `./download/${item}`)
+  if (fs.existsSync(file)) {
+    res.setHeader('Content-disposition', `attachment; filename=${fileName}`);
+    let filestream = fs.createReadStream(file);
+    filestream.pipe(res);
+  } else {
+    res.json({ error: "File not Found" });
+  }
+}
 
 module.exports = {
-    getMysqlDump: function (req, res) {
-      const user = basicAuth(req);
-      if (!user || !user.name || !user.pass) {
-        res.statusCode = 401;
-        res.setHeader('WWW-Authenticate', 'Basic realm="Secure Area"');
-        res.end('This request requires authentication');
-        return;
-      }
-      if (user.name === env.dumpUser.username && user.pass === env.dumpUser.password) {
-        let file = require('path').resolve(sails.config.appPath + '//' + './download/radarDump.sql')
-
-        if (fs.existsSync(file)) {
-          res.setHeader('Content-disposition', 'attachment; filename=radardaten.sql');
-
-          let filestream = fs.createReadStream(file);
-          filestream.pipe(res);
-
-        } else {
-          res.json({ error: "File not Found" });
-        }
-      } else {
-        res.statusCode = 401;
-        res.setHeader('WWW-Authenticate', 'Basic realm="Secure Area"');
-        res.end('Access denied');
-        return;
+    getMysqlDump: (req, res) => {
+      if (auth(req, res)) {
+        download(res, 'radarDump.sql', 'radardaten.sql')
       }
     },
+    getRecordTsv: (req, res) => {
+      if (auth(req, res)) {
+        download(res, 'record.tsv', 'records.tsv')
+      }
+    },
+    getRadarTsv: (req, res) => {
+      if (auth(req, res)) {
+        download(res, 'radar.tsv', 'radars.tsv')
+      }
+    },
+    // getRadarTsv: (req, res) => {
+    //   if (auth(req, res)) {
+    //     let file = require('path').resolve(sails.config.appPath + '//' + './download/radarDump.sql')
+    //     if (fs.existsSync(file)) {
+    //       res.setHeader('Content-disposition', 'attachment; filename=radardaten.sql');
+    //       let filestream = fs.createReadStream(file);
+    //       filestream.pipe(res);
+    //     } else {
+    //       res.json({ error: "File not Found" });
+    //     }
+    //   }
+    // },
 };
 

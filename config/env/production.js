@@ -53,5 +53,5 @@ module.exports = {
   authCredentials:{
     username: process.env.AUTHUSER,
     password: process.env.AUTHPASSWORD,
-  } 
+  }
 };
