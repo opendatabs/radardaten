@@ -35,10 +35,10 @@ module.exports = {
   //   level: "silent"
   // }
 
-  cors: {
-    allRoutes: true,
-    origin: '*'
-  },
+  // cors: {
+  //   allRoutes: true,
+  //   origin: '*'
+  // },
 
   dumpConnection: {
     host: process.env.HOST,
