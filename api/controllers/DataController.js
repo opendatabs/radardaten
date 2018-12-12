@@ -49,26 +49,10 @@ module.exports = {
       }
     },
     getRecordTsv: (req, res) => {
-      if (auth(req, res)) {
         download(res, 'record.tsv', 'records.tsv')
-      }
     },
     getRadarTsv: (req, res) => {
-      if (auth(req, res)) {
         download(res, 'radar.tsv', 'radars.tsv')
-      }
     },
-    // getRadarTsv: (req, res) => {
-    //   if (auth(req, res)) {
-    //     let file = require('path').resolve(sails.config.appPath + '//' + './download/radarDump.sql')
-    //     if (fs.existsSync(file)) {
-    //       res.setHeader('Content-disposition', 'attachment; filename=radardaten.sql');
-    //       let filestream = fs.createReadStream(file);
-    //       filestream.pipe(res);
-    //     } else {
-    //       res.json({ error: "File not Found" });
-    //     }
-    //   }
-    // },
 };
 

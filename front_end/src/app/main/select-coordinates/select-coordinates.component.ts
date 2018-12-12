@@ -27,13 +27,13 @@ export class SelectCoordinatesComponent implements OnInit, ViewCell {
   closeResult: string;
   options = {};
   map: Map;
-  coordinates: LatLng = new LatLng(0,0);
+  coordinates: LatLng = new LatLng(0, 0);
   direction1: LatLng;
   direction2: LatLng;
   status: Status;
   markers: Layer[] = [];
   Status = Status; // copy class to local reference
-  adapted: boolean = false;
+  adapted = false;
 
   coordinatesBtnLabel: String = 'Ändern';
 
@@ -50,13 +50,14 @@ export class SelectCoordinatesComponent implements OnInit, ViewCell {
     }
   }
 
-  // every time we open the map, we have to recreate the options. Otherwise the tiles of leaflet map aren't initialized correctly (blank map)
+  // every time we open the map, we have to recreate the options.
+  // Otherwise the tiles of leaflet map aren't initialized correctly (blank map)
   setOptions() {
     this.options = {
       layers: [
         tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 18, attribution: '...' }),
       ],
-      zoom: 13,
+      zoom: 11,
       center: latLng(47.55814, 7.58769)
     };
   }
@@ -74,7 +75,7 @@ export class SelectCoordinatesComponent implements OnInit, ViewCell {
     this.direction2 = new LatLng(this.rowData.directionTwoLat, this.rowData.directionTwoLong);
     this.addCoordinates(this.direction2);
 
-    //set status again to initial after drawing coordinates
+    // set status again to initial after drawing coordinates
     this.status = Status.initial;
 
     this.modalService.open(content, { windowClass: 'big-modal' }).result.then((result) => {
@@ -92,14 +93,15 @@ export class SelectCoordinatesComponent implements OnInit, ViewCell {
     this.map = map;
     this.map.setMaxBounds(this.map.getBounds());
     this.map.setMinZoom(13);
-    this.map.on('contextmenu', (m:any) => {
+    this.map.on('contextmenu', (m: any) => {
       this.addCoordinates(m.latlng);
-    })
+    });
   }
 
   addCoordinates(latLng: LatLng) {
-    if (this.status === Status.finished || !latLng)
+    if (this.status === Status.finished || !latLng) {
       return null;
+    }
 
     let color: string;
     switch (this.status) {
