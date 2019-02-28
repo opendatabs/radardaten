@@ -152,7 +152,7 @@ export class D3graphComponent implements OnInit, OnChanges {
       .append('rect')
       .attr('x', function(d, i) {
         if (self.groupBy === 'days') {
-          return self.xScale(moment(d.timestamp).format('dddd')) + self.padding;
+          return self.xScale(moment(d.date).format('dddd')) + self.padding;
         } else {
           return self.xScale(d.hour) + self.padding;
         }
@@ -213,7 +213,7 @@ Anzahl Fahrzeuge: ${d.count}<br/>
       .transition()
       .attr('x', function(d, i) {
         if (self.groupBy === 'days') {
-          return self.xScale(moment(d.timestamp).format('dddd')) + self.padding;
+          return self.xScale(moment(d.date).format('dddd')) + self.padding;
         } else {
           return self.xScale(d.hour) + self.padding;
         }

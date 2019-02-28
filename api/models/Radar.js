@@ -45,6 +45,10 @@ module.exports = {
       collection: 'record',
       via: 'radar'
     },
+    recordsAggregated: {
+      collection: 'recordAggregated',
+      via: 'radar'
+    },
     recordCount: {
       type: 'float',
       defaultsTo: 0

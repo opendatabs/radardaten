@@ -16,6 +16,9 @@ export class MapTooltipComponent implements OnInit {
   transform = '';
   content: Radar;
 
+  TOOLTIP_PX_LEFT = 220;
+  TOOLTIP_PX_TOP = -200;
+
   constructor(
     private colorService: ColorService,
   ) { }
@@ -24,12 +27,8 @@ export class MapTooltipComponent implements OnInit {
   }
 
   showTooltip(pxLeft: number, pxTop: number, radar: Radar) {
-    // let tooltipWidht = $('#tooltip').width();
-    this.pxTop = pxTop;
-    // if (this.pxLeft <= $('#map').width() / 2)
-    //   this.pxLeft = pxLeft - tooltipWidht - 10;
-    // else
-    this.pxLeft = pxLeft;
+    this.pxTop = Math.max(pxTop, 50);
+    this.pxLeft = pxLeft + this.TOOLTIP_PX_LEFT;
     this.display = 'block';
     this.transform = $('.leaflet-map-pane').css('transform');
     this.content = radar;

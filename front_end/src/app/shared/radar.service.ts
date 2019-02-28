@@ -35,7 +35,7 @@ export class RadarService {
   }
 
   getRadarWithAvgSpeedAndSpeedingQuote(): Observable<Radar[]> {
-    return this.http.get<Radar[]>(this.api + 'radarWithAvgSpeedAndSpeedingQuote');
+    return this.http.get<Radar[]>(this.api + 'radarWithAvgSpeedAndSpeedingQuote2');
   }
 
   updateRecordCount(radar: Radar): Observable<any> {

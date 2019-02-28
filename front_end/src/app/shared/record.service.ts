@@ -26,10 +26,6 @@ export class RecordService {
     return this.http.get<Record>(this.api + id);
   }
 
-  getRecordOfRadar(radarId: number): Observable<Record[]> {
-    return this.http.get<Record[]>(this.api + `recordsOfRadar?radarId=${radarId}`);
-  }
-
   getMeasurementWeeks(radarId: number, direction: number): Observable<MeasurementWeek[]> {
     return this.http.get<MeasurementWeek[]>(this.api + `measurementWeeks?radarId=${radarId}&direction=${direction}`);
   }
@@ -39,12 +35,12 @@ export class RecordService {
   }
 
   getRecordsForWeeklyView(radarId: number, direction: number, startDay: string, endDay: string): Observable<WeeklyRecord[]> {
-    return this.http.get<WeeklyRecord[]>(this.api + `getRecordForWeeklyView?radarId=${radarId}&direction=${direction}
+    return this.http.get<WeeklyRecord[]>(this.api + `recordForWeeklyView?radarId=${radarId}&direction=${direction}
     &startDay=${startDay}&endDay=${endDay}`);
   }
 
   getRecordsForDailyView(radarId: number, direction: number, startDay: string, endDay: string): Observable<DailyRecord[]> {
-    return this.http.get<DailyRecord[]>(this.api + `getRecordForDailyView?radarId=${radarId}&direction=${direction}
+    return this.http.get<DailyRecord[]>(this.api + `recordForDailyView?radarId=${radarId}&direction=${direction}
     &startDay=${startDay}&endDay=${endDay}`);
   }
   updateRecord(record: any): Observable<Record> {

@@ -146,7 +146,7 @@ export class MapComponent implements OnInit {
   showPopup(lefletElement: any, self: MapComponent, radar: Radar): void {
     // because there is a bug in leaflet callbacks, we have to implement change detection by ourselves
     this.tooltip.showTooltip(
-      this.map.latLngToLayerPoint(lefletElement._latlng).x,
+      this.map.latLngToLayerPoint(lefletElement._latlng).x ,
       this.map.latLngToLayerPoint(lefletElement._latlng).y,
       radar
     );
