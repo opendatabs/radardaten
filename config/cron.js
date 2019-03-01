@@ -54,6 +54,7 @@ module.exports.cron = {
             }
             main('record').catch(error => console.error(error));
             main('radar').catch(error => console.error(error));
+            main('radaraggregated').catch(error => console.error(error));
         }
     }
 };

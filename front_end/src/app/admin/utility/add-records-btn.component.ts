@@ -1,4 +1,4 @@
-import { Component, Input, Output, EventEmitter, OnInit, OnDestroy } from '@angular/core';
+import {Component, Input, Output, EventEmitter, OnInit, OnDestroy, ApplicationRef} from '@angular/core';
 import { ViewCell} from 'ng2-smart-table';
 import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { RadarService } from '../../shared/radar.service';
@@ -54,6 +54,9 @@ import { Observable } from 'rxjs/Observable';
           <b>Warnung</b> Sie laden mehr als 300KB an Daten hoch. Das Parsen der Daten kann mehrere Minuten in Anspuch
           nehmen.
         </div>
+        <p *ngIf="aggregatedRecords">
+          {{ aggregatedRecords }} Messungen aggregiert.
+        </p>
         <div *ngIf="success" class="alert alert-success mt-2" role="alert">
           {{ foundMatches }} Messungen erfolgreich hochgeladen
         </div>
@@ -87,28 +90,32 @@ export class AddRecordsBtnComponent implements ViewCell, OnInit, OnDestroy {
   isClicked = false;
   public users$: Observable<any>;
   sub: any;
+  aggregatedRecords: number;
+  counter = 0;
 
   constructor(
     private modalService: NgbModal,
     private radarService: RadarService,
     private sailsClientService: SailsClientService,
+    private ref: ApplicationRef
   ) {
   }
 
   ngOnInit() {
     this.sub = this.sailsClientService.on('newRecords').subscribe(
-      () => {
-        if (this.foundMatches > 0) {
-          this.creationCounter += 50;
-          this.progress = Math.ceil((this.creationCounter / this.foundMatches) * 100 );
-        }
+      (data: any) => {
+        this.progress = Math.round(data.progress * 100);
         // OK if more than 98% done
         if (this.progress >= 98 || this.foundMatches < 50) {
           this.loading = false;
           this.success = true;
         }
+        this.counter++;
       }
     );
+    this.sailsClientService.on('recordsAggregated').subscribe((data:any) => {
+      this.aggregatedRecords = data.recordsCreated;
+    })
   }
 
   ngOnDestroy() {
@@ -119,6 +126,7 @@ export class AddRecordsBtnComponent implements ViewCell, OnInit, OnDestroy {
     this.success = false;
     this.loading = false;
     this.error = null;
+    this.aggregatedRecords = null;
     this.modalService.open(content, { windowClass: 'big-modal' }).result.then((result) => {
       this.closeResult = `Closed with: ${result}`;
     }, (reason) => {

@@ -1,3 +1,5 @@
+const moment = require('moment');
+
 /**
  * RecordAggregatedController
  *
@@ -6,6 +8,51 @@
  */
 
 module.exports = {
+
+  async aggregateAndInsertRecords(records, socketId) {
+    const aggregated = [];
+    const radar = await Radar.find({id: records[0].radar}).limit(1);
+    const speedLimit = radar[0].speedLimit;
+    records.forEach(r => {
+      let date = moment(r.timestamp).format('YYYY-MM-DD');
+      let hour = moment(r.timestamp).format('hh');
+      let tooFast;
+      (r.kmh - 5 > speedLimit) ? tooFast = 1 : tooFast = 0;
+
+      let found = false;
+      for (let ag of aggregated) {
+        if (r.radar === ag.radar
+          && r.direction === ag.direction
+          && date === ag.date
+          && hour === ag.hour
+        ) {
+          found = true;
+          ag.sumKmh += r.kmh;
+          ag.tooFast += tooFast;
+          ag.numberVehicles++;
+        }
+      }
+      if (!found) {
+        aggregated.push({
+          date: date,
+          hour: hour,
+          sumKmh: r.kmh,
+          tooFast: tooFast,
+          numberVehicles: 1,
+          direction: r.direction,
+          radar: r.radar
+        })
+      }
+    });
+    aggregated.forEach(ag => ag.avgKmh = Math.round(ag.sumKmh / ag.numberVehicles * 100) / 100);
+    await RecordAggregated.create(aggregated).exec( (err, created) => {
+      sails.sockets.broadcast(socketId, 'recordsAggregated', {
+        data: {
+          recordsCreated: aggregated.length
+        }
+      });
+    })
+  },
 
   getRecordForWeeklyView(req, res) {
     const radarId = req.query.radarId;
@@ -16,8 +63,8 @@ module.exports = {
     SELECT 
       ROUND(SUM(tooFast) / SUM(numberVehicles), 2) AS speedingQuote,
       ROUND(SUM(avgKmh * numberVehicles) / SUM(numberVehicles), 2) AS avgSpeed,
-      WEEKDAY(date) as weekday,
-      date,
+      WEEKDAY(recordaggregated.date) as weekday,
+      recordaggregated.date as date,
       hour,
       COUNT(*) AS count
   FROM
@@ -27,7 +74,7 @@ module.exports = {
   WHERE direction = ?
       AND recordaggregated.radar = ?
       AND recordaggregated.date > ? AND recordaggregated.date < ?
-  GROUP BY WEEKDAY(date)
+  GROUP BY WEEKDAY(recordaggregated.date)
   `;
 
     RecordAggregated.query(sql, [direction, radarId, startDay, endDay], function (error, data) {
@@ -69,7 +116,7 @@ module.exports = {
     const radarId = req.query.radarId;
     const direction = req.query.direction;
 
-    const sql = `SELECT DISTINCT weekofyear(date) as week, MIN(date) as startDay
+    const sql = `SELECT DISTINCT weekofyear(recordaggregated.date) as week, MIN(recordaggregated.date) as startDay
 FROM recordaggregated INNER JOIN radar ON radar.id = recordaggregated.radar
 WHERE radar.id = ?
 AND recordaggregated.direction = ?

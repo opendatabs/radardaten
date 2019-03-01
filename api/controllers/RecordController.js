@@ -1,4 +1,5 @@
 const moment = require('moment');
+const RecordAggregatedController = require('./RecordAggregatedController');
 /**
  * RecordController
  *
@@ -44,18 +45,22 @@ module.exports = {
       } catch(error) {
         return res.json(500, { error: 'Es ist ein Fehler aufgetreten: ' + error })
       }
+      const aggregatedCount =  await RecordAggregatedController.aggregateAndInsertRecords(matches, sails.sockets.getId(req));
+
       for (let i = 0; i < matches.length; i += 50) {
         await Record.create(matches.slice(i, i + 50)).exec( (err, created) => {
           if (err) {
             return res.json(500, { error: 'Es ist ein Fehler beim Speichern der Daten aufgetreten: ' + err });
           }
-          sails.sockets.broadcast(sails.sockets.getId(req), 'newRecords', { 
-            progress: i / matches.length,
-            recordsCreated: i
+          sails.sockets.broadcast(sails.sockets.getId(req), 'newRecords', {
+            data: {
+              progress: i / matches.length,
+              recordsCreated: i
+            }
           });
         });
       }
-      return res.json(200, { foundMatches: matches.length});
+      return res.json(200, { foundMatches: matches.length, aggregatedMatches: aggregatedCount});
     } else {
       return res.json(500, { error: 'Upload enthält keine Daten' })
     }

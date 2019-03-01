@@ -181,7 +181,7 @@ export class AdminComponent implements OnInit {
   onUserRowSelect(event): void {
     if (event.selected.length) {
       this.radarService.updateRecordCount(event.selected[0]).subscribe(
-        // res => console.log('Recordcount updated', res),
+        res => console.log('Recordcount updated', res),
         err => console.error('Reocrdcount could not be updated', err)
       );
       this.radarService.getRadar(event.selected[0].id).subscribe(
