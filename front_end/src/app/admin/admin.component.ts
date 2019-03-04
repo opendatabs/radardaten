@@ -111,11 +111,8 @@ export class AdminComponent implements OnInit {
         editable: false,
         addable: false,
         renderComponent: AddRecordsBtnComponent,
-        onComponentInitFunction(instance) {
-          instance.open.subscribe(row => {
-            // TODO: overwrite old entries in case of duplicates
-          });
-        }
+        onComponentInitFunction(instance) {},
+
       },
       recordCount: {
         title: '# Messungen',
@@ -167,6 +164,14 @@ export class AdminComponent implements OnInit {
     if (!this.data) {
       this.getData();
     }
+    this.settings.columns.recordsButton.onComponentInitFunction = (instance) => {
+      instance.open.subscribe(row => {
+        // TODO: overwrite old entries in case of duplicates
+      });
+      instance.close.subscribe(row => {
+        this.getData();
+      })
+    }
   }
 
 /*
@@ -178,7 +183,7 @@ export class AdminComponent implements OnInit {
   //     this.source.update(selected, newValues);
   //   }
   // }
-  onUserRowSelect(event): void {
+  /*onUserRowSelect(event): void {
     if (event.selected.length) {
       this.radarService.updateRecordCount(event.selected[0]).subscribe(
         res => console.log('Recordcount updated', res),
@@ -188,7 +193,7 @@ export class AdminComponent implements OnInit {
         e => this.source.update(event.selected[0], e) // update(selected object, new values)
       );
     }
-  }
+  }*/
 
   onClickDelete(event) {
     if (confirm(`

@@ -1,4 +1,4 @@
-import {Component, Input, Output, EventEmitter, OnInit, OnDestroy, ApplicationRef} from '@angular/core';
+import {Component, Input, Output, EventEmitter, OnInit, OnDestroy, ApplicationRef, ElementRef} from '@angular/core';
 import { ViewCell} from 'ng2-smart-table';
 import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { RadarService } from '../../shared/radar.service';
@@ -13,7 +13,7 @@ import { Observable } from 'rxjs/Observable';
     <ng-template #content let-c="close" let-d="dismiss">
       <div class="modal-header">
         <h4 class="modal-title">Messungen für {{rowData.streetName}} hochladen</h4>
-        <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+        <button type="button" class="close" aria-label="Close" (click)="closeModal()">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
@@ -47,7 +47,9 @@ import { Observable } from 'rxjs/Observable';
             <fa class="alingn" name="refresh" size="4x" animation="spin"></fa>
           </div>
           <div class="row h-100 justify-content-center align-items-center">
-            <p class="mt-3">Anzahl Messungen: <strong>{{ foundMatches }}</strong> | Gespeichert: <strong>{{ progress }}%</strong><p>
+            <p class="mt-3">Anzahl Messungen: <strong>{{ foundMatches }}</strong> | Gespeichert: <strong>{{ progress }}
+              %</strong>
+            <p>
           </div>
         </div>
         <div *ngIf="!success && fileSize > 300000" class="alert alert-warning mt-2" role="alert">
@@ -62,7 +64,7 @@ import { Observable } from 'rxjs/Observable';
         </div>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-outline-dark" (click)="c('Close click')">Close</button>
+        <button type="button" class="btn btn-outline-dark" (click)="closeModal()">Close</button>
       </div>
     </ng-template>
     <button (click)="onOpen(content)" class="btn btn-outline-primary py-0">Hochladen</button>
@@ -75,6 +77,7 @@ export class AddRecordsBtnComponent implements ViewCell, OnInit, OnDestroy {
   @Input() rowData: any;
 
   @Output() open: EventEmitter<any> = new EventEmitter();
+  @Output() close: EventEmitter<any> = new EventEmitter();
 
   file: any;
   fileSize: 0;
@@ -92,29 +95,32 @@ export class AddRecordsBtnComponent implements ViewCell, OnInit, OnDestroy {
   sub: any;
   aggregatedRecords: number;
   counter = 0;
+  modalReference: any;
 
   constructor(
     private modalService: NgbModal,
     private radarService: RadarService,
     private sailsClientService: SailsClientService,
-    private ref: ApplicationRef
+    private ref: ElementRef
   ) {
   }
 
   ngOnInit() {
     this.sub = this.sailsClientService.on('newRecords').subscribe(
       (data: any) => {
-        this.progress = Math.round(data.progress * 100);
-        // OK if more than 98% done
-        if (this.progress >= 98 || this.foundMatches < 50) {
-          this.loading = false;
-          this.success = true;
-        }
-        this.counter++;
+          this.progress = Math.round(data.progress * 100);
+          // OK if more than 98% done
+          if (this.progress >= 98 || this.foundMatches < 50) {
+            this.loading = false;
+            this.success = true;
+          }
+          this.counter++;
       }
     );
     this.sailsClientService.on('recordsAggregated').subscribe((data:any) => {
-      this.aggregatedRecords = data.recordsCreated;
+      setTimeout(() => {
+        this.aggregatedRecords = data.recordsCreated;
+      }, 0);
     })
   }
 
@@ -127,7 +133,8 @@ export class AddRecordsBtnComponent implements ViewCell, OnInit, OnDestroy {
     this.loading = false;
     this.error = null;
     this.aggregatedRecords = null;
-    this.modalService.open(content, { windowClass: 'big-modal' }).result.then((result) => {
+    this.modalReference = this.modalService.open(content, { windowClass: 'big-modal', backdrop: 'static', keyboard: false });
+    this.modalReference.result.then((result) => {
       this.closeResult = `Closed with: ${result}`;
     }, (reason) => {
       this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
@@ -137,8 +144,6 @@ export class AddRecordsBtnComponent implements ViewCell, OnInit, OnDestroy {
   private getDismissReason(reason: any): string {
     if (reason === ModalDismissReasons.ESC) {
       return 'by pressing ESC';
-    } else if (reason === ModalDismissReasons.BACKDROP_CLICK) {
-      return 'by clicking on a backdrop';
     } else {
       return  `with: ${reason}`;
     }
@@ -169,11 +174,14 @@ export class AddRecordsBtnComponent implements ViewCell, OnInit, OnDestroy {
           res => {
             this.foundMatches = res.foundMatches;
             // console.log('Should be: ' + this.rowData.Recordcount);
-            this.updateRecordCount();
           },
           err => {
             this.loading = false;
-            this.error = err.message;
+            if (err.data && err.data.error.indexOf('E_VALIDATION') > 0)
+              this.error = 'Diese Daten wurden bereits hochgeladen';
+            else {
+              this.error = JSON.stringify(err)
+            }
             console.log(err);
           });
     };
@@ -186,10 +194,8 @@ export class AddRecordsBtnComponent implements ViewCell, OnInit, OnDestroy {
     $('#uploadLabel').html(fileName);
   }
 
-  updateRecordCount(): void {
-    this.radarService.updateRecordCount(this.rowData).subscribe(
-      res => console.log('Recordcount updated', res),
-      err => console.error('Reocrdcount could not be updated', err)
-    );
+  closeModal() {
+    this.close.emit();
+    this.modalReference.close()
   }
 }

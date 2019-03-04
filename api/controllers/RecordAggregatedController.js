@@ -45,13 +45,7 @@ module.exports = {
       }
     });
     aggregated.forEach(ag => ag.avgKmh = Math.round(ag.sumKmh / ag.numberVehicles * 100) / 100);
-    await RecordAggregated.create(aggregated).exec( (err, created) => {
-      sails.sockets.broadcast(socketId, 'recordsAggregated', {
-        data: {
-          recordsCreated: aggregated.length
-        }
-      });
-    })
+    return await RecordAggregated.create(aggregated);
   },
 
   getRecordForWeeklyView(req, res) {
@@ -66,7 +60,7 @@ module.exports = {
       WEEKDAY(recordaggregated.date) as weekday,
       recordaggregated.date as date,
       hour,
-      COUNT(*) AS count
+      SUM(numberVehicles) AS count
   FROM
       recordaggregated
           INNER JOIN

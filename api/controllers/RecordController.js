@@ -18,6 +18,7 @@ module.exports = {
 
   async batchCreate(req, res) {
     const matches = [];
+    let aggregatedCount;
     if (req.body && req.body.id && req.body.text) {
       try {
         const txt = req.body.text;
@@ -42,10 +43,10 @@ module.exports = {
             }
           }
         } while (match);
+        aggregatedCount =  await RecordAggregatedController.aggregateAndInsertRecords(matches, sails.sockets.getId(req));
       } catch(error) {
         return res.json(500, { error: 'Es ist ein Fehler aufgetreten: ' + error })
       }
-      const aggregatedCount =  await RecordAggregatedController.aggregateAndInsertRecords(matches, sails.sockets.getId(req));
 
       for (let i = 0; i < matches.length; i += 50) {
         await Record.create(matches.slice(i, i + 50)).exec( (err, created) => {

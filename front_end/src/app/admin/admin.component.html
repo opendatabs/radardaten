@@ -7,7 +7,7 @@
     </button>
     
     <ng2-smart-table [settings]="settings" [source]="source" (editConfirm)="onClickEdit($event)" (createConfirm)="onClickCreate($event)"
-      (deleteConfirm)="onClickDelete($event)" (userRowSelect)="onUserRowSelect($event)">
+      (deleteConfirm)="onClickDelete($event)">
     </ng2-smart-table>
     <div class="container h-100" *ngIf="!data">
       <div class="row h-100 justify-content-center align-items-center">

@@ -38,6 +38,7 @@ export class MapDetailComponent implements OnInit {
   }
 
   open(radar: Radar) {
+    this.directionOne = radar.count1 > 0;
     this.visible = true;
     this.header = radar.streetName;
     this.radar = radar;
