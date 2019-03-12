@@ -2480,7 +2480,7 @@ var SailsClientService = /** @class */ (function () {
 // The list of which env maps to which file can be found in `.angular-cli.json`.
 var environment = {
     production: false,
-    api: 'http://localhost:1337/'
+    api: '/'
 };
 
 
