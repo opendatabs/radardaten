@@ -15,7 +15,7 @@ module.exports = {
     const speedLimit = radar[0].speedLimit;
     records.forEach(r => {
       let date = moment(r.timestamp).format('YYYY-MM-DD');
-      let hour = moment(r.timestamp).format('hh');
+      let hour = moment(r.timestamp).format('HH');
       let tooFast;
       (r.kmh - 5 > speedLimit) ? tooFast = 1 : tooFast = 0;
 
@@ -67,7 +67,7 @@ module.exports = {
       radar ON radar.id = recordaggregated.radar
   WHERE direction = ?
       AND recordaggregated.radar = ?
-      AND recordaggregated.date > ? AND recordaggregated.date < ?
+      AND recordaggregated.date >= ? AND recordaggregated.date < ?
   GROUP BY WEEKDAY(recordaggregated.date)
   `;
 

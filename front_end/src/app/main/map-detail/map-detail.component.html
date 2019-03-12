@@ -49,10 +49,10 @@
       <div class="row">
         <div class="col s12">
           <h3 *ngIf="currentDay">{{dailyHeader}}</h3>
+          <app-d3graph *ngIf="currentDay" [measure]="measure" [data]="currentDay" [radar]="radar"
+                       [speedLimit]="radar?.speedLimit"
+                       [groupBy]="'hours'" [clickable]="false"></app-d3graph>
         </div>
-        <app-d3graph *ngIf="currentDay" [measure]="measure" [data]="currentDay" [radar]="radar"
-                     [speedLimit]="radar?.speedLimit"
-                     [groupBy]="'hours'" [clickable]="false"></app-d3graph>
       </div>
       <div class="row mt-5" *ngIf="radar">
         <div class="col-12">
