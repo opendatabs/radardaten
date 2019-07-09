@@ -1,14 +1,12 @@
 /**
  * Radar.js
  *
- * @description :: TODO: You might write a short summary of how this model works and what it represents here.
- * @docs        :: http://sailsjs.org/documentation/concepts/models-and-orm/models
+ * @description :: A model definition represents a database table/collection.
+ * @docs        :: https://sailsjs.com/docs/concepts/models-and-orm/models
  */
 
-const moment = require('moment');
-moment.locale('de-ch');
-
 module.exports = {
+
   attributes: {
     streetName: {
       type: 'string'
@@ -53,6 +51,20 @@ module.exports = {
       type: 'float',
       defaultsTo: 0
     }
+    //  ╔═╗╦═╗╦╔╦╗╦╔╦╗╦╦  ╦╔═╗╔═╗
+    //  ╠═╝╠╦╝║║║║║ ║ ║╚╗╔╝║╣ ╚═╗
+    //  ╩  ╩╚═╩╩ ╩╩ ╩ ╩ ╚╝ ╚═╝╚═╝
+
+
+    //  ╔═╗╔╦╗╔╗ ╔═╗╔╦╗╔═╗
+    //  ║╣ ║║║╠╩╗║╣  ║║╚═╗
+    //  ╚═╝╩ ╩╚═╝╚═╝═╩╝╚═╝
+
+
+    //  ╔═╗╔═╗╔═╗╔═╗╔═╗╦╔═╗╔╦╗╦╔═╗╔╗╔╔═╗
+    //  ╠═╣╚═╗╚═╗║ ║║  ║╠═╣ ║ ║║ ║║║║╚═╗
+    //  ╩ ╩╚═╝╚═╝╚═╝╚═╝╩╩ ╩ ╩ ╩╚═╝╝╚╝╚═╝
+
   },
   // if deleted, delete all associated records
   afterDestroy: async function(destroyedRecords, cb) {
@@ -60,5 +72,6 @@ module.exports = {
       RecordAggregated.destroy({radar: _.pluck(destroyedRecords, 'id')}).exec(cb)
     });
   }
+
 };
 

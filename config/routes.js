@@ -2,75 +2,69 @@
  * Route Mappings
  * (sails.config.routes)
  *
- * Your routes map URLs to views and controllers.
- *
- * If Sails receives a URL that doesn't match any of the routes below,
- * it will check for matching files (images, scripts, stylesheets, etc.)
- * in your assets directory.  e.g. `http://localhost:1337/images/foo.jpg`
- * might match an image file: `/assets/images/foo.jpg`
- *
- * Finally, if those don't match either, the default 404 handler is triggered.
- * See `api/responses/notFound.js` to adjust your app's 404 logic.
- *
- * Note: Sails doesn't ACTUALLY serve stuff from `assets`-- the default Gruntfile in Sails copies
- * flat files from `assets` to `.tmp/public`.  This allows you to do things like compile LESS or
- * CoffeeScript for the front-end.
+ * Your routes tell Sails what to do each time it receives a request.
  *
  * For more information on configuring custom routes, check out:
- * http://sailsjs.org/#!/documentation/concepts/Routes/RouteTargetSyntax.html
+ * https://sailsjs.com/anatomy/config/routes-js
  */
 
 module.exports.routes = {
 
-  // 'r|^\/?(home|karte|admin)$|': {
-  //   skipAssets: true,
-  //   view: 'homepage'
-  // },
-
-  'get /*': {
-    view: 'homepage',
-    skipAssets: true,
-    skipRegex: /^(\/record)|(\/radar)|(\/data)|(\/auth)|(\/__getcookie)/
-  },
 
   /***************************************************************************
   *                                                                          *
-  * Make the view located at `views/homepage.ejs` (or `views/homepage.jade`, *
-  * etc. depending on your default view engine) your home page.              *
+  * More custom routes here...                                               *
+  * (See https://sailsjs.com/config/routes for examples.)                    *
   *                                                                          *
-  * (Alternatively, remove this and add an `index.html` file in your         *
-  * `assets` directory)                                                      *
+  * If a request to a URL doesn't match any of the routes in this file, it   *
+  * is matched against "shadow routes" (e.g. blueprint routes).  If it does  *
+  * not match any of those, it is matched against static assets.             *
   *                                                                          *
   ***************************************************************************/
-
-  '/': {
-    view: 'homepage'
+  'post /Record/batchCreate': {
+    action: 'record/batch-create'
+  },
+  'post /api/radar/addRadar' : {
+    action: 'radar/add'
+  },
+  'post /api/Radar/updateRadar' : {
+    action: 'radar/update'
+  },
+  'get  /api/Radar/radarWithAvgSpeedAndSpeedingQuote' : {
+    action: 'radar/get-radar-with-avg-speed-and-speeding-quote'
+  },
+  'post /api/record/addRecords' : {
+    action: 'record/add'
+  },
+  'get /api/record/recordForWeeklyView' : {
+    action: 'record-aggregated/get-record-for-weekly-view'
+  },
+  'get /api/record/recordForDailyView' : {
+    action: 'record-aggregated/get-record-for-daily-view'
+  },
+  'get /api/record/measurementWeeks' : {
+    action: 'record-aggregated/get-measurement-weeks'
+  },
+  'put /api/radar/updateRecordCount' : {
+    action: 'radar/update-record-count'
+  },
+  'get /api/data/getMysqlDump' : {
+    action: 'data/get-mysql-dump'
+  },
+  'get /api/data/getRecord' : {
+    action: 'data/get-record-tsv'
+  },
+  'get /api/data/getRadar' : {
+    action: 'data/get-radar-tsv'
+  },
+  'get /api/auth/auth': {
+    action: 'auth/auth'
   },
 
-  /***************************************************************************
-  *                                                                          *
-  * Custom routes here...                                                    *
-  *                                                                          *
-  * If a request to a URL doesn't match any of the custom routes above, it   *
-  * is matched against Sails route blueprints. See `config/blueprints.js`    *
-  * for configuration options and examples.                                  *
-  *                                                                          *
-  ***************************************************************************/
-  'post /Record/batchCreate': 'RecordController.batchCreate',
+  /**
+   * Redirect to client side navigation
+   */
+  'GET /*': {action: 'homepage'},
 
-  'post /Radar/addRadar' : 'RadarController.addRadar',
-  'post /Radar/updateRadar' : 'RadarController.updateRadar',
-  'get  /Radar/radarWithAvgSpeedAndSpeedingQuote' : 'RadarController.getRadarWithAvgSpeedAndSpeedingQuote',
-  'get  /Radar/radarWithAvgSpeedAndSpeedingQuote2' : 'RadarController.getRadarWithAvgSpeedAndSpeedingQuote2',
-  'post /Record/addRecords' : 'RecordController.addRecords',
-  'get /Record/recordForWeeklyView' : 'RecordAggregatedController.getRecordForWeeklyView',
-  'get /Record/recordForDailyView' : 'RecordAggregatedController.getRecordForDailyView',
-  'get /Record/measurementWeeks' : 'RecordAggregatedController.getMeasurementWeeks',
-  // 'get /Radar/getRecordCount/:id' : 'RadarController.getRecordCount',
-  'put /Radar/updateRecordCount' : 'RadarController.updateRecordCount',
-  'get /Data/getMysqlDump' : 'DataController.getMysqlDump',
-  'get /Data/getRecord' : 'DataController.getRecordTsv',
-  'get /Data/getRadar' : 'DataController.getRadarTsv',
-  'get /Auth/auth': 'AuthController.auth',
 
 };

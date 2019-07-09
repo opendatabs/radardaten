@@ -1,16 +1,16 @@
 /**
  * Record.js
  *
- * @description :: TODO: You might write a short summary of how this model works and what it represents here.
- * @docs        :: http://sailsjs.org/documentation/concepts/models-and-orm/models
+ * @description :: A model definition represents a database table/collection.
+ * @docs        :: https://sailsjs.com/docs/concepts/models-and-orm/models
  */
 
 module.exports = {
 
   attributes: {
-
     timestamp: {
-      type: 'dateTime'
+      type: 'string',
+      columnType: 'datetime'
     },
     kmh: {
       type: 'float',
@@ -21,8 +21,8 @@ module.exports = {
       defaultsTo: 0
     },
     weekday: {
-      type: 'String',
-      defaultsTo: null
+      type: 'string',
+      allowNull: true
     },
     direction: {
       type: 'float'
@@ -30,6 +30,7 @@ module.exports = {
     radar: {
       model: 'radar'
     }
+
   },
 
 };
