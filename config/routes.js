@@ -64,7 +64,11 @@ module.exports.routes = {
   /**
    * Redirect to client side navigation
    */
-  'GET /*': {action: 'homepage'},
+  'GET /*': {
+    action: 'homepage',
+    skipAssets: true,
+    skipRegex: /^(\/api)|(\/__getcookie)/
+  },
 
 
 };

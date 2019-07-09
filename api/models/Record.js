@@ -13,11 +13,11 @@ module.exports = {
       columnType: 'datetime'
     },
     kmh: {
-      type: 'float',
+      type: 'number',
       defaultsTo: 0
     },
     length: {
-      type: 'float',
+      type: 'number',
       defaultsTo: 0
     },
     weekday: {
@@ -25,7 +25,7 @@ module.exports = {
       allowNull: true
     },
     direction: {
-      type: 'float'
+      type: 'number'
     },
     radar: {
       model: 'radar'

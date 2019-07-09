@@ -12,31 +12,31 @@ module.exports = {
       type: 'string'
     },
     long: {
-      type: 'float',
+      type: 'number',
       defaultsTo: 0
     },
     lat: {
-      type: 'float',
+      type: 'number',
       defaultsTo: 0
     },
     directionOneLong: {
-      type: 'float',
+      type: 'number',
       defaultsTo: 0
     },
     directionOneLat: {
-      type: 'float',
+      type: 'number',
       defaultsTo: 0
     },
     directionTwoLong: {
-      type: 'float',
+      type: 'number',
       defaultsTo: 0
     },
     directionTwoLat: {
-      type: 'float',
+      type: 'number',
       defaultsTo: 0
     },
     speedLimit: {
-      type: 'integer',
+      type: 'number',
       defaultsTo: 0
     },
     records: {
@@ -48,7 +48,7 @@ module.exports = {
       via: 'radar'
     },
     recordCount: {
-      type: 'float',
+      type: 'number',
       defaultsTo: 0
     }
     //  ╔═╗╦═╗╦╔╦╗╦╔╦╗╦╦  ╦╔═╗╔═╗

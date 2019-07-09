@@ -1,3 +1,5 @@
+const moment = require('moment');
+
 module.exports = {
 
 
@@ -8,7 +10,14 @@ module.exports = {
 
 
   inputs: {
-
+    streetName: {
+      type: 'string',
+      required: true
+    },
+    speedLimit: {
+      type: 'number',
+      required: true
+    }
   },
 
 
@@ -17,11 +26,21 @@ module.exports = {
   },
 
 
-  fn: async function (inputs) {
+  fn: async function (inputs, exits) {
 
-    // All done.
-    return;
-
+    moment.locale('de-ch');
+    const radar = {
+      streetName: inputs.streetName,
+      speedLimit: inputs.speedLimit,
+      long: 0,
+      lat: 0,
+      directionOneLong: 0,
+      directionOneLat: 0,
+      directionTwoLong: 0,
+      directionTwoLat: 0,
+    };
+    const newRadar = await Radar.create(radar).fetch();
+    return exits.success(newRadar);
   }
 
 

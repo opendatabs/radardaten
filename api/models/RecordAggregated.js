@@ -10,23 +10,23 @@ module.exports = {
   attributes: {
 
     date: {
-      type: 'string',
+      type: 'ref',
       columnType: 'date'
     },
     hour: {
-      type: 'float'
+      type: 'number'
     },
     avgKmh: {
-      type: 'float',
+      type: 'number',
     },
     tooFast: {
-      type: 'integer'
+      type: 'number'
     },
     numberVehicles: {
-      type: 'integer',
+      type: 'number',
     },
     direction: {
-      type: 'integer'
+      type: 'number'
     },
     radar: {
       model: 'radar'

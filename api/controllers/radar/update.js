@@ -8,19 +8,62 @@ module.exports = {
 
 
   inputs: {
+    streetName: {
+      type: 'string',
+      required: true
+    },
+    speedLimit: {
+      type: 'number',
+      required: true
+    },
+    lat: {
+      type: 'number',
+      required: true
+    },
+    long: {
+      type: 'number',
+      required: true
+    },
+    directionOneLat: {
+      type: 'number',
+      required: true
+    },
+    directionOneLong: {
+      type: 'number',
+      required: true
+    },
+    directionTwoLat: {
+      type: 'number',
+      required: true
+    },
+    directionTwoLong: {
+      type: 'number',
+      required: true
+    },
 
   },
 
 
-  exits: {
-
-  },
+  exits: {},
 
 
-  fn: async function (inputs) {
+  fn: async function (inputs, exits) {
 
-    // All done.
-    return;
+    const updatedRadar = await Radar.updateOne({
+      id: inputs.id
+    }).set({
+      streetName: inputs.streetName,
+      speedLimit: parseInt(inputs.speedLimit),
+      lat: inputs.lat,
+      long: inputs.long,
+      directionOneLat: inputs.directionOneLat,
+      directionOneLong: inputs.directionOneLong,
+      directionTwoLat: inputs.directionTwoLat,
+      directionTwoLong: inputs.directionTwoLong,
+    }).fetch();
+
+    return exits.success(updatedRadar);
+
 
   }
 
