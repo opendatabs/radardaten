@@ -14,7 +14,7 @@ module.exports = {
   security: {
     cors: {
       allRoutes: true,
-      origin: '*'
+      allowOrigins: '*'
     }
   },
   dumpConnection: {

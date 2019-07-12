@@ -27,7 +27,7 @@ module.exports.routes = {
   'post /api/radar/addRadar' : {
     action: 'radar/add'
   },
-  'post /api/Radar/updateRadar' : {
+  'put /api/radar/updateRadar' : {
     action: 'radar/update'
   },
   'get  /api/Radar/radarWithAvgSpeedAndSpeedingQuote' : {

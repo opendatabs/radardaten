@@ -167,7 +167,8 @@ export class AddRecordsBtnComponent implements ViewCell, OnInit, OnDestroy {
       this.loading = true;
       this.creationCounter = 0;
       this.error = null;
-      this.sailsClientService.post(environment.api + 'record/batchCreate', {
+      // replace api/ in url. sockets requests should be redirected to sockets.io api, not to custom api/ route.
+      this.sailsClientService.post( environment.socketApi + 'record/batchCreate', {
         id: this.rowData.id, text: fileReader.result.toString()
       })
         .subscribe(

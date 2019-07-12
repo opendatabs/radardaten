@@ -710,7 +710,8 @@ var AddRecordsBtnComponent = /** @class */ (function () {
             _this.loading = true;
             _this.creationCounter = 0;
             _this.error = null;
-            _this.sailsClientService.post(environment_1.environment.api + 'record/batchCreate', {
+            // replace api/ in url. sockets requests should be redirected to sockets.io api, not to custom api/ route.
+            _this.sailsClientService.post(environment_1.environment.socketApi + 'record/batchCreate', {
                 id: _this.rowData.id, text: fileReader.result.toString()
             })
                 .subscribe(function (res) {
@@ -935,7 +936,7 @@ var AppComponent = /** @class */ (function () {
     AppComponent.prototype.ngOnInit = function () {
         // Init Sails service and request CSRF Token and check login
         var opts = {
-            url: environment_1.environment.api,
+            url: environment_1.environment.socketApi,
             transports: ['websocket'],
             reconnection: true
         };
@@ -2378,7 +2379,7 @@ var SailsClientService = /** @class */ (function () {
      * Unsubscribe from each connected socket room
      */
     SailsClientService.prototype.off = function () {
-        return this.post('/Recrod/socket/off', {});
+        return this.post('/Record/socket/off', {});
     };
     SailsClientService = __decorate([
         core_1.Injectable(),
@@ -2403,7 +2404,8 @@ exports.SailsClientService = SailsClientService;
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.environment = {
     production: false,
-    api: '/api/'
+    api: '/api/',
+    socketApi: '/'
 };
 
 

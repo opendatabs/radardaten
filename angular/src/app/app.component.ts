@@ -43,7 +43,7 @@ export class AppComponent implements OnInit, AfterViewInit {
   ngOnInit() {
     // Init Sails service and request CSRF Token and check login
     const opts = {
-      url: environment.api,
+      url: environment.socketApi,
       transports: ['websocket'],
       reconnection: true
     };

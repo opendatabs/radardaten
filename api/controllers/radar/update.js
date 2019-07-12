@@ -8,6 +8,10 @@ module.exports = {
 
 
   inputs: {
+    id: {
+      type: 'number',
+      required: true
+    },
     streetName: {
       type: 'string',
       required: true
@@ -60,7 +64,7 @@ module.exports = {
       directionOneLong: inputs.directionOneLong,
       directionTwoLat: inputs.directionTwoLat,
       directionTwoLong: inputs.directionTwoLong,
-    }).fetch();
+    });
 
     return exits.success(updatedRadar);
 

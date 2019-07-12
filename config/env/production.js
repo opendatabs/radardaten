@@ -141,7 +141,7 @@ module.exports = {
     cors: {
       cors: {
         allRoutes: false,
-        origin: false
+        allowOrigins: false
       }
     },
 
