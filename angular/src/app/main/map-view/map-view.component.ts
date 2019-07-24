@@ -9,7 +9,7 @@ import { RadarService } from '../../shared/radar.service';
   styleUrls: ['./map-view.component.css']
 })
 export class MapViewComponent implements OnInit {
-  @ViewChild(MapDetailComponent) mapDetailComponent: MapDetailComponent;
+  @ViewChild(MapDetailComponent, {static: true}) mapDetailComponent: MapDetailComponent;
 
   data: Radar[];
 
