@@ -24,8 +24,10 @@ module.exports = {
     username: local.localDUMPUSERNAME,
     password: local.localDUMPUSERPASSWORD,
   },
-  authCredentials: {
-    username: local.authUSER,
-    password: local.authPASSWORD
-  },
+  custom: {
+    authCredentials: {
+      username: local.authUSER,
+      password: local.authPASSWORD
+    },
+  }
 };
