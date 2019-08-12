@@ -12,7 +12,7 @@ declare var $: any;
   styleUrls: ['./map.component.css']
 })
 export class MapComponent implements OnInit {
-  @ViewChild(MapTooltipComponent) tooltip: MapTooltipComponent;
+  @ViewChild(MapTooltipComponent, {static: true}) tooltip: MapTooltipComponent;
 
   @Input() data: Radar[];
   @Output() bubbleClickEvent: EventEmitter<any> = new EventEmitter();

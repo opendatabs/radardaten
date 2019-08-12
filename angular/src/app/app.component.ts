@@ -15,7 +15,7 @@ export class AppComponent implements OnInit, AfterViewInit {
   title = 'Geschwindigkeitserhebungen des Kantons Basel-Stadt';
   admin: boolean;
   firstDisplay = true; // Should be "true" in production
-  @ViewChild('content') content: ElementRef;
+  @ViewChild('content', {static: true}) content: ElementRef;
 
   constructor(
     private router: Router,

@@ -45,7 +45,7 @@ import { AuthService } from './shared/auth.service';
   imports: [
     BrowserModule,
     AppRoutingModule,
-    NgbModule.forRoot(),
+    NgbModule,
     LeafletModule.forRoot(),
     HttpClientModule,
     Ng2SmartTableModule,
