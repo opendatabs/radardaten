@@ -48,18 +48,13 @@ module.exports.routes = {
   'put /api/radar/updateRecordCount' : {
     action: 'radar/update-record-count'
   },
-  'get /api/data/getMysqlDump' : {
-    action: 'data/get-mysql-dump'
-  },
-  'get /api/data/getRecord' : {
-    action: 'data/get-record-tsv'
-  },
-  'get /api/data/getRadar' : {
-    action: 'data/get-radar-tsv'
-  },
   'get /api/auth/auth': {
     action: 'auth/auth'
   },
+
+  'get /api/data/getMysqlDump' : 'dataController.getMysqlDump',
+  'get /api/data/getRecord' : 'dataController/getRecord',
+  'get /api/data/getRadar' : 'dataController.getRadarTsv',
 
   /**
    * Redirect to client side navigation
