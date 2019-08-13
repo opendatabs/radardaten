@@ -15,34 +15,6 @@
 
 module.exports.datastores = {
 
-  localDiskDb: {
-    adapter: 'sails-disk'
-  },
-
-  localhostDb: {
-    adapter: 'sails-mysql',
-    host: 'localhost',
-    user: local.localDbUser,
-    password: local.localDbPassword,
-    database: local.localDb
-  },
-
-  devDbLocal: {
-    adapter: 'sails-mysql',
-    host: local.localHOST,
-    user: local.localUSER,
-    password: local.localPASSWORD,
-    database: local.localDATABASE
-  },
-
-  prod: {
-    adapter: 'sails-mysql',
-    host: process.env.HOST,
-    user: process.env.USER,
-    password: process.env.PASSWORD,
-    database: process.env.DATABASE
-  }
-
 
   /***************************************************************************
   *                                                                          *

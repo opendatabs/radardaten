@@ -8,18 +8,13 @@
  *
  */
 
-/*let env = {};
-if (!process.env.NODE_ENV || process.env.NODE_ENV === 'development') {
-  env = require('../../config/env/development');
-} else {
-  env = require('../../config/env/production');
-}*/
-let authCredentials = sails.config.custom.authCredentials;
 
-// using basic-auth https://www.npmjs.com/package/basic-auth
 const basicAuth = require('basic-auth');
 
 module.exports = function sessionAuth(req, res, next) {
+
+  let authCredentials = sails.config.custom.authCredentials;
+
   function unauthorized(res) {
     res.set('WWW-Authenticate', 'Basic realm=Authorization Required');
     return res.status(401).send('Authentication required');

@@ -17,17 +17,5 @@ module.exports = {
       allowOrigins: '*'
     }
   },
-  dumpConnection: {
-    url: local.localDB
-  },
-  dumpUser: {
-    username: local.localDUMPUSERNAME,
-    password: local.localDUMPUSERPASSWORD,
-  },
-  custom: {
-    authCredentials: {
-      username: local.authUSER,
-      password: local.authPASSWORD
-    },
-  }
 };
+
