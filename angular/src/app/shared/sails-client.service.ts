@@ -8,7 +8,8 @@ export class SailsClientService {
 
   constructor(
     private sailsService: SailsService,
-  ) { }
+  ) {
+  }
 
   request(options): Observable<any> {
     return this.sailsService.request(options)
@@ -51,6 +52,6 @@ export class SailsClientService {
    * Unsubscribe from each connected socket room
    */
   off(): Observable<any> {
-    return this.post('/Recrod/socket/off', {});
+    return this.post('/Record/socket/off', {});
   }
 }

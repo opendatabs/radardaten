@@ -8,6 +8,10 @@ module.exports = {
 
 
   inputs: {
+    id: {
+      type: 'number',
+      required: true
+    },
     streetName: {
       type: 'string',
       required: true
