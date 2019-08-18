@@ -21,14 +21,6 @@
 
 module.exports = {
 
-  dumpConnection: {
-    url: local.localDB
-  },
-  dumpUser: {
-    username: local.localDUMPUSERNAME,
-    password: local.localDUMPUSERPASSWORD,
-  },
-
 
   /**************************************************************************
   *                                                                         *
