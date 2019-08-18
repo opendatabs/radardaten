@@ -373,11 +373,18 @@ module.exports = {
   custom: {
     baseUrl: 'https://radardaten.fdn.iwi.unibe.ch',
     authCredentials: {
-      username: local.authUSER,
-      password: local.authPASSWORD
+      username: process.env.AUTHUSER,
+      password: process.env.AUTHPASSWORD
     },
+    dump: {
+      user: process.env.DUMPUSERNAME,
+      password: process.env.DUMPUSERPASSWORD,
+      host: process.env.HOST,
+      database: process.env.DATABASE
+    }
 
   },
+
 
 
 
