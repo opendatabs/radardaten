@@ -33,8 +33,8 @@ module.exports = {
     const radarId = inputs.radarId;
     const direction = inputs.direction;
     const startDay = inputs.startDay;
-    const sql = `
-    SELECT ROUND(tooFast / numberVehicles, 2) as speedingQuote,
+
+    const sql = `SELECT ROUND(tooFast / numberVehicles, 2) as speedingQuote,
   avgKmh as avgSpeed,
   hour,
   numberVehicles as count
@@ -42,11 +42,18 @@ module.exports = {
     WHERE direction = $1
     AND recordaggregated.radar = $2
 	AND recordaggregated.date = $3
-    GROUP BY hour
-  `;
+    GROUP BY hour`;
 
-    const data = await sails.sendNativeQuery(sql, [direction, radarId, startDay, endDay]);
-    return exits.success(data.rows)
+    const data = await sails.sendNativeQuery(sql, [direction, radarId, startDay]);
+
+    data.rows.forEach(d => {
+      if (d.hour.toString().length === 1)
+        d.hour = `0${d.hour}:00`;
+      else
+        d.hour = `${d.hour}:00`
+    });
+
+    return exits.success(data.rows);
 
   }
 
