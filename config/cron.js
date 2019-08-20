@@ -5,7 +5,7 @@ module.exports.cron = {
     createMysqlDump: {
         // ['seconds', 'minutes', 'hours', 'dayOfMonth', 'month', 'dayOfWeek']
         // schedule: '0 */3 * * * *', // Every two minutes
-        schedule: '0 0 0 * * *', // Run daily at midnight
+        schedule: '0 0 * * * *', // Run daily at midnight
         onTick: function () {
 
             let connection = sails.config.custom.dump;
@@ -27,7 +27,7 @@ module.exports.cron = {
         }
     },
     createTsv: {
-        schedule: '0 0 2 * * *', // Run daily at 2AM
+        schedule: '0 0 * * * *', // Run daily at 2AM
         onTick: function () {
             async function main(table) {
 
